@@ -1,13 +1,13 @@
-import 'package:afetivo/afetivograma.dart';
-import 'package:afetivo/cadastroPage.dart';
-import 'package:afetivo/configuracoes.dart';
-import 'package:afetivo/ajuda.dart';
-import 'package:afetivo/forgotPage.dart';
-import 'package:afetivo/home.dart';
-import 'package:afetivo/loginPage.dart';
+import 'package:afetivo/pages/afetivograma.dart';
+import 'package:afetivo/pages/cadastroPage.dart';
+import 'package:afetivo/pages/configuracoes.dart';
+import 'package:afetivo/pages/ajuda.dart';
+import 'package:afetivo/pages/forgotPage.dart';
+import 'package:afetivo/pages/home.dart';
+import 'package:afetivo/pages/loginPage.dart';
 import 'package:flutter/material.dart';
 
-import 'adicionalInfo.dart';
+import 'pages/adicionalInfo.dart';
 
 void main() => runApp(new MyApp());
 

@@ -1,7 +1,7 @@
-import 'package:afetivo/cadastroPage.dart';
+import 'package:afetivo/pages/cadastroPage.dart';
 import 'package:flutter/material.dart';
 import 'forgotPage.dart';
-import 'main.dart';
+import '../main.dart';
 
 class LoginPage extends StatefulWidget {
   static String tag = 'tag-page';

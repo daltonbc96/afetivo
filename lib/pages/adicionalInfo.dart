@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
+import '../main.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class AddicionalInfo extends StatefulWidget {
@@ -87,7 +87,7 @@ class _State extends State<AddicionalInfo> {
                   mCurrentValue = value;
                 });
               },
-              divisions: 10,
+              divisions: null,
               min: 0,
               max: 100,
               label: '$mCurrentValue',
@@ -200,7 +200,7 @@ class _State extends State<AddicionalInfo> {
                   currentValue = value;
                 });
               },
-              divisions: 10,
+              divisions: null,
               min: -4,
               max: 4,
               label: '$currentValue',

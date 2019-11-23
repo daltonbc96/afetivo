@@ -1,4 +1,4 @@
-import 'package:afetivo/loginPage.dart';
+import 'package:afetivo/pages/loginPage.dart';
 import 'package:flutter/material.dart';
 
 class FogotPage extends StatefulWidget {
