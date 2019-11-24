@@ -1,4 +1,5 @@
 import 'package:afetivo/pages/cadastroPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'forgotPage.dart';
 import '../main.dart';
@@ -47,8 +48,9 @@ class _State extends State<LoginPage> {
           color: Theme.of(context).primaryColor,
           textColor: Colors.white,
           child: new Text("ENTRAR", style: TextStyle(fontSize: 16.0)),
-          onPressed: () =>
-              {Navigator.of(context).pushNamed(DashboardScreen.tag)},
+          onPressed: () {
+            Navigator.of(context).pushNamed(DashboardScreen.tag);
+          },
           splashColor: Colors.redAccent,
         ));
 

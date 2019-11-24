@@ -6,6 +6,8 @@ import 'package:afetivo/pages/forgotPage.dart';
 import 'package:afetivo/pages/home.dart';
 import 'package:afetivo/pages/loginPage.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'pages/adicionalInfo.dart';
 
@@ -14,7 +16,10 @@ void main() => runApp(new MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
+    return new MultiProvider(providers: [
+      StreamProvider<FirebaseUser>.value(value: FirebaseAuth.instance.onAuthStateChanged)
+    ],
+    child: MaterialApp(
         title: 'Afetivo',
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(
@@ -24,7 +29,13 @@ class MyApp extends StatelessWidget {
           //primaryColorDark: const Color(0xFF167F67),
           //accentColor: const Color(0xFFFFAD32),
         ),
-        home: LoginPage(),
+        home: new Builder(builder: (context) {
+          var user = Provider.of<FirebaseUser>(context);
+          if (user == null)
+            return LoginPage();
+          else
+            return DashboardScreen(title: 'Afetivo');
+        }),
         //new DashboardScreen(title: 'Afetivo'),
         routes: <String, WidgetBuilder>{
           "/a": (BuildContext context) => configuracoes("Configurações"),
@@ -35,7 +46,7 @@ class MyApp extends StatelessWidget {
           AddicionalInfo.tag: (context) => AddicionalInfo(),
           Afetivograma.tag: (context) => Afetivograma("Afetivograma"),
           CadastroPage.tag: (context) => CadastroPage(),
-        });
+        }));
   }
 }
 
@@ -114,9 +125,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             new Divider(),
             new ListTile(
-              title: new Text("Fechar"),
+              title: new Text("Sair"),
               trailing: new Icon(Icons.close),
-              onTap: () => Navigator.of(context).pop(),
+              onTap: FirebaseAuth.instance.signOut,
             ),
           ],
         ),
