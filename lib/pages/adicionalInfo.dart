@@ -1,6 +1,7 @@
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../main.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class AddicionalInfo extends StatefulWidget {
   static String tag = 'tag-pageAddInfo';
@@ -23,22 +24,18 @@ class _State extends State<AddicionalInfo> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            TextFormField(
-              decoration: InputDecoration(),
-              onTap: () {
-                DatePicker.showDatePicker(context,
-                    theme: DatePickerTheme(
-                      containerHeight: 210.0,
-                    ),
-                    showTitleActions: true,
-                    minTime: DateTime(1900, 01, 01),
-                    maxTime: DateTime(2100, 12, 31), onConfirm: (date) {
-                  print("confirme $date");
-                  _date = '${date.day} - ${date.month} - ${date.year}';
-                  setState(() {});
-                }, currentTime: DateTime.now(), locale: LocaleType.pt);
+            DateTimeField(
+              format: DateFormat(DateFormat.YEAR_MONTH_DAY),
+              //onChanged: (value) => userProfile.nascimento = value,
+              //initialValue: userProfile.nascimento,
+              onShowPicker: (context, currentValue) {
+                return showDatePicker(
+                    context: context,
+                    firstDate: DateTime(1900),
+                    initialDate: currentValue ?? DateTime.now(),
+                    lastDate: DateTime(2100));
               },
-            )
+            ),
           ],
         ),
       ),

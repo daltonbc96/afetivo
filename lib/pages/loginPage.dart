@@ -1,8 +1,8 @@
 import 'package:afetivo/pages/cadastroPage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:afetivo/stores/LoginStore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'forgotPage.dart';
-import '../main.dart';
 
 class LoginPage extends StatefulWidget {
   static String tag = 'tag-page';
@@ -11,9 +11,20 @@ class LoginPage extends StatefulWidget {
 }
 
 class _State extends State<LoginPage> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordControler = TextEditingController();
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordControler.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    LoginStore loginStore = Provider.of<LoginStore>(context);
     final email = TextFormField(
+      controller: emailController,
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
       decoration: InputDecoration(
@@ -28,6 +39,7 @@ class _State extends State<LoginPage> {
     final password = TextFormField(
       autofocus: false,
       obscureText: true,
+      controller: passwordControler,
       decoration: InputDecoration(
         labelText: 'Senha',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -49,7 +61,7 @@ class _State extends State<LoginPage> {
           textColor: Colors.white,
           child: new Text("ENTRAR", style: TextStyle(fontSize: 16.0)),
           onPressed: () {
-            Navigator.of(context).pushNamed(DashboardScreen.tag);
+            loginStore.login(emailController.text, passwordControler.text);
           },
           splashColor: Colors.redAccent,
         ));

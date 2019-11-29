@@ -5,9 +5,10 @@ import 'package:afetivo/pages/ajuda.dart';
 import 'package:afetivo/pages/forgotPage.dart';
 import 'package:afetivo/pages/home.dart';
 import 'package:afetivo/pages/loginPage.dart';
+import 'package:afetivo/stores/LoginStore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import 'pages/adicionalInfo.dart';
 
@@ -16,36 +17,42 @@ void main() => runApp(new MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MultiProvider(providers: [
-      StreamProvider<FirebaseUser>.value(value: FirebaseAuth.instance.onAuthStateChanged)
-    ],
-    child: MaterialApp(
-        title: 'Afetivo',
-        debugShowCheckedModeBanner: false,
-        theme: new ThemeData(
-          primarySwatch: Colors.green,
-          //canvasColor: Colors.white,
-          //primaryColor: const Color(0xFF02BB9F),
-          //primaryColorDark: const Color(0xFF167F67),
-          //accentColor: const Color(0xFFFFAD32),
-        ),
-        home: new Builder(builder: (context) {
-          var user = Provider.of<FirebaseUser>(context);
-          if (user == null)
-            return LoginPage();
-          else
-            return DashboardScreen(title: 'Afetivo');
-        }),
-        //new DashboardScreen(title: 'Afetivo'),
-        routes: <String, WidgetBuilder>{
-          "/a": (BuildContext context) => configuracoes("Configurações"),
-          "/b": (BuildContext context) => ajuda("Ajuda"),
-          LoginPage.tag: (context) => LoginPage(),
-          DashboardScreen.tag: (context) => DashboardScreen(title: 'Afetivo'),
-          FogotPage.tag: (context) => FogotPage(),
-          AddicionalInfo.tag: (context) => AddicionalInfo(),
-          Afetivograma.tag: (context) => Afetivograma("Afetivograma"),
-          CadastroPage.tag: (context) => CadastroPage(),
+    return Provider<LoginStore>(
+        create: (_) => LoginStore(),
+        dispose: (_, value) => value.dispose(),
+        child: Observer(builder: (context) {
+          var loginStore = Provider.of<LoginStore>(context);
+          if (loginStore.logged) {
+            return new MaterialApp(
+                title: 'Afetivo',
+                debugShowCheckedModeBanner: false,
+                theme: new ThemeData(
+                  primarySwatch: Colors.green,
+                ),
+                home: DashboardScreen(title: 'Afetivo'),
+                routes: <String, WidgetBuilder>{
+                  "/a": (BuildContext context) =>
+                      configuracoes("Configurações"),
+                  "/b": (BuildContext context) => ajuda("Ajuda"),
+                  DashboardScreen.tag: (context) =>
+                      DashboardScreen(title: 'Afetivo'),
+                  FogotPage.tag: (context) => FogotPage(),
+                  AddicionalInfo.tag: (context) => AddicionalInfo(),
+                  Afetivograma.tag: (context) => Afetivograma("Afetivograma"),
+                });
+          } else {
+            return new MaterialApp(
+                title: 'Afetivo',
+                debugShowCheckedModeBanner: false,
+                theme: new ThemeData(
+                  primarySwatch: Colors.green,
+                ),
+                home: LoginPage(),
+                routes: <String, WidgetBuilder>{
+                  LoginPage.tag: (context) => LoginPage(),
+                  CadastroPage.tag: (context) => CadastroPage(),
+                });
+          }
         }));
   }
 }
@@ -91,6 +98,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    LoginStore loginStore = Provider.of<LoginStore>(context);
     return new Scaffold(
       appBar: new AppBar(
         title: new Text(
@@ -101,14 +109,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
       drawer: new Drawer(
         child: new ListView(
           children: <Widget>[
-            new UserAccountsDrawerHeader(
-              accountName: new Text("Dalton Costa"),
-              accountEmail: new Text("dalton.bc96@gmail.com"),
+            Observer(builder: (context) =>
+            UserAccountsDrawerHeader(
+              accountName: new Text(loginStore.userProfile.fullName),
+              accountEmail: new Text(loginStore.userProfile.email),
               currentAccountPicture: new CircleAvatar(
                 backgroundColor: Colors.green[300],
                 child: new Text("D"),
               ),
-            ),
+            )),
             new ListTile(
               title: new Text("Configurações"),
               trailing: new Icon(Icons.settings),
@@ -127,7 +136,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             new ListTile(
               title: new Text("Sair"),
               trailing: new Icon(Icons.close),
-              onTap: FirebaseAuth.instance.signOut,
+              onTap: loginStore.logout,
             ),
           ],
         ),
