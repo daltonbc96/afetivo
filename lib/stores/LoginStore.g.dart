@@ -45,4 +45,11 @@ mixin _$LoginStore on _LoginStore, Store {
   Future<void> logout() {
     return _$logoutAsyncAction.run(() => super.logout());
   }
+
+  final _$registerAsyncAction = AsyncAction('register');
+
+  @override
+  Future<void> register(UserProfile user, String password) {
+    return _$registerAsyncAction.run(() => super.register(user, password));
+  }
 }
