@@ -67,14 +67,13 @@ class _State extends State<LoginPage> {
         ));
 
     final cadastro = FlatButton(
-      child: Text(
-        'CRIAR CONTA',
-        style: TextStyle(color: Colors.black54, fontSize: 15),
-      ),
-      onPressed: () {
-        Navigator.of(context).pushNamed(CadastroPage.tag);
-      },
-    );
+        child: Text(
+          'CRIAR CONTA',
+          style: TextStyle(color: Colors.black54, fontSize: 15),
+        ),
+        onPressed: () {
+          Navigator.of(context).pushNamed(CadastroPage.tag);
+        });
 
     final forgotLabel = FlatButton(
       child: Text(

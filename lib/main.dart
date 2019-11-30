@@ -20,40 +20,31 @@ class MyApp extends StatelessWidget {
     return Provider<LoginStore>(
         create: (_) => LoginStore(),
         dispose: (_, value) => value.dispose(),
-        child: Observer(builder: (context) {
-          var loginStore = Provider.of<LoginStore>(context);
-          if (loginStore.logged) {
-            return new MaterialApp(
-                title: 'Afetivo',
-                debugShowCheckedModeBanner: false,
-                theme: new ThemeData(
-                  primarySwatch: Colors.green,
-                ),
-                home: DashboardScreen(title: 'Afetivo'),
-                routes: <String, WidgetBuilder>{
-                  "/a": (BuildContext context) =>
-                      configuracoes("Configurações"),
-                  "/b": (BuildContext context) => ajuda("Ajuda"),
-                  DashboardScreen.tag: (context) =>
-                      DashboardScreen(title: 'Afetivo'),
-                  FogotPage.tag: (context) => FogotPage(),
-                  AddicionalInfo.tag: (context) => AddicionalInfo(),
-                  Afetivograma.tag: (context) => Afetivograma("Afetivograma"),
-                });
-          } else {
-            return new MaterialApp(
-                title: 'Afetivo',
-                debugShowCheckedModeBanner: false,
-                theme: new ThemeData(
-                  primarySwatch: Colors.green,
-                ),
-                home: LoginPage(),
-                routes: <String, WidgetBuilder>{
-                  LoginPage.tag: (context) => LoginPage(),
-                  CadastroPage.tag: (context) => CadastroPage(),
-                });
-          }
-        }));
+        child: MaterialApp(
+            title: 'Afetivo',
+            debugShowCheckedModeBanner: false,
+            theme: new ThemeData(
+              primarySwatch: Colors.green,
+            ),
+            home: Observer(builder: (context) {
+              var loginStore = Provider.of<LoginStore>(context);
+              return loginStore.logged
+                  ? DashboardScreen(
+                      title: 'Afetivo',
+                    )
+                  : LoginPage();
+            }),
+            routes: <String, WidgetBuilder>{
+              "/a": (BuildContext context) => configuracoes("Configurações"),
+              "/b": (BuildContext context) => ajuda("Ajuda"),
+              DashboardScreen.tag: (context) =>
+                  DashboardScreen(title: 'Afetivo'),
+              FogotPage.tag: (context) => FogotPage(),
+              AddicionalInfo.tag: (context) => AddicionalInfo(),
+              Afetivograma.tag: (context) => Afetivograma("Afetivograma"),
+              LoginPage.tag: (context) => LoginPage(),
+              CadastroPage.tag: (context) => CadastroPage(),
+            }));
   }
 }
 
@@ -109,15 +100,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
       drawer: new Drawer(
         child: new ListView(
           children: <Widget>[
-            Observer(builder: (context) =>
-            UserAccountsDrawerHeader(
-              accountName: new Text(loginStore.userProfile.fullName),
-              accountEmail: new Text(loginStore.userProfile.email),
-              currentAccountPicture: new CircleAvatar(
-                backgroundColor: Colors.green[300],
-                child: new Text("D"),
-              ),
-            )),
+            Observer(
+                builder: (context) => UserAccountsDrawerHeader(
+                      accountName: new Text(loginStore.userProfile.fullName),
+                      accountEmail: new Text(loginStore.userProfile.email),
+                      currentAccountPicture: new CircleAvatar(
+                        backgroundColor: Colors.green[300],
+                        child: new Text("D"),
+                      ),
+                    )),
             new ListTile(
               title: new Text("Configurações"),
               trailing: new Icon(Icons.settings),

@@ -6,12 +6,10 @@ part 'LoginStore.g.dart';
 class LoginStore = _LoginStore with _$LoginStore;
 
 abstract class _LoginStore with Store {
-  Set<UserProfile> _userlist = Set();
+  List<UserProfile> _userlist = List();
 
   @observable
   UserProfile userProfile;
-
-  _LoginStore();
 
   @computed
   bool get logged => userProfile != null;
@@ -32,7 +30,9 @@ abstract class _LoginStore with Store {
   @action
   Future<void> register(UserProfile user, String password) async {
     await Future.delayed(Duration(seconds: 1));
-    if (_userlist.where((u) => u.email == user.email).isEmpty) {
+    var a = _userlist.where((u) => u.email == user.email).toList();
+    if (a.isEmpty) {
+      print("Registering user");
       user.password = password;
       _userlist.add(user);
       userProfile = user;

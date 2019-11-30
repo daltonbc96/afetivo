@@ -18,7 +18,7 @@ class _State extends State<CadastroPage> {
   final TextEditingController diagnosticoFieldController =
       TextEditingController();
   final TextEditingController passwordFieldController = TextEditingController();
-  UserProfile userProfile = UserProfile(diagnosticos: ['TOC', 'Depressão']);
+  UserProfile userProfile = UserProfile();
   @override
   void dispose() {
     diagnosticoFieldController.dispose();
@@ -183,8 +183,10 @@ class _State extends State<CadastroPage> {
         color: Theme.of(context).primaryColor,
         textColor: Colors.white,
         child: new Text("CADASTRAR", style: TextStyle(fontSize: 16.0)),
-        onPressed: () =>
-            loginStore.register(userProfile, passwordFieldController.text),
+        onPressed: () {
+          loginStore.register(userProfile, passwordFieldController.text);
+          Navigator.of(context).pop();
+        },
         splashColor: Colors.redAccent,
       ),
     );
