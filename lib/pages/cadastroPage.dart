@@ -1,5 +1,4 @@
 import 'package:afetivo/models/User.dart';
-import 'package:afetivo/pages/loginPage.dart';
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -14,7 +13,6 @@ class CadastroPage extends StatefulWidget {
 }
 
 class _State extends State<CadastroPage> {
-  String sexos = 'Masculino';
   final TextEditingController diagnosticoFieldController =
       TextEditingController();
   final TextEditingController passwordFieldController = TextEditingController();

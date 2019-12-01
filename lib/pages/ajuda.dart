@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class ajuda extends StatelessWidget {
+class Ajuda extends StatelessWidget {
   final String title;
 
-  ajuda(this.title);
+  Ajuda(this.title);
 
   @override
   Widget build(BuildContext context) {

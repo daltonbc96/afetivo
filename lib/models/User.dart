@@ -14,6 +14,8 @@ String describeSexo(Sexo sexo) {
     case Sexo.other:
       return 'Outro';
   }
+
+  return "";
 }
 
 @JsonSerializable()

@@ -16,7 +16,6 @@ class _State extends State<AddicionalInfo> {
   String resposta = 'Não';
   @override
   Widget build(BuildContext context) {
-    String _date = "Not set";
     final data = Padding(
       padding: const EdgeInsets.all(16.0),
       child: Container(

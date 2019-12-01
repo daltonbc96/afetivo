@@ -35,8 +35,8 @@ class MyApp extends StatelessWidget {
                   : LoginPage();
             }),
             routes: <String, WidgetBuilder>{
-              "/a": (BuildContext context) => configuracoes("Configurações"),
-              "/b": (BuildContext context) => ajuda("Ajuda"),
+              "/a": (BuildContext context) => Configuracoes("Configurações"),
+              "/b": (BuildContext context) => Ajuda("Ajuda"),
               DashboardScreen.tag: (context) =>
                   DashboardScreen(title: 'Afetivo'),
               FogotPage.tag: (context) => FogotPage(),
