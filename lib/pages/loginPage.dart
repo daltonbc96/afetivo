@@ -1,6 +1,9 @@
+import 'package:afetivo/main.dart';
 import 'package:afetivo/pages/cadastroPage.dart';
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'forgotPage.dart';
 
@@ -11,12 +14,25 @@ class LoginPage extends StatefulWidget {
 }
 
 class _State extends State<LoginPage> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordControler = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordControler = TextEditingController();
+  ReactionDisposer _disposePageChanger;
+
+  @override
+  void initState() {
+    super.initState();
+    _disposePageChanger = autorun((_) {
+      if (LoginStore.instance.loginStatus == LoginStatus.LoggedIn)
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil(DashboardScreen.tag, (_) => false);
+    });
+  }
+
   @override
   void dispose() {
-    emailController.dispose();
-    passwordControler.dispose();
+    _emailController.dispose();
+    _passwordControler.dispose();
+    _disposePageChanger();
     super.dispose();
   }
 
@@ -24,7 +40,7 @@ class _State extends State<LoginPage> {
   Widget build(BuildContext context) {
     LoginStore loginStore = Provider.of<LoginStore>(context);
     final email = TextFormField(
-      controller: emailController,
+      controller: _emailController,
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
       decoration: InputDecoration(
@@ -39,7 +55,7 @@ class _State extends State<LoginPage> {
     final password = TextFormField(
       autofocus: false,
       obscureText: true,
-      controller: passwordControler,
+      controller: _passwordControler,
       decoration: InputDecoration(
         labelText: 'Senha',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -61,10 +77,22 @@ class _State extends State<LoginPage> {
           textColor: Colors.white,
           child: new Text("ENTRAR", style: TextStyle(fontSize: 16.0)),
           onPressed: () {
-            loginStore.login(emailController.text, passwordControler.text);
+            loginStore.login(_emailController.text, _passwordControler.text);
           },
           splashColor: Colors.redAccent,
         ));
+
+    final errorMessage = Container(child: Observer(builder: (context) {
+      switch (loginStore.loginStatus) {
+        case LoginStatus.LoginError:
+          return Text("Usuario ou senha invalido",
+              style: TextStyle(color: Colors.redAccent));
+        case LoginStatus.LoginWait:
+          return Text("Validando Usuario...");
+        default:
+      }
+      return Text("");
+    }));
 
     final cadastro = FlatButton(
         child: Text(
@@ -99,7 +127,9 @@ class _State extends State<LoginPage> {
             email,
             SizedBox(height: 8.0),
             password,
-            SizedBox(height: 48.0),
+            SizedBox(height: 24.0),
+            errorMessage,
+            SizedBox(height: 24.0),
             loginButton,
             forgotLabel,
             cadastro,

@@ -1,9 +1,11 @@
+import 'package:afetivo/main.dart';
 import 'package:afetivo/models/User.dart';
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
 class CadastroPage extends StatefulWidget {
@@ -17,9 +19,22 @@ class _State extends State<CadastroPage> {
       TextEditingController();
   final TextEditingController passwordFieldController = TextEditingController();
   UserProfile userProfile = UserProfile();
+  ReactionDisposer _disposePageChanger;
+
+  @override
+  void initState() {
+    super.initState();
+    _disposePageChanger = autorun((_) {
+      if (LoginStore.instance.loginStatus == LoginStatus.LoggedIn)
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil(DashboardScreen.tag, (_) => false);
+    });
+  }
+
   @override
   void dispose() {
     diagnosticoFieldController.dispose();
+    _disposePageChanger();
     super.dispose();
   }
 
@@ -180,10 +195,14 @@ class _State extends State<CadastroPage> {
         minWidth: 70.0,
         color: Theme.of(context).primaryColor,
         textColor: Colors.white,
-        child: new Text("CADASTRAR", style: TextStyle(fontSize: 16.0)),
+        child: Observer(
+            builder: (context) => Text(
+                loginStore.loginStatus == LoginStatus.LoginWait
+                    ? "CADASTRANDO..."
+                    : "CADASTRAR",
+                style: TextStyle(fontSize: 16.0))),
         onPressed: () {
           loginStore.register(userProfile, passwordFieldController.text);
-          Navigator.of(context).pop();
         },
         splashColor: Colors.redAccent,
       ),

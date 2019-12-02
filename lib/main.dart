@@ -8,6 +8,7 @@ import 'package:afetivo/pages/loginPage.dart';
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
 import 'pages/adicionalInfo.dart';
@@ -18,22 +19,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider<LoginStore>(
-        create: (_) => LoginStore(),
-        dispose: (_, value) => value.dispose(),
+        create: (_) => LoginStore.instance,
         child: MaterialApp(
             title: 'Afetivo',
             debugShowCheckedModeBanner: false,
             theme: new ThemeData(
               primarySwatch: Colors.green,
             ),
-            home: Observer(builder: (context) {
-              var loginStore = Provider.of<LoginStore>(context);
-              return loginStore.logged
-                  ? DashboardScreen(
-                      title: 'Afetivo',
-                    )
-                  : LoginPage();
-            }),
+            initialRoute: LoginPage.tag,
             routes: <String, WidgetBuilder>{
               "/a": (BuildContext context) => Configuracoes("Configurações"),
               "/b": (BuildContext context) => Ajuda("Ajuda"),
@@ -61,17 +54,24 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   PageController _pageController;
   int _page = 0;
+  ReactionDisposer _disposePageChanger;
 
   @override
   void initState() {
     super.initState();
     _pageController = new PageController();
+    _disposePageChanger = autorun((_) {
+      if (LoginStore.instance.loginStatus == LoginStatus.LoggedOff)
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil(LoginPage.tag, (_) => false);
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
     _pageController.dispose();
+    _disposePageChanger();
   }
 
   void navigationTapped(int page) {
@@ -101,14 +101,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: new ListView(
           children: <Widget>[
             Observer(
-                builder: (context) => UserAccountsDrawerHeader(
-                      accountName: new Text(loginStore.userProfile.fullName),
-                      accountEmail: new Text(loginStore.userProfile.email),
-                      currentAccountPicture: new CircleAvatar(
-                        backgroundColor: Colors.green[300],
-                        child: new Text("D"),
-                      ),
-                    )),
+                builder: (context) => loginStore.userProfile != null
+                    ? UserAccountsDrawerHeader(
+                        accountName: new Text(loginStore.userProfile.fullName),
+                        accountEmail: new Text(loginStore.userProfile.email),
+                        currentAccountPicture: new CircleAvatar(
+                          backgroundColor: Colors.green[300],
+                          child: new Text("D"),
+                        ),
+                      )
+                    : SizedBox.shrink()),
             new ListTile(
               title: new Text("Configurações"),
               trailing: new Icon(Icons.settings),

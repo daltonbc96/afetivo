@@ -3,7 +3,11 @@ import '../models/User.dart';
 
 part 'LoginStore.g.dart';
 
-class LoginStore = _LoginStore with _$LoginStore;
+enum LoginStatus { LoggedOff, LoginWait, LoggedIn, LoginError }
+
+class LoginStore extends _LoginStore with _$LoginStore {
+  static final instance = LoginStore();
+}
 
 abstract class _LoginStore with Store {
   List<UserProfile> _userlist = List();
@@ -11,24 +15,32 @@ abstract class _LoginStore with Store {
   @observable
   UserProfile userProfile;
 
-  @computed
-  bool get logged => userProfile != null;
+  @observable
+  LoginStatus loginStatus;
 
   @action
   Future<void> login(String user, String password) async {
+    loginStatus = LoginStatus.LoginWait;
     await Future.delayed(Duration(seconds: 1));
     var a = _userlist.where((u) => u.email == user).toList();
-    if (a.isNotEmpty && a[0].password == password) userProfile = a[0];
+    if (a.isNotEmpty && a[0].password == password) {
+      userProfile = a[0];
+      loginStatus = LoginStatus.LoggedIn;
+    } else {
+      loginStatus = LoginStatus.LoginError;
+    }
   }
 
   @action
   Future<void> logout() async {
+    loginStatus = LoginStatus.LoginWait;
     await Future.delayed(Duration(seconds: 1));
-    userProfile = null;
+    loginStatus = LoginStatus.LoggedOff;
   }
 
   @action
   Future<void> register(UserProfile user, String password) async {
+    loginStatus = LoginStatus.LoginWait;
     await Future.delayed(Duration(seconds: 1));
     var a = _userlist.where((u) => u.email == user.email).toList();
     if (a.isEmpty) {
@@ -36,6 +48,7 @@ abstract class _LoginStore with Store {
       user.password = password;
       _userlist.add(user);
       userProfile = user;
+      loginStatus = LoginStatus.LoggedIn;
     }
   }
 }

@@ -9,12 +9,6 @@ part of 'LoginStore.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$LoginStore on _LoginStore, Store {
-  Computed<bool> _$loggedComputed;
-
-  @override
-  bool get logged =>
-      (_$loggedComputed ??= Computed<bool>(() => super.logged)).value;
-
   final _$userProfileAtom = Atom(name: '_LoginStore.userProfile');
 
   @override
@@ -30,6 +24,23 @@ mixin _$LoginStore on _LoginStore, Store {
       super.userProfile = value;
       _$userProfileAtom.reportChanged();
     }, _$userProfileAtom, name: '${_$userProfileAtom.name}_set');
+  }
+
+  final _$loginStatusAtom = Atom(name: '_LoginStore.loginStatus');
+
+  @override
+  LoginStatus get loginStatus {
+    _$loginStatusAtom.context.enforceReadPolicy(_$loginStatusAtom);
+    _$loginStatusAtom.reportObserved();
+    return super.loginStatus;
+  }
+
+  @override
+  set loginStatus(LoginStatus value) {
+    _$loginStatusAtom.context.conditionallyRunInAction(() {
+      super.loginStatus = value;
+      _$loginStatusAtom.reportChanged();
+    }, _$loginStatusAtom, name: '${_$loginStatusAtom.name}_set');
   }
 
   final _$loginAsyncAction = AsyncAction('login');
