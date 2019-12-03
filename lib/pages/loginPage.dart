@@ -14,13 +14,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _State extends State<LoginPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordControler = TextEditingController();
+  TextEditingController _emailController;
+  TextEditingController _passwordControler;
   ReactionDisposer _disposePageChanger;
 
   @override
   void initState() {
     super.initState();
+    _emailController = TextEditingController();
+    _passwordControler = TextEditingController();
     _disposePageChanger = autorun((_) {
       if (LoginStore.instance.loginStatus == LoginStatus.LoggedIn)
         Navigator.of(context)

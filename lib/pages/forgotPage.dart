@@ -7,6 +7,7 @@ class FogotPage extends StatefulWidget {
   _State createState() => _State();
 }
 
+//TODO: Implement password reminder
 class _State extends State<FogotPage> {
   @override
   Widget build(BuildContext context) {

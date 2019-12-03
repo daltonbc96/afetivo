@@ -12,6 +12,7 @@ class Ajuda extends StatelessWidget {
         title: new Text(title),
       ),
       body: new Center(
+        //TODO: Write Help Content
         child: new Text("Aqui terá conteúdo de ajuda! :)"),
       ),
     );

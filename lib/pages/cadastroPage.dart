@@ -14,16 +14,18 @@ class CadastroPage extends StatefulWidget {
   _State createState() => _State();
 }
 
+//TODO: Implement form validation
 class _State extends State<CadastroPage> {
-  final TextEditingController diagnosticoFieldController =
-      TextEditingController();
-  final TextEditingController passwordFieldController = TextEditingController();
+  TextEditingController diagnosticoFieldController;
+  TextEditingController passwordFieldController;
   UserProfile userProfile = UserProfile();
   ReactionDisposer _disposePageChanger;
 
   @override
   void initState() {
     super.initState();
+    diagnosticoFieldController = TextEditingController();
+    passwordFieldController = TextEditingController();
     _disposePageChanger = autorun((_) {
       if (LoginStore.instance.loginStatus == LoginStatus.LoggedIn)
         Navigator.of(context)
@@ -34,6 +36,7 @@ class _State extends State<CadastroPage> {
   @override
   void dispose() {
     diagnosticoFieldController.dispose();
+    passwordFieldController.dispose();
     _disposePageChanger();
     super.dispose();
   }
@@ -55,23 +58,23 @@ class _State extends State<CadastroPage> {
               ),
             ));
 
-    final password = Observer(
-        builder: (context) => TextFormField(
-              autofocus: false,
-              obscureText: true,
-              controller: passwordFieldController,
-              decoration: InputDecoration(
-                labelText: 'Senha',
-                contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(32.0),
-                ),
-              ),
-            ));
+    final password = TextFormField(
+      autofocus: false,
+      obscureText: true,
+      controller: passwordFieldController,
+      decoration: InputDecoration(
+        labelText: 'Senha',
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(32.0),
+        ),
+      ),
+    );
 
     final primeiroNome = Observer(
         builder: (context) => TextFormField(
               autofocus: false,
+              initialValue: userProfile.nome,
               onChanged: (value) => userProfile.nome = value,
               decoration: InputDecoration(
                 labelText: 'Primeiro Nome',
@@ -85,6 +88,7 @@ class _State extends State<CadastroPage> {
     final sobrenome = Observer(
         builder: (context) => TextFormField(
               autofocus: false,
+              initialValue: userProfile.sobrenome,
               onChanged: (value) => userProfile.sobrenome = value,
               decoration: InputDecoration(
                 labelText: 'Sobrenome',
