@@ -16,18 +16,55 @@ enum TipoHumor {
   graveMania
 }
 
+bool tipoHumorManiaco(TipoHumor tipoHumor) {
+  switch (tipoHumor) {
+    case TipoHumor.leveMania:
+    case TipoHumor.modLeveMania:
+    case TipoHumor.modGraveMania:
+    case TipoHumor.graveMania:
+      return true;
+    default:
+  }
+  return false;
+}
+
+String describeTipoHumor(TipoHumor humor) {
+  switch (humor) {
+    case TipoHumor.graveDepre:
+      return "Depressão Severa";
+    case TipoHumor.modGraveDepre:
+      return "Depressão Moderada Alta";
+    case TipoHumor.modLeveDepre:
+      return "Depressão Moderada Baixa";
+    case TipoHumor.leveDepre:
+      return "Depressão Leve";
+    case TipoHumor.estavel:
+      return "Estável";
+    case TipoHumor.leveMania:
+      return "Mania Leve";
+    case TipoHumor.modLeveMania:
+      return "Mania Moderada Baixa";
+    case TipoHumor.modGraveMania:
+      return "Mania Moderada Alta";
+    case TipoHumor.graveMania:
+      return "Mania Severa";
+    default:
+  }
+  return '';
+}
+
 @JsonSerializable()
 class RegistroHumor extends _RegistroHumor with _$RegistroHumor {
   RegistroHumor(
       {TipoHumor tipo,
-      bool disforico,
+      bool disforico = false,
       DateTime data,
       int nota,
       List<RegistroMedicamento> medicamentos,
-      double horasDormidas,
-      bool periodoMenstrual,
+      int horasDormidas,
+      bool periodoMenstrual = false,
       String eventoDeVida,
-      int impactoEvento,
+      double impactoEvento = 0,
       String sintomas,
       String otherInfo})
       : super(
@@ -35,7 +72,7 @@ class RegistroHumor extends _RegistroHumor with _$RegistroHumor {
             disforico: disforico,
             data: data,
             nota: nota,
-            medicamentos: ObservableList.of(medicamentos??[]),
+            medicamentos: ObservableList.of(medicamentos ?? []),
             horasDormidas: horasDormidas,
             periodoMenstrual: periodoMenstrual,
             eventoDeVida: eventoDeVida,
@@ -69,13 +106,13 @@ abstract class _RegistroHumor with Store {
   ObservableList<RegistroMedicamento> medicamentos =
       ObservableList<RegistroMedicamento>();
   @observable
-  double horasDormidas;
+  int horasDormidas;
   @observable
   bool periodoMenstrual;
   @observable
   String eventoDeVida;
   @observable
-  int impactoEvento;
+  double impactoEvento;
   @observable
   String sintomas;
   @observable
@@ -96,11 +133,14 @@ abstract class _RegistroHumor with Store {
 }
 
 class _ObservableListJsonConverter
-    implements JsonConverter<ObservableList<RegistroMedicamento>, List<Map<String, dynamic>>> {
+    implements
+        JsonConverter<ObservableList<RegistroMedicamento>,
+            List<Map<String, dynamic>>> {
   const _ObservableListJsonConverter();
 
   @override
-  ObservableList<RegistroMedicamento> fromJson(List<Map<String, dynamic>> json) =>
+  ObservableList<RegistroMedicamento> fromJson(
+          List<Map<String, dynamic>> json) =>
       ObservableList.of(json.map((x) => RegistroMedicamento.fromJson(x)));
 
   @override

@@ -10,7 +10,14 @@ class LoginStore extends _LoginStore with _$LoginStore {
 }
 
 abstract class _LoginStore with Store {
-  List<UserProfile> _userlist = List();
+  List<UserProfile> _userlist = [
+    UserProfile(
+        email: "john.dalton@exemplo.com",
+        password: "senha",
+        nome: "John",
+        sobrenome: "Dalton",
+        sexo: Sexo.masc)
+  ];
 
   @observable
   UserProfile userProfile;

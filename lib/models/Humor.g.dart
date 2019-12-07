@@ -17,10 +17,10 @@ RegistroHumor _$RegistroHumorFromJson(Map<String, dynamic> json) {
             ? null
             : RegistroMedicamento.fromJson(e as Map<String, dynamic>))
         ?.toList(),
-    horasDormidas: (json['horasDormidas'] as num)?.toDouble(),
+    horasDormidas: json['horasDormidas'] as int,
     periodoMenstrual: json['periodoMenstrual'] as bool,
     eventoDeVida: json['eventoDeVida'] as String,
-    impactoEvento: json['impactoEvento'] as int,
+    impactoEvento: (json['impactoEvento'] as num)?.toDouble(),
     sintomas: json['sintomas'] as String,
     otherInfo: json['otherInfo'] as String,
   );
@@ -181,14 +181,14 @@ mixin _$RegistroHumor on _RegistroHumor, Store {
   final _$horasDormidasAtom = Atom(name: '_RegistroHumor.horasDormidas');
 
   @override
-  double get horasDormidas {
+  int get horasDormidas {
     _$horasDormidasAtom.context.enforceReadPolicy(_$horasDormidasAtom);
     _$horasDormidasAtom.reportObserved();
     return super.horasDormidas;
   }
 
   @override
-  set horasDormidas(double value) {
+  set horasDormidas(int value) {
     _$horasDormidasAtom.context.conditionallyRunInAction(() {
       super.horasDormidas = value;
       _$horasDormidasAtom.reportChanged();
@@ -232,14 +232,14 @@ mixin _$RegistroHumor on _RegistroHumor, Store {
   final _$impactoEventoAtom = Atom(name: '_RegistroHumor.impactoEvento');
 
   @override
-  int get impactoEvento {
+  double get impactoEvento {
     _$impactoEventoAtom.context.enforceReadPolicy(_$impactoEventoAtom);
     _$impactoEventoAtom.reportObserved();
     return super.impactoEvento;
   }
 
   @override
-  set impactoEvento(int value) {
+  set impactoEvento(double value) {
     _$impactoEventoAtom.context.conditionallyRunInAction(() {
       super.impactoEvento = value;
       _$impactoEventoAtom.reportChanged();

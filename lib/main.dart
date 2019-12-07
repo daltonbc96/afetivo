@@ -33,7 +33,6 @@ class MyApp extends StatelessWidget {
               DashboardScreen.tag: (context) =>
                   DashboardScreen(title: 'Afetivo'),
               FogotPage.tag: (context) => FogotPage(),
-              AddicionalInfo.tag: (context) => AddicionalInfo(),
               Afetivograma.tag: (context) => Afetivograma("Afetivograma"),
               LoginPage.tag: (context) => LoginPage(),
               CadastroPage.tag: (context) => CadastroPage(),

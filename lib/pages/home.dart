@@ -1,3 +1,4 @@
+import 'package:afetivo/models/Humor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,13 +19,8 @@ class _HomeState extends State<Home> {
     final PageController pageController =
         PageController(initialPage: 4, viewportFraction: 0.8);
 
-    Widget getPageWidget(
-      String text,
-      String text2,
-      MaterialColor backgroundColor,
-      String titulo,
-      String descricao,
-    ) {
+    Widget getPageWidget(String text2, MaterialColor backgroundColor,
+        String titulo, String descricao, TipoHumor tipoHumor) {
       return Container(
         margin: EdgeInsets.symmetric(horizontal: 15.0),
         child: Column(
@@ -39,7 +35,7 @@ class _HomeState extends State<Home> {
                     Align(
                         alignment: Alignment.center,
                         child: Text(
-                          text,
+                          describeTipoHumor(tipoHumor),
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20.0,
@@ -66,7 +62,9 @@ class _HomeState extends State<Home> {
                         ),
                         color: Colors.green[700],
                         onPressed: () {
-                          Navigator.of(context).pushNamed(AddicionalInfo.tag);
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => AddicionalInfo(
+                                  humor: RegistroHumor(tipo: tipoHumor))));
                         },
                       ),
                     ),
@@ -143,24 +141,24 @@ class _HomeState extends State<Home> {
       child: PageView(
         controller: pageController,
         children: [
-          getPageWidget("Page 1", " Descrição do humor", Colors.amber, "page1",
-              "descrição 1"),
-          getPageWidget("Page 2", " Descrição do humor", Colors.lightBlue,
-              "page2", "descrição 2"),
-          getPageWidget("Page 3", " Descrição do humor", Colors.lime, "page3",
-              "descrição 3"),
-          getPageWidget("Page 4", " Descrição do humor", Colors.lime, "page4",
-              "descrição 4"),
-          getPageWidget("Page 5", " Descrição do humor", Colors.lime, "page5",
-              "descrição 5"),
-          getPageWidget("Page 6", " Descrição do humor", Colors.lime, "page6",
-              "descrição 6"),
-          getPageWidget("Page 7", " Descrição do humor", Colors.lime, "page7",
-              "descrição 7"),
-          getPageWidget("Page 8", " Descrição do humor", Colors.lime, "page8",
-              "descrição 8"),
-          getPageWidget("Page 9", " Descrição do humor", Colors.lime, "page9",
-              "descrição 9"),
+          getPageWidget(" Descrição do humor", Colors.amber, "page1",
+              "descrição 1", TipoHumor.graveDepre),
+          getPageWidget(" Descrição do humor", Colors.lightBlue, "page2",
+              "descrição 2", TipoHumor.modGraveDepre),
+          getPageWidget(" Descrição do humor", Colors.lime, "page3",
+              "descrição 3", TipoHumor.modLeveDepre),
+          getPageWidget(" Descrição do humor", Colors.lime, "page4",
+              "descrição 4", TipoHumor.leveDepre),
+          getPageWidget(" Descrição do humor", Colors.lime, "page5",
+              "descrição 5", TipoHumor.estavel),
+          getPageWidget(" Descrição do humor", Colors.lime, "page6",
+              "descrição 6", TipoHumor.leveMania),
+          getPageWidget(" Descrição do humor", Colors.lime, "page7",
+              "descrição 7", TipoHumor.modLeveMania),
+          getPageWidget(" Descrição do humor", Colors.lime, "page8",
+              "descrição 8", TipoHumor.modGraveMania),
+          getPageWidget(" Descrição do humor", Colors.lime, "page9",
+              "descrição 9", TipoHumor.graveMania),
         ],
       ),
     );
