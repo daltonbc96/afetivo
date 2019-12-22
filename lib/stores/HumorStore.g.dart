@@ -26,15 +26,10 @@ mixin _$HumorStore on _HumorStore, Store {
     }, _$humorListAtom, name: '${_$humorListAtom.name}_set');
   }
 
-  final _$_HumorStoreActionController = ActionController(name: '_HumorStore');
+  final _$addHumorAsyncAction = AsyncAction('addHumor');
 
   @override
   Future<void> addHumor(RegistroHumor humor) {
-    final _$actionInfo = _$_HumorStoreActionController.startAction();
-    try {
-      return super.addHumor(humor);
-    } finally {
-      _$_HumorStoreActionController.endAction(_$actionInfo);
-    }
+    return _$addHumorAsyncAction.run(() => super.addHumor(humor));
   }
 }

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
 class CadastroPage extends StatefulWidget {
@@ -14,30 +13,28 @@ class CadastroPage extends StatefulWidget {
   _State createState() => _State();
 }
 
+enum _CadastroStatus { Idle, Wait, Error }
+
 //TODO: Implement form validation
 class _State extends State<CadastroPage> {
   TextEditingController diagnosticoFieldController;
   TextEditingController passwordFieldController;
   UserProfile userProfile = UserProfile();
-  ReactionDisposer _disposePageChanger;
+  _CadastroStatus _cadastroStatus;
+  RegisterError _error;
 
   @override
   void initState() {
     super.initState();
+    _cadastroStatus = _CadastroStatus.Idle;
     diagnosticoFieldController = TextEditingController();
     passwordFieldController = TextEditingController();
-    _disposePageChanger = autorun((_) {
-      if (LoginStore.instance.loginStatus == LoginStatus.LoggedIn)
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil(DashboardScreen.tag, (_) => false);
-    });
   }
 
   @override
   void dispose() {
     diagnosticoFieldController.dispose();
     passwordFieldController.dispose();
-    _disposePageChanger();
     super.dispose();
   }
 
@@ -199,14 +196,30 @@ class _State extends State<CadastroPage> {
         minWidth: 70.0,
         color: Theme.of(context).primaryColor,
         textColor: Colors.white,
-        child: Observer(
+        child: Builder(
             builder: (context) => Text(
-                loginStore.loginStatus == LoginStatus.LoginWait
+                _cadastroStatus == _CadastroStatus.Wait
                     ? "CADASTRANDO..."
                     : "CADASTRAR",
                 style: TextStyle(fontSize: 16.0))),
-        onPressed: () {
-          loginStore.register(userProfile, passwordFieldController.text);
+        onPressed: () async {
+          try {
+            setState(() {
+              _cadastroStatus = _CadastroStatus.Wait;
+            });
+            await loginStore.register(
+                userProfile, passwordFieldController.text);
+            setState(() {
+              _cadastroStatus = _CadastroStatus.Idle;
+            });
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil(DashboardScreen.tag, (_) => false);
+          } on RegisterError catch (e) {
+            setState(() {
+              _cadastroStatus = _CadastroStatus.Error;
+              _error = e;
+            });
+          }
         },
         splashColor: Colors.redAccent,
       ),

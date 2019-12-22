@@ -5,28 +5,40 @@ import 'package:afetivo/pages/ajuda.dart';
 import 'package:afetivo/pages/forgotPage.dart';
 import 'package:afetivo/pages/home.dart';
 import 'package:afetivo/pages/loginPage.dart';
+import 'package:afetivo/stores/HumorStore.dart';
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
-
-import 'pages/adicionalInfo.dart';
 
 void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Provider<LoginStore>(
-        create: (_) => LoginStore.instance,
+    var loginStore = LoginStore();
+    var humorStore = HumorStore(loginStore: loginStore);
+
+    return MultiProvider(
+        providers: [
+          Provider<LoginStore>(
+            create: (_) => loginStore,
+            dispose: (_, store) => store.dispose(),
+          ),
+          Provider<HumorStore>(
+            create: (_) => humorStore,
+            dispose: (_, store) => store.dispose(),
+          ),
+        ],
         child: MaterialApp(
             title: 'Afetivo',
             debugShowCheckedModeBanner: false,
             theme: new ThemeData(
               primarySwatch: Colors.green,
             ),
-            initialRoute: LoginPage.tag,
+            initialRoute: loginStore.loginStatus == LoginStatus.LoggedIn
+                ? DashboardScreen.tag
+                : LoginPage.tag,
             routes: <String, WidgetBuilder>{
               "/a": (BuildContext context) => Configuracoes("Configurações"),
               "/b": (BuildContext context) => Ajuda("Ajuda"),
@@ -53,24 +65,17 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   PageController _pageController;
   int _page = 0;
-  ReactionDisposer _disposePageChanger;
 
   @override
   void initState() {
     super.initState();
     _pageController = new PageController();
-    _disposePageChanger = autorun((_) {
-      if (LoginStore.instance.loginStatus == LoginStatus.LoggedOff)
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil(LoginPage.tag, (_) => false);
-    });
   }
 
   @override
   void dispose() {
     super.dispose();
     _pageController.dispose();
-    _disposePageChanger();
   }
 
   void navigationTapped(int page) {
@@ -128,7 +133,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
             new ListTile(
               title: new Text("Sair"),
               trailing: new Icon(Icons.close),
-              onTap: loginStore.logout,
+              onTap: () async {
+                await loginStore.logout();
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil(LoginPage.tag, (_) => false);
+              },
             ),
           ],
         ),

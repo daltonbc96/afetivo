@@ -4,12 +4,12 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../main.dart';
+import 'package:provider/provider.dart';
 
 class AddicionalInfo extends StatefulWidget {
   static String tag = 'tag-pageAddInfo';
 
-  RegistroHumor humor;
+  final RegistroHumor humor;
 
   AddicionalInfo({Key key, this.humor}) : super(key: key);
 
@@ -36,6 +36,7 @@ class _State extends State<AddicionalInfo> {
 
   @override
   Widget build(BuildContext context) {
+    var humorStore = Provider.of<HumorStore>(context);
     final data = Observer(
         builder: (context) => Padding(
               padding: const EdgeInsets.all(16.0),
@@ -73,7 +74,10 @@ class _State extends State<AddicionalInfo> {
           color: Theme.of(context).primaryColor,
           textColor: Colors.white,
           child: new Text("CADASTRAR", style: TextStyle(fontSize: 16.0)),
-          onPressed: () => HumorStore.instance.addHumor(humor),
+          onPressed: () async {
+            await humorStore.addHumor(humor);
+            Navigator.of(context).pop();
+          },
           splashColor: Colors.redAccent,
         ));
 

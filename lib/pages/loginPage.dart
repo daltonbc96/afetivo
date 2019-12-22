@@ -13,28 +13,24 @@ class LoginPage extends StatefulWidget {
   _State createState() => _State();
 }
 
+enum _LoginStatus { Idle, Wait, Error }
+
 class _State extends State<LoginPage> {
   TextEditingController _emailController;
   TextEditingController _passwordControler;
-  ReactionDisposer _disposePageChanger;
+  _LoginStatus _loginStatus;
 
   @override
   void initState() {
     super.initState();
     _emailController = TextEditingController();
     _passwordControler = TextEditingController();
-    _disposePageChanger = autorun((_) {
-      if (LoginStore.instance.loginStatus == LoginStatus.LoggedIn)
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil(DashboardScreen.tag, (_) => false);
-    });
   }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordControler.dispose();
-    _disposePageChanger();
     super.dispose();
   }
 
@@ -78,18 +74,33 @@ class _State extends State<LoginPage> {
           color: Theme.of(context).primaryColor,
           textColor: Colors.white,
           child: new Text("ENTRAR", style: TextStyle(fontSize: 16.0)),
-          onPressed: () {
-            loginStore.login(_emailController.text, _passwordControler.text);
+          onPressed: () async {
+            try {
+              setState(() {
+                _loginStatus = _LoginStatus.Wait;
+              });
+              await loginStore.login(
+                  _emailController.text, _passwordControler.text);
+              setState(() {
+                _loginStatus = _LoginStatus.Idle;
+              });
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil(DashboardScreen.tag, (_) => false);
+            } on LoginError catch (_) {
+              setState(() {
+                _loginStatus = _LoginStatus.Error;
+              });
+            }
           },
           splashColor: Colors.redAccent,
         ));
 
-    final errorMessage = Container(child: Observer(builder: (context) {
-      switch (loginStore.loginStatus) {
-        case LoginStatus.LoginError:
+    final errorMessage = Container(child: Builder(builder: (context) {
+      switch (_loginStatus) {
+        case _LoginStatus.Error:
           return Text("Usuario ou senha invalido",
               style: TextStyle(color: Colors.redAccent));
-        case LoginStatus.LoginWait:
+        case _LoginStatus.Wait:
           return Text("Validando Usuario...");
         default:
       }

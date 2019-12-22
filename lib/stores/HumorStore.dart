@@ -1,20 +1,22 @@
+import 'package:afetivo/stores/LoginStore.dart';
 import 'package:mobx/mobx.dart';
 import '../models/Humor.dart';
 
 part 'HumorStore.g.dart';
 
-enum HumorStoreStatus { idle, busy, done }
-
-class HumorStore extends _HumorStore with _$HumorStore {
-  static HumorStore instance = HumorStore();
-}
+class HumorStore = _HumorStore with _$HumorStore;
 
 abstract class _HumorStore with Store {
+  LoginStore loginStore;
+
+  _HumorStore({this.loginStore});
+
   @observable
-  ObservableList<RegistroHumor> humorList;
+  ObservableList<RegistroHumor> humorList = ObservableList();
 
   @action
-  Future<void> addHumor(RegistroHumor humor) {
+  Future<void> addHumor(RegistroHumor humor) async {
+    await Future.delayed(Duration(seconds: 1));
     humorList.add(humor);
   }
 }
