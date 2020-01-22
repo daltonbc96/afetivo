@@ -21,7 +21,6 @@ class _State extends State<AddicionalInfo> {
   RegistroHumor humor;
   double mCurrentValue = 50.0;
   double currentValue = 0.0;
-  String resposta = 'Não';
   @override
   void initState() {
     super.initState();

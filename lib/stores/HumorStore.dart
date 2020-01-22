@@ -18,5 +18,12 @@ abstract class _HumorStore with Store {
   Future<void> addHumor(RegistroHumor humor) async {
     await Future.delayed(Duration(seconds: 1));
     humorList.add(humor);
+    humorList.sort((a, b) => b.data.compareTo(a.data));
+  }
+
+  @action
+  Future<void> deleteHumor(RegistroHumor humor) async {
+    await Future.delayed(Duration(seconds: 1));
+    humorList.remove(humor);
   }
 }

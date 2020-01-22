@@ -129,7 +129,9 @@ abstract class _RegistroHumor with Store {
       this.eventoDeVida,
       this.impactoEvento,
       this.sintomas,
-      this.otherInfo});
+      this.otherInfo}) {
+    if (data == null) data = DateTime.now();
+  }
 }
 
 class _ObservableListJsonConverter

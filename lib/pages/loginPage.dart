@@ -2,8 +2,6 @@ import 'package:afetivo/main.dart';
 import 'package:afetivo/pages/cadastroPage.dart';
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'forgotPage.dart';
 

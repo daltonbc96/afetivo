@@ -8,6 +8,7 @@ import 'package:afetivo/pages/loginPage.dart';
 import 'package:afetivo/stores/HumorStore.dart';
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +32,14 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [
+              const Locale.fromSubtags(languageCode: 'pt', countryCode: 'BR')
+            ],
             title: 'Afetivo',
             debugShowCheckedModeBanner: false,
             theme: new ThemeData(
@@ -45,7 +54,7 @@ class MyApp extends StatelessWidget {
               DashboardScreen.tag: (context) =>
                   DashboardScreen(title: 'Afetivo'),
               FogotPage.tag: (context) => FogotPage(),
-              Afetivograma.tag: (context) => Afetivograma("Afetivograma"),
+              Afetivograma.tag: (context) => Afetivograma(),
               LoginPage.tag: (context) => LoginPage(),
               CadastroPage.tag: (context) => CadastroPage(),
             }));
@@ -145,7 +154,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: new PageView(
         children: [
           new Home("Home"),
-          new Afetivograma("Afetivograma screen"),
+          new Afetivograma(),
         ],
         onPageChanged: onPageChanged,
         controller: _pageController,

@@ -32,4 +32,11 @@ mixin _$HumorStore on _HumorStore, Store {
   Future<void> addHumor(RegistroHumor humor) {
     return _$addHumorAsyncAction.run(() => super.addHumor(humor));
   }
+
+  final _$deleteHumorAsyncAction = AsyncAction('deleteHumor');
+
+  @override
+  Future<void> deleteHumor(RegistroHumor humor) {
+    return _$deleteHumorAsyncAction.run(() => super.deleteHumor(humor));
+  }
 }
