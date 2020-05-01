@@ -63,8 +63,10 @@ class _HomeState extends State<Home> {
                         color: Colors.green[700],
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => AddicionalInfo(
-                                  humor: RegistroHumor(tipo: tipoHumor))));
+                              builder: (context) =>
+                                  AddicionalInfo.fromHumorType(
+                                    tipoHumor: tipoHumor,
+                                  )));
                         },
                       ),
                     ),

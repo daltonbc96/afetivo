@@ -1,5 +1,7 @@
 import 'package:afetivo/models/Humor.dart';
+import 'package:afetivo/models/Medicamento.dart';
 import 'package:afetivo/stores/HumorStore.dart';
+import 'package:afetivo/stores/LoginStore.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +12,14 @@ class AddicionalInfo extends StatefulWidget {
   static String tag = 'tag-pageAddInfo';
 
   final RegistroHumor humor;
+  final TipoHumor tipoHumor;
 
-  AddicionalInfo({Key key, this.humor}) : super(key: key);
+  AddicionalInfo({Key key, @required this.humor})
+      : tipoHumor = null,
+        super(key: key);
+  AddicionalInfo.fromHumorType({Key key, @required this.tipoHumor})
+      : this.humor = null,
+        super(key: key);
 
   @override
   _State createState() => _State();
@@ -21,21 +29,33 @@ class _State extends State<AddicionalInfo> {
   RegistroHumor humor;
   double mCurrentValue = 50.0;
   double currentValue = 0.0;
+
   @override
   void initState() {
     super.initState();
-    humor = this.widget.humor ?? RegistroHumor();
   }
 
   @override
   void dispose() {
     super.dispose();
-    humor.dispose();
+    if (humor != null) humor.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    var humorStore = Provider.of<HumorStore>(context);
+    final humorStore = Provider.of<HumorStore>(context);
+    final loginStore = Provider.of<LoginStore>(context);
+    final userProfile = loginStore.userProfile;
+    if (this.humor == null)
+      this.humor = this.widget.humor ??
+          RegistroHumor(
+              tipo: this.widget.tipoHumor,
+              medicamentos: userProfile.medicamentos.map((med) {
+                final ret = RegistroMedicamento(medicamento: med);
+                print(ret);
+                return ret;
+              }).toList());
+
     final data = Observer(
         builder: (context) => Padding(
               padding: const EdgeInsets.all(16.0),
@@ -118,20 +138,42 @@ class _State extends State<AddicionalInfo> {
         ));
 
     final medicamentos = Container(
-        child: Column(
-      children: <Widget>[
-        TextFormField(
-          autofocus: false,
-          decoration: InputDecoration(
-            labelText: 'Medicamentos',
-            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(32.0),
-            ),
-          ),
-        ),
-      ],
-    ));
+        child: Observer(
+            builder: (context) => Column(
+                children: humor.medicamentos
+                    .map((item) => Observer(
+                          builder: (context) => ListTile(
+                              title: Row(
+                            children: [
+                              Expanded(
+                                  flex: 4,
+                                  child: Text(
+                                    "${item.medicamento.nome}, ${item.medicamento.dose}",
+                                    overflow: TextOverflow.ellipsis,
+                                  )),
+                              Expanded(
+                                  flex: 3,
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    initialValue: (item.numeroComprimidos ?? '')
+                                        .toString(),
+                                    onChanged: (value) => item
+                                        .numeroComprimidos = int.parse(value),
+                                    autofocus: false,
+                                    decoration: InputDecoration(
+                                      labelText: 'Comprimidos:',
+                                      contentPadding: EdgeInsets.fromLTRB(
+                                          20.0, 10.0, 20.0, 10.0),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(32.0),
+                                      ),
+                                    ),
+                                  ))
+                            ],
+                          )),
+                        ))
+                    .toList())));
 
     final horasDormidas = Container(
         child: Observer(
@@ -261,7 +303,7 @@ class _State extends State<AddicionalInfo> {
     return Scaffold(
         appBar: new AppBar(
           title: Column(children: [
-            Text("Indormações Adicionais"),
+            Text("Informações Adicionais"),
             Text(describeTipoHumor(humor.tipo))
           ]),
         ),

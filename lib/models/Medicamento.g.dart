@@ -9,7 +9,7 @@ part of 'Medicamento.dart';
 Medicamento _$MedicamentoFromJson(Map<String, dynamic> json) {
   return Medicamento(
     nome: json['nome'] as String,
-    dose: (json['dose'] as num)?.toDouble(),
+    dose: json['dose'] as String,
   );
 }
 
@@ -62,14 +62,14 @@ mixin _$Medicamento on _Medicamento, Store {
   final _$doseAtom = Atom(name: '_Medicamento.dose');
 
   @override
-  double get dose {
+  String get dose {
     _$doseAtom.context.enforceReadPolicy(_$doseAtom);
     _$doseAtom.reportObserved();
     return super.dose;
   }
 
   @override
-  set dose(double value) {
+  set dose(String value) {
     _$doseAtom.context.conditionallyRunInAction(() {
       super.dose = value;
       _$doseAtom.reportChanged();

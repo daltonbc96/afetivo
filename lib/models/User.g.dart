@@ -18,7 +18,8 @@ UserProfile _$UserProfileFromJson(Map<String, dynamic> json) {
     sexo: _$enumDecodeNullable(_$SexoEnumMap, json['sexo']),
     diagnosticos:
         (json['diagnosticos'] as List)?.map((e) => e as String)?.toList(),
-  );
+  )..medicamentos = const _ObservableListJsonConverter()
+      .fromJson(json['medicamentos'] as List<Map<String, dynamic>>);
 }
 
 Map<String, dynamic> _$UserProfileToJson(UserProfile instance) =>
@@ -30,6 +31,8 @@ Map<String, dynamic> _$UserProfileToJson(UserProfile instance) =>
       'nascimento': instance.nascimento?.toIso8601String(),
       'sexo': _$SexoEnumMap[instance.sexo],
       'diagnosticos': instance.diagnosticos,
+      'medicamentos':
+          const _ObservableListJsonConverter().toJson(instance.medicamentos),
     };
 
 T _$enumDecode<T>(
@@ -207,6 +210,23 @@ mixin _$UserProfile on _UserProfile, Store {
     }, _$diagnosticosAtom, name: '${_$diagnosticosAtom.name}_set');
   }
 
+  final _$medicamentosAtom = Atom(name: '_UserProfile.medicamentos');
+
+  @override
+  ObservableList<Medicamento> get medicamentos {
+    _$medicamentosAtom.context.enforceReadPolicy(_$medicamentosAtom);
+    _$medicamentosAtom.reportObserved();
+    return super.medicamentos;
+  }
+
+  @override
+  set medicamentos(ObservableList<Medicamento> value) {
+    _$medicamentosAtom.context.conditionallyRunInAction(() {
+      super.medicamentos = value;
+      _$medicamentosAtom.reportChanged();
+    }, _$medicamentosAtom, name: '${_$medicamentosAtom.name}_set');
+  }
+
   final _$_UserProfileActionController = ActionController(name: '_UserProfile');
 
   @override
@@ -224,6 +244,26 @@ mixin _$UserProfile on _UserProfile, Store {
     final _$actionInfo = _$_UserProfileActionController.startAction();
     try {
       return super.addDiagnostico(diagnostico);
+    } finally {
+      _$_UserProfileActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void deleteMedicamento(Medicamento medicamento) {
+    final _$actionInfo = _$_UserProfileActionController.startAction();
+    try {
+      return super.deleteMedicamento(medicamento);
+    } finally {
+      _$_UserProfileActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void addMedicamento(Medicamento medicamento) {
+    final _$actionInfo = _$_UserProfileActionController.startAction();
+    try {
+      return super.addMedicamento(medicamento);
     } finally {
       _$_UserProfileActionController.endAction(_$actionInfo);
     }

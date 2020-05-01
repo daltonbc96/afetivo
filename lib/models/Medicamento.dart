@@ -3,9 +3,9 @@ import 'package:mobx/mobx.dart';
 
 part 'Medicamento.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Medicamento extends _Medicamento with _$Medicamento {
-  Medicamento({String nome, double dose}) : super(nome: nome, dose: dose);
+  Medicamento({String nome, String dose}) : super(nome: nome, dose: dose);
 
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.
@@ -24,9 +24,12 @@ abstract class _Medicamento with Store {
   String nome;
 
   @observable
-  double dose;
+  String dose;
 
-  _Medicamento({this.nome, this.dose});
+  _Medicamento({nome, dose}) {
+    if (nome != null) this.nome = nome.trim();
+    if (dose != null) this.dose = dose.trim();
+  }
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -50,6 +53,7 @@ class RegistroMedicamento extends _RegistroMedicamento
 abstract class _RegistroMedicamento with Store {
   @observable
   Medicamento medicamento;
+
   @observable
   int numeroComprimidos;
 

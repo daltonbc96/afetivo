@@ -1,4 +1,5 @@
 import 'package:afetivo/main.dart';
+import 'package:afetivo/models/Medicamento.dart';
 import 'package:afetivo/models/User.dart';
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +18,11 @@ enum _CadastroStatus { Idle, Wait, Error }
 
 //TODO: Implement form validation
 class _State extends State<CadastroPage> {
-  TextEditingController diagnosticoFieldController;
-  TextEditingController passwordFieldController;
-  UserProfile userProfile = UserProfile();
+  TextEditingController _diagnosticoFieldController;
+  TextEditingController _medNameFieldController;
+  TextEditingController _medDoseFieldController;
+  TextEditingController _passwordFieldController;
+  UserProfile _userProfile = UserProfile();
   _CadastroStatus _cadastroStatus;
   RegisterError _error;
 
@@ -27,14 +30,18 @@ class _State extends State<CadastroPage> {
   void initState() {
     super.initState();
     _cadastroStatus = _CadastroStatus.Idle;
-    diagnosticoFieldController = TextEditingController();
-    passwordFieldController = TextEditingController();
+    _diagnosticoFieldController = TextEditingController();
+    _passwordFieldController = TextEditingController();
+    _medNameFieldController = TextEditingController();
+    _medDoseFieldController = TextEditingController();
   }
 
   @override
   void dispose() {
-    diagnosticoFieldController.dispose();
-    passwordFieldController.dispose();
+    _diagnosticoFieldController.dispose();
+    _passwordFieldController.dispose();
+    _medNameFieldController.dispose();
+    _medDoseFieldController.dispose();
     super.dispose();
   }
 
@@ -45,7 +52,7 @@ class _State extends State<CadastroPage> {
         builder: (context) => TextFormField(
               keyboardType: TextInputType.emailAddress,
               autofocus: false,
-              onChanged: (value) => userProfile.email = value,
+              onChanged: (value) => _userProfile.email = value,
               decoration: InputDecoration(
                 labelText: 'E-mail',
                 contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -58,7 +65,7 @@ class _State extends State<CadastroPage> {
     final password = TextFormField(
       autofocus: false,
       obscureText: true,
-      controller: passwordFieldController,
+      controller: _passwordFieldController,
       decoration: InputDecoration(
         labelText: 'Senha',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -71,8 +78,8 @@ class _State extends State<CadastroPage> {
     final primeiroNome = Observer(
         builder: (context) => TextFormField(
               autofocus: false,
-              initialValue: userProfile.nome,
-              onChanged: (value) => userProfile.nome = value,
+              initialValue: _userProfile.nome,
+              onChanged: (value) => _userProfile.nome = value,
               decoration: InputDecoration(
                 labelText: 'Primeiro Nome',
                 contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -85,8 +92,8 @@ class _State extends State<CadastroPage> {
     final sobrenome = Observer(
         builder: (context) => TextFormField(
               autofocus: false,
-              initialValue: userProfile.sobrenome,
-              onChanged: (value) => userProfile.sobrenome = value,
+              initialValue: _userProfile.sobrenome,
+              onChanged: (value) => _userProfile.sobrenome = value,
               decoration: InputDecoration(
                 labelText: 'Sobrenome',
                 contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -101,8 +108,8 @@ class _State extends State<CadastroPage> {
                 child: DropdownButton<Sexo>(
               hint: Text("Sexo"),
               isExpanded: true,
-              value: userProfile.sexo,
-              onChanged: (value) => userProfile.sexo = value,
+              value: _userProfile.sexo,
+              onChanged: (value) => _userProfile.sexo = value,
               items: Sexo.values.map<DropdownMenuItem<Sexo>>((value) {
                 return DropdownMenuItem<Sexo>(
                   value: value,
@@ -121,8 +128,8 @@ class _State extends State<CadastroPage> {
                   children: <Widget>[
                     DateTimeField(
                       format: DateFormat(DateFormat.YEAR_MONTH_DAY),
-                      onChanged: (value) => userProfile.nascimento = value,
-                      initialValue: userProfile.nascimento,
+                      onChanged: (value) => _userProfile.nascimento = value,
+                      initialValue: _userProfile.nascimento,
                       onShowPicker: (context, currentValue) {
                         return showDatePicker(
                             context: context,
@@ -141,7 +148,7 @@ class _State extends State<CadastroPage> {
         children: <Widget>[
           Flexible(
               child: TextField(
-            controller: diagnosticoFieldController,
+            controller: _diagnosticoFieldController,
             decoration: InputDecoration(
               labelText: 'Diagnosticos:',
               contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -153,8 +160,8 @@ class _State extends State<CadastroPage> {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              userProfile.addDiagnostico(diagnosticoFieldController.text);
-              diagnosticoFieldController.text = '';
+              _userProfile.addDiagnostico(_diagnosticoFieldController.text);
+              _diagnosticoFieldController.text = '';
             },
           ),
         ],
@@ -163,23 +170,77 @@ class _State extends State<CadastroPage> {
 
     final diagnosticosList = Observer(
         builder: (context) => Column(
-            children: userProfile.diagnosticos
+            children: _userProfile.diagnosticos
                 .map(
                   (item) => Observer(
                     builder: (context) => ListTile(
-                      title: Row(
-                        children: <Widget>[
-                          Expanded(
-                              child: Text(
-                            item,
-                            overflow: TextOverflow.ellipsis,
-                          )),
-                          IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () =>
-                                userProfile.deleteDiagnostico(item),
-                          )
-                        ],
+                        title: Text(
+                          item,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () => _userProfile.deleteDiagnostico(item),
+                        )),
+                  ),
+                )
+                .toList()));
+
+    final medicamentoAdder = Container(
+      child: Row(
+        children: <Widget>[
+          Expanded(
+              flex: 2,
+              child: TextField(
+                controller: _medNameFieldController,
+                decoration: InputDecoration(
+                  labelText: 'Medicamento:',
+                  contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(32.0),
+                  ),
+                ),
+              )),
+          Expanded(
+              flex: 1,
+              child: TextField(
+                controller: _medDoseFieldController,
+                decoration: InputDecoration(
+                  labelText: 'Dose:',
+                  contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(32.0),
+                  ),
+                ),
+              )),
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              final medicamento = Medicamento(
+                  nome: _medNameFieldController.text,
+                  dose: _medDoseFieldController.text);
+              _userProfile.addMedicamento(medicamento);
+              _medNameFieldController.text = '';
+              _medDoseFieldController.text = '';
+            },
+          ),
+        ],
+      ),
+    );
+
+    final medicamentoList = Observer(
+        builder: (context) => Column(
+            children: _userProfile.medicamentos
+                .map(
+                  (item) => Observer(
+                    builder: (context) => ListTile(
+                      title: Text(
+                        "${item.nome}, ${item.dose}",
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () => _userProfile.deleteMedicamento(item),
                       ),
                     ),
                   ),
@@ -208,7 +269,7 @@ class _State extends State<CadastroPage> {
               _cadastroStatus = _CadastroStatus.Wait;
             });
             await loginStore.register(
-                userProfile, passwordFieldController.text);
+                _userProfile, _passwordFieldController.text);
             setState(() {
               _cadastroStatus = _CadastroStatus.Idle;
             });
@@ -255,6 +316,10 @@ class _State extends State<CadastroPage> {
               SizedBox(height: 25.0),
               diagnosticoAdder,
               diagnosticosList,
+              SizedBox(height: 25.0),
+              medicamentoAdder,
+              medicamentoList,
+              SizedBox(height: 25.0),
               sentBtt,
             ],
           ),

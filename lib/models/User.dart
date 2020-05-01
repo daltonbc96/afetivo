@@ -1,3 +1,4 @@
+import 'package:afetivo/models/Medicamento.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mobx/mobx.dart';
 
@@ -77,6 +78,10 @@ abstract class _UserProfile with Store {
   @observable
   ObservableList<String> diagnosticos = ObservableList<String>();
 
+  @observable
+  @_ObservableListJsonConverter()
+  ObservableList<Medicamento> medicamentos = ObservableList<Medicamento>();
+
   @action
   void deleteDiagnostico(String diagnostico) {
     diagnostico = diagnostico.trim();
@@ -91,6 +96,19 @@ abstract class _UserProfile with Store {
     }
   }
 
+  @action
+  void deleteMedicamento(Medicamento medicamento) {
+    medicamentos.remove(medicamento);
+  }
+
+  @action
+  void addMedicamento(Medicamento medicamento) {
+    print(medicamento);
+    if (!medicamentos.contains(medicamento)) {
+      medicamentos.add(medicamento);
+    }
+  }
+
   _UserProfile(
       {this.nome,
       this.sobrenome,
@@ -99,4 +117,18 @@ abstract class _UserProfile with Store {
       this.nascimento,
       this.sexo,
       this.diagnosticos});
+}
+
+class _ObservableListJsonConverter
+    implements
+        JsonConverter<ObservableList<Medicamento>, List<Map<String, dynamic>>> {
+  const _ObservableListJsonConverter();
+
+  @override
+  ObservableList<Medicamento> fromJson(List<Map<String, dynamic>> json) =>
+      ObservableList.of(json.map((x) => Medicamento.fromJson(x)));
+
+  @override
+  List<Map<String, dynamic>> toJson(ObservableList<Medicamento> list) =>
+      list.map((x) => x.toJson()).toList();
 }
