@@ -19,8 +19,7 @@ class Afetivograma extends StatelessWidget {
                 builder: (_) => ListView.builder(
                     itemCount: humorStore.humorList.length,
                     itemBuilder: (context, index) {
-                      final humor = humorStore.humorList[index];
-                      return _HumorCard(humor);
+                      return _HumorCard(humorStore.humorList[index]);
                     }))));
   }
 }
@@ -52,9 +51,17 @@ class _CardState extends State<_HumorCard> {
   }
 
   @override
+  void didUpdateWidget(_HumorCard oldWidget) {
+    if (widget.humor != oldWidget.humor) {
+      this.isExpanded = false;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final humorStore = Provider.of<HumorStore>(context);
-    final humor = this.widget.humor;
+    final humor = widget.humor;
     final _menuItems = [
       _MenuOption("Editar", (context, humor) async {
         print("Vc clicou em editar");
@@ -63,27 +70,36 @@ class _CardState extends State<_HumorCard> {
         await humorStore.deleteHumor(humor);
       })
     ];
-    return Card(
-        child: ExpansionPanelList(
-            expansionCallback: (_, isExpanded) => setState(() {
-                  this.isExpanded = !isExpanded;
-                }),
-            children: [
-          ExpansionPanel(
-              headerBuilder: (context, isExpanded) => ListTile(
-                    title: Text(describeTipoHumor(humor.tipo)),
-                    subtitle: Text(DateFormat.yMd().format(humor.data)),
-                  ),
-              body: ListTile(
-                  trailing: PopupMenuButton<_MenuOption>(
-                initialValue: _menuItems[0],
-                itemBuilder: (context) => _menuItems
-                    .map((item) =>
-                        PopupMenuItem(value: item, child: Text(item.title)))
-                    .toList(),
-                onSelected: (choice) => choice.callback(context, humor),
-              )),
-              isExpanded: isExpanded)
-        ]));
+
+    return Observer(
+        builder: (context) => Card(
+                child: ExpansionPanelList(
+                    expansionCallback: (_, isExpanded) => setState(() {
+                          this.isExpanded = !isExpanded;
+                        }),
+                    children: [
+                  ExpansionPanel(
+                      headerBuilder: (context, isExpanded) => ListTile(
+                            title: Text(describeTipoHumor(humor.tipo)),
+                            subtitle: Text(DateFormat.yMd().format(humor.data)),
+                          ),
+                      body: Column(children: <Widget>[
+                        ButtonBar(children: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () => humorStore.deleteHumor(humor),
+                          ),
+                          PopupMenuButton<_MenuOption>(
+                            itemBuilder: (context) => _menuItems
+                                .map((item) => PopupMenuItem(
+                                    value: item, child: Text(item.title)))
+                                .toList(),
+                            onSelected: (choice) =>
+                                choice.callback(context, humor),
+                          )
+                        ])
+                      ]),
+                      isExpanded: isExpanded)
+                ])));
   }
 }
