@@ -58,6 +58,14 @@ class _CardState extends State<_HumorCard> {
     super.didUpdateWidget(oldWidget);
   }
 
+  _cardInfoText(String text) {
+    return Align(
+        alignment: Alignment.centerLeft,
+        child: Container(
+            margin: new EdgeInsets.symmetric(horizontal: 10.0),
+            child: Text(text)));
+  }
+
   @override
   Widget build(BuildContext context) {
     final humorStore = Provider.of<HumorStore>(context);
@@ -84,6 +92,25 @@ class _CardState extends State<_HumorCard> {
                             subtitle: Text(DateFormat.yMd().format(humor.data)),
                           ),
                       body: Column(children: <Widget>[
+                        if (humor.nota != null)
+                          _cardInfoText("Nota do Humor: ${humor.nota}"),
+                        if (humor.horasDormidas != null)
+                          _cardInfoText(
+                              "Horas Dormidas: ${humor.horasDormidas}"),
+                        if (humor.periodoMenstrual)
+                          _cardInfoText("Em Periodo Menstrual"),
+                        if (humor.eventoDeVida != null)
+                          _cardInfoText(
+                              "Evento de Vida: ${humor.eventoDeVida}"),
+                        if (humor.eventoDeVida != null)
+                          _cardInfoText(
+                              "Impacto do evento: ${humor.impactoEvento}"),
+                        if (humor.sintomas != null)
+                          _cardInfoText(
+                              "Sintomas Comorbidos: ${humor.sintomas}"),
+                        if (humor.otherInfo != null)
+                          _cardInfoText(
+                              "Outras Informações: ${humor.otherInfo}"),
                         ButtonBar(children: <Widget>[
                           IconButton(
                             icon: Icon(Icons.delete),
