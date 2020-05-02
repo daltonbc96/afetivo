@@ -10,6 +10,10 @@ import 'package:provider/provider.dart';
 
 class CadastroPage extends StatefulWidget {
   static String tag = 'tag-page-cadastro';
+  final UserProfile userProfile;
+
+  CadastroPage({Key key, this.userProfile}) : super(key: key);
+
   @override
   _State createState() => _State();
 }
@@ -22,13 +26,14 @@ class _State extends State<CadastroPage> {
   TextEditingController _medNameFieldController;
   TextEditingController _medDoseFieldController;
   TextEditingController _passwordFieldController;
-  UserProfile _userProfile = UserProfile();
+  UserProfile _userProfile;
   _CadastroStatus _cadastroStatus;
   RegisterError _error;
 
   @override
   void initState() {
     super.initState();
+    _userProfile = widget.userProfile ?? UserProfile();
     _cadastroStatus = _CadastroStatus.Idle;
     _diagnosticoFieldController = TextEditingController();
     _passwordFieldController = TextEditingController();

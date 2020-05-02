@@ -142,8 +142,7 @@ class _State extends State<AddicionalInfo> {
             builder: (context) => Column(
                 children: humor.medicamentos
                     .map((item) => Observer(
-                          builder: (context) => ListTile(
-                              title: Row(
+                          builder: (context) => Row(
                             children: [
                               Expanded(
                                   flex: 4,
@@ -171,7 +170,7 @@ class _State extends State<AddicionalInfo> {
                                     ),
                                   ))
                             ],
-                          )),
+                          ),
                         ))
                     .toList())));
 
@@ -322,7 +321,6 @@ class _State extends State<AddicionalInfo> {
                 SizedBox(height: 25.0),
                 new Text("Atibua uma Nota para o seu Humor"),
                 notaHumor,
-                SizedBox(height: 25.0),
                 medicamentos,
                 SizedBox(height: 25.0),
                 horasDormidas,

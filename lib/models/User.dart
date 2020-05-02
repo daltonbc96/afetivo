@@ -21,22 +21,25 @@ String describeSexo(Sexo sexo) {
 
 @JsonSerializable()
 class UserProfile extends _UserProfile with _$UserProfile {
-  UserProfile(
-      {String nome,
-      String sobrenome,
-      String email,
-      String password,
-      DateTime nascimento,
-      Sexo sexo,
-      List<String> diagnosticos})
-      : super(
-            nome: nome,
-            sobrenome: sobrenome,
-            email: email,
-            password: password,
-            nascimento: nascimento,
-            sexo: sexo,
-            diagnosticos: ObservableList.of(diagnosticos ?? []));
+  UserProfile({
+    String nome,
+    String sobrenome,
+    String email,
+    String password,
+    DateTime nascimento,
+    Sexo sexo,
+    List<String> diagnosticos,
+    List<Medicamento> medicamentos,
+  }) : super(
+          nome: nome,
+          sobrenome: sobrenome,
+          email: email,
+          password: password,
+          nascimento: nascimento,
+          sexo: sexo,
+          diagnosticos: ObservableList.of(diagnosticos ?? []),
+          medicamentos: ObservableList.of(medicamentos ?? []),
+        );
 
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.
@@ -116,7 +119,8 @@ abstract class _UserProfile with Store {
       this.password,
       this.nascimento,
       this.sexo,
-      this.diagnosticos});
+      this.diagnosticos,
+      this.medicamentos});
 }
 
 class _ObservableListJsonConverter

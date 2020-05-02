@@ -18,8 +18,11 @@ UserProfile _$UserProfileFromJson(Map<String, dynamic> json) {
     sexo: _$enumDecodeNullable(_$SexoEnumMap, json['sexo']),
     diagnosticos:
         (json['diagnosticos'] as List)?.map((e) => e as String)?.toList(),
-  )..medicamentos = const _ObservableListJsonConverter()
-      .fromJson(json['medicamentos'] as List<Map<String, dynamic>>);
+    medicamentos: (json['medicamentos'] as List)
+        ?.map((e) =>
+            e == null ? null : Medicamento.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+  );
 }
 
 Map<String, dynamic> _$UserProfileToJson(UserProfile instance) =>

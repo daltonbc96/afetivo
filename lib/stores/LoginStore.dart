@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:afetivo/models/Medicamento.dart';
 import 'package:mobx/mobx.dart';
 import '../models/User.dart';
 
@@ -12,17 +12,19 @@ class LoginError {}
 class LoginStore = _LoginStore with _$LoginStore;
 
 abstract class _LoginStore with Store {
-  static final _default_user = UserProfile(
+  static final _defaultUser = UserProfile(
       email: "john.dalton@exemplo.com",
       password: "senha",
       nome: "John",
       sobrenome: "Dalton",
-      sexo: Sexo.masc);
+      sexo: Sexo.masc,
+      diagnosticos: ["Transtorno Bipolar"],
+      medicamentos: [Medicamento(nome: "Litio", dose: "200mg")]);
 
-  List<UserProfile> _userlist = [_default_user];
+  List<UserProfile> _userlist = [_defaultUser];
 
   @observable
-  UserProfile userProfile = _default_user;
+  UserProfile userProfile = _defaultUser;
 
   @observable
   LoginStatus loginStatus = LoginStatus.LoggedIn;
