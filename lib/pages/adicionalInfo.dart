@@ -1,7 +1,5 @@
 import 'package:afetivo/models/Humor.dart';
-import 'package:afetivo/models/Medicamento.dart';
 import 'package:afetivo/stores/HumorStore.dart';
-import 'package:afetivo/stores/LoginStore.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
@@ -12,14 +10,8 @@ class AddicionalInfo extends StatefulWidget {
   static String tag = 'tag-pageAddInfo';
 
   final RegistroHumor humor;
-  final TipoHumor tipoHumor;
 
-  AddicionalInfo({Key key, @required this.humor})
-      : tipoHumor = null,
-        super(key: key);
-  AddicionalInfo.fromHumorType({Key key, @required this.tipoHumor})
-      : this.humor = null,
-        super(key: key);
+  AddicionalInfo({Key key, @required this.humor}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -33,28 +25,17 @@ class _State extends State<AddicionalInfo> {
   @override
   void initState() {
     super.initState();
+    this.humor = RegistroHumor.from(this.widget.humor);
   }
 
   @override
   void dispose() {
     super.dispose();
-    if (humor != null) humor.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final humorStore = Provider.of<HumorStore>(context);
-    final loginStore = Provider.of<LoginStore>(context);
-    final userProfile = loginStore.userProfile;
-    if (this.humor == null)
-      this.humor = this.widget.humor ??
-          RegistroHumor(
-              tipo: this.widget.tipoHumor,
-              medicamentos: userProfile.medicamentos.map((med) {
-                final ret = RegistroMedicamento(medicamento: med);
-                print(ret);
-                return ret;
-              }).toList());
 
     final data = Observer(
         builder: (context) => Padding(
@@ -92,9 +73,9 @@ class _State extends State<AddicionalInfo> {
           minWidth: 70.0,
           color: Theme.of(context).primaryColor,
           textColor: Colors.white,
-          child: new Text("CADASTRAR", style: TextStyle(fontSize: 16.0)),
+          child: new Text("Registrar", style: TextStyle(fontSize: 16.0)),
           onPressed: () async {
-            await humorStore.addHumor(humor);
+            await humorStore.editHumor(humor);
             Navigator.of(context).pop();
           },
           splashColor: Colors.redAccent,

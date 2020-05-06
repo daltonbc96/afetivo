@@ -1,6 +1,8 @@
 import 'package:afetivo/models/Humor.dart';
+import 'package:afetivo/stores/HumorStore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'adicionalInfo.dart';
 
@@ -15,6 +17,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     //final Widget body = Column(children: [pageView,]);
+    final humorStore = Provider.of<HumorStore>(context);
 
     final PageController pageController =
         PageController(initialPage: 4, viewportFraction: 0.8);
@@ -62,10 +65,10 @@ class _HomeState extends State<Home> {
                         ),
                         color: Colors.green[700],
                         onPressed: () {
+                          final humor = humorStore.createHumor(tipoHumor);
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  AddicionalInfo.fromHumorType(
-                                    tipoHumor: tipoHumor,
+                              builder: (context) => AddicionalInfo(
+                                    humor: humor,
                                   )));
                         },
                       ),

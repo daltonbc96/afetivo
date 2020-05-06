@@ -1,3 +1,4 @@
+import 'package:afetivo/models/Medicamento.dart';
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:mobx/mobx.dart';
 import '../models/Humor.dart';
@@ -15,8 +16,21 @@ abstract class _HumorStore with Store {
   ObservableList<RegistroHumor> humorList = ObservableList();
 
   @action
-  Future<void> addHumor(RegistroHumor humor) async {
+  RegistroHumor createHumor(TipoHumor tipoHumor) {
+    final humor = RegistroHumor(tipo: tipoHumor);
+    if (loginStore != null && loginStore.userProfile != null) {
+      humor.medicamentos = ObservableList.of(loginStore.userProfile.medicamentos
+          .map((med) => RegistroMedicamento(medicamento: med))
+          .toList());
+    }
+
+    return humor;
+  }
+
+  @action
+  Future<void> editHumor(RegistroHumor humor) async {
     await Future.delayed(Duration(seconds: 1));
+    humorList.removeWhere((item) => item.id == humor.id);
     humorList.add(humor);
     humorList.sort((a, b) => b.data.compareTo(a.data));
   }

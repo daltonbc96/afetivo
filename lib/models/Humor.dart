@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:afetivo/models/Medicamento.dart';
 import 'package:mobx/mobx.dart';
+import 'package:uuid/uuid.dart';
 
 part 'Humor.g.dart';
 
@@ -56,7 +58,7 @@ String describeTipoHumor(TipoHumor humor) {
 @JsonSerializable()
 class RegistroHumor extends _RegistroHumor with _$RegistroHumor {
   RegistroHumor(
-      {TipoHumor tipo,
+      {@required TipoHumor tipo,
       bool disforico = false,
       DateTime data,
       int nota,
@@ -68,6 +70,7 @@ class RegistroHumor extends _RegistroHumor with _$RegistroHumor {
       String sintomas,
       String otherInfo})
       : super(
+            id: Uuid().v4(),
             tipo: tipo,
             disforico: disforico,
             data: data,
@@ -79,6 +82,21 @@ class RegistroHumor extends _RegistroHumor with _$RegistroHumor {
             impactoEvento: impactoEvento,
             sintomas: sintomas,
             otherInfo: otherInfo);
+
+  RegistroHumor.from(RegistroHumor other)
+      : super(
+            id: other.id,
+            tipo: other.tipo,
+            disforico: other.disforico,
+            data: other.data,
+            nota: other.nota,
+            medicamentos: other.medicamentos,
+            horasDormidas: other.horasDormidas,
+            periodoMenstrual: other.periodoMenstrual,
+            eventoDeVida: other.eventoDeVida,
+            impactoEvento: other.impactoEvento,
+            sintomas: other.sintomas,
+            otherInfo: other.otherInfo);
 
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.
@@ -93,6 +111,7 @@ class RegistroHumor extends _RegistroHumor with _$RegistroHumor {
 }
 
 abstract class _RegistroHumor with Store {
+  final String id;
   @observable
   TipoHumor tipo;
   @observable
@@ -119,7 +138,8 @@ abstract class _RegistroHumor with Store {
   String otherInfo;
 
   _RegistroHumor(
-      {this.tipo,
+      {@required this.id,
+      this.tipo,
       this.disforico,
       this.data,
       this.nota,

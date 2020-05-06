@@ -26,11 +26,11 @@ mixin _$HumorStore on _HumorStore, Store {
     }, _$humorListAtom, name: '${_$humorListAtom.name}_set');
   }
 
-  final _$addHumorAsyncAction = AsyncAction('addHumor');
+  final _$editHumorAsyncAction = AsyncAction('editHumor');
 
   @override
-  Future<void> addHumor(RegistroHumor humor) {
-    return _$addHumorAsyncAction.run(() => super.addHumor(humor));
+  Future<void> editHumor(RegistroHumor humor) {
+    return _$editHumorAsyncAction.run(() => super.editHumor(humor));
   }
 
   final _$deleteHumorAsyncAction = AsyncAction('deleteHumor');
@@ -38,5 +38,17 @@ mixin _$HumorStore on _HumorStore, Store {
   @override
   Future<void> deleteHumor(RegistroHumor humor) {
     return _$deleteHumorAsyncAction.run(() => super.deleteHumor(humor));
+  }
+
+  final _$_HumorStoreActionController = ActionController(name: '_HumorStore');
+
+  @override
+  RegistroHumor createHumor(TipoHumor tipoHumor) {
+    final _$actionInfo = _$_HumorStoreActionController.startAction();
+    try {
+      return super.createHumor(tipoHumor);
+    } finally {
+      _$_HumorStoreActionController.endAction(_$actionInfo);
+    }
   }
 }

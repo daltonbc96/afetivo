@@ -1,3 +1,4 @@
+import 'package:afetivo/pages/adicionalInfo.dart';
 import 'package:afetivo/stores/HumorStore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -72,7 +73,10 @@ class _CardState extends State<_HumorCard> {
     final humor = widget.humor;
     final _menuItems = [
       _MenuOption("Editar", (context, humor) async {
-        print("Vc clicou em editar");
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => AddicionalInfo(
+                  humor: humor,
+                )));
       }),
       _MenuOption("Remover", (context, humor) async {
         await humorStore.deleteHumor(humor);
@@ -112,10 +116,6 @@ class _CardState extends State<_HumorCard> {
                           _cardInfoText(
                               "Outras Informações: ${humor.otherInfo}"),
                         ButtonBar(children: <Widget>[
-                          IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () => humorStore.deleteHumor(humor),
-                          ),
                           PopupMenuButton<_MenuOption>(
                             itemBuilder: (context) => _menuItems
                                 .map((item) => PopupMenuItem(
