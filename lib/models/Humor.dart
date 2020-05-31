@@ -59,6 +59,7 @@ String describeTipoHumor(TipoHumor humor) {
 class RegistroHumor extends _RegistroHumor with _$RegistroHumor {
   RegistroHumor(
       {@required TipoHumor tipo,
+      String id,
       bool disforico = false,
       DateTime data,
       int nota,
@@ -70,7 +71,7 @@ class RegistroHumor extends _RegistroHumor with _$RegistroHumor {
       String sintomas,
       String otherInfo})
       : super(
-            id: Uuid().v4(),
+            id: id ?? Uuid().v4(),
             tipo: tipo,
             disforico: disforico,
             data: data,

@@ -12,53 +12,45 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(new MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final loginStore = LoginStore();
+  final humorStore = HumorStore(loginStore: loginStore);
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var loginStore = LoginStore();
-    var humorStore = HumorStore(loginStore: loginStore);
-
-    return MultiProvider(
-        providers: [
-          Provider<LoginStore>(
-            create: (_) => loginStore,
-            dispose: (_, store) => store.dispose(),
+  runApp(MultiProvider(
+      providers: [
+        Provider<LoginStore>(
+          create: (_) => loginStore,
+        ),
+        Provider<HumorStore>(
+          create: (_) => humorStore,
+        ),
+      ],
+      child: MaterialApp(
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale.fromSubtags(languageCode: 'pt', countryCode: 'BR')
+          ],
+          title: 'Afetivo',
+          debugShowCheckedModeBanner: false,
+          theme: new ThemeData(
+            primarySwatch: Colors.green,
           ),
-          Provider<HumorStore>(
-            create: (_) => humorStore,
-            dispose: (_, store) => store.dispose(),
-          ),
-        ],
-        child: MaterialApp(
-            localizationsDelegates: [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: [
-              const Locale.fromSubtags(languageCode: 'pt', countryCode: 'BR')
-            ],
-            title: 'Afetivo',
-            debugShowCheckedModeBanner: false,
-            theme: new ThemeData(
-              primarySwatch: Colors.green,
-            ),
-            initialRoute: loginStore.loginStatus == LoginStatus.LoggedIn
-                ? DashboardScreen.tag
-                : LoginPage.tag,
-            routes: <String, WidgetBuilder>{
-              "/a": (BuildContext context) => Configuracoes("Configurações"),
-              "/b": (BuildContext context) => Ajuda("Ajuda"),
-              DashboardScreen.tag: (context) =>
-                  DashboardScreen(title: 'Afetivo'),
-              FogotPage.tag: (context) => FogotPage(),
-              Afetivograma.tag: (context) => Afetivograma(),
-              LoginPage.tag: (context) => LoginPage(),
-              CadastroPage.tag: (context) => CadastroPage(),
-            }));
-  }
+          initialRoute:
+              await loginStore.isLoggedIn ? DashboardScreen.tag : LoginPage.tag,
+          routes: <String, WidgetBuilder>{
+            "/a": (BuildContext context) => Configuracoes("Configurações"),
+            "/b": (BuildContext context) => Ajuda("Ajuda"),
+            DashboardScreen.tag: (context) => DashboardScreen(title: 'Afetivo'),
+            FogotPage.tag: (context) => FogotPage(),
+            Afetivograma.tag: (context) => Afetivograma(),
+            LoginPage.tag: (context) => LoginPage(),
+            CadastroPage.tag: (context) => CadastroPage(),
+          })));
 }
 
 class DashboardScreen extends StatefulWidget {

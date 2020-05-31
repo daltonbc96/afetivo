@@ -1,62 +1,84 @@
-import 'package:afetivo/models/Medicamento.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mobx/mobx.dart';
 import '../models/User.dart';
 
 part 'LoginStore.g.dart';
 
-enum LoginStatus { LoggedOff, LoggedIn }
-enum RegisterError { Invalid, Unavailable }
+final _firebaseAuth = FirebaseAuth.instance;
+final _fireStore = Firestore.instance;
+enum RegisterError { Invalid, Unavailable, WeakPassword, UnknownError }
 
 class LoginError {}
 
-class LoginStore = _LoginStore with _$LoginStore;
+class LoginStore extends _LoginStore with _$LoginStore {
+  LoginStore() {
+    _firebaseAuth.onAuthStateChanged.listen((user) {
+      if (user != null) {
+        this.uid = user.uid;
+        _fireStore.collection("users").document(user.uid).get().then((value) {
+          this.userProfile = UserProfile.fromJson(value.data);
+        });
+      } else {
+        this.uid = null;
+        this.userProfile = null;
+      }
+    });
+  }
+}
 
 abstract class _LoginStore with Store {
-  static final _defaultUser = UserProfile(
-      email: "john.dalton@exemplo.com",
-      password: "senha",
-      nome: "John",
-      sobrenome: "Dalton",
-      sexo: Sexo.masc,
-      diagnosticos: ["Transtorno Bipolar"],
-      medicamentos: [Medicamento(nome: "Litio", dose: "200mg")]);
-
-  List<UserProfile> _userlist = [_defaultUser];
+  @observable
+  UserProfile userProfile;
 
   @observable
-  UserProfile userProfile = _defaultUser;
+  String uid;
 
-  @observable
-  LoginStatus loginStatus = LoginStatus.LoggedIn;
+  @computed
+  Future<bool> get isLoggedIn async =>
+      (await _firebaseAuth.currentUser()) != null;
 
   @action
-  Future<void> login(String user, String password) async {
-    var a = _userlist.where((u) => u.email == user).toList();
-    if (a.isNotEmpty && a[0].password == password) {
-      userProfile = a[0];
-      loginStatus = LoginStatus.LoggedIn;
-    } else {
-      throw LoginError();
+  Future<void> login(String email, String password) async {
+    try {
+      final response = await _firebaseAuth.signInWithEmailAndPassword(
+          email: email.trim(), password: password);
+      if (response.user == null) throw LoginError();
+    } on AuthException catch (e) {
+      switch (e.code) {
+        default:
+          throw LoginError();
+      }
     }
   }
 
   @action
-  Future<void> logout() async {
-    await Future.delayed(Duration(seconds: 1));
-    loginStatus = LoginStatus.LoggedOff;
-  }
+  Future<void> logout() => _firebaseAuth.signOut();
 
   @action
   Future<void> register(UserProfile user, String password) async {
-    await Future.delayed(Duration(seconds: 1));
-    var a = _userlist.where((u) => u.email == user.email).toList();
-    if (a.isEmpty) {
-      user.password = password;
-      _userlist.add(user);
-      userProfile = user;
-      loginStatus = LoginStatus.LoggedIn;
-    } else {
-      throw RegisterError.Unavailable;
+    // TODO: Validate register
+    try {
+      final result = await _firebaseAuth.createUserWithEmailAndPassword(
+          email: user.email.trim(), password: password);
+      await _fireStore
+          .collection('users')
+          .document(result.user.uid)
+          .setData(user.toJson());
+    } on AuthException catch (e) {
+      switch (e.code) {
+        case 'FirebaseAuthUserCollisionException':
+          throw RegisterError.Unavailable;
+          break;
+        case 'FirebaseAuthWeakPasswordException':
+          throw RegisterError.WeakPassword;
+          break;
+        default:
+          throw RegisterError.UnknownError;
+          break;
+      }
+    } catch (_) {
+      throw RegisterError.UnknownError;
     }
   }
 }
