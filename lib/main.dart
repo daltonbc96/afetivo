@@ -7,6 +7,8 @@ import 'package:afetivo/pages/home.dart';
 import 'package:afetivo/pages/loginPage.dart';
 import 'package:afetivo/stores/HumorStore.dart';
 import 'package:afetivo/stores/LoginStore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -16,6 +18,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final loginStore = LoginStore();
   final humorStore = HumorStore(loginStore: loginStore);
+  final analytics = FirebaseAnalytics();
 
   runApp(MultiProvider(
       providers: [
@@ -27,6 +30,9 @@ Future<void> main() async {
         ),
       ],
       child: MaterialApp(
+          navigatorObservers: [
+            FirebaseAnalyticsObserver(analytics: analytics),
+          ],
           localizationsDelegates: [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
