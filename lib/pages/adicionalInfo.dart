@@ -74,8 +74,8 @@ class _State extends State<AddicionalInfo> {
           color: Theme.of(context).primaryColor,
           textColor: Colors.white,
           child: new Text("Registrar", style: TextStyle(fontSize: 16.0)),
-          onPressed: () async {
-            await humorStore.editHumor(humor);
+          onPressed: () {
+            humorStore.editHumor(humor);
             Navigator.of(context).pop();
           },
           splashColor: Colors.redAccent,

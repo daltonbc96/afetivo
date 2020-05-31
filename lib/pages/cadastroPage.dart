@@ -28,7 +28,6 @@ class _State extends State<CadastroPage> {
   TextEditingController _passwordFieldController;
   UserProfile _userProfile;
   _CadastroStatus _cadastroStatus;
-  RegisterError _error;
 
   @override
   void initState() {
@@ -280,10 +279,9 @@ class _State extends State<CadastroPage> {
             });
             Navigator.of(context)
                 .pushNamedAndRemoveUntil(DashboardScreen.tag, (_) => false);
-          } on RegisterError catch (e) {
+          } on RegisterError {
             setState(() {
               _cadastroStatus = _CadastroStatus.Error;
-              _error = e;
             });
           }
         },
