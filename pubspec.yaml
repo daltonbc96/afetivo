@@ -44,7 +44,7 @@ dev_dependencies:
     sdk: flutter
 
 builders:
-  built_value_generator: ^6.6.0
+  built_value_generator:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
