@@ -1,4 +1,3 @@
-import 'package:afetivo/main.dart';
 import 'package:afetivo/models/Medicamento.dart';
 import 'package:afetivo/models/User.dart';
 import 'package:afetivo/stores/LoginStore.dart';
@@ -267,19 +266,16 @@ class _State extends State<CadastroPage> {
                     ? "CADASTRANDO..."
                     : "CADASTRAR",
                 style: TextStyle(fontSize: 16.0))),
-        onPressed: () async {
+        onPressed: () {
           try {
             setState(() {
               _cadastroStatus = _CadastroStatus.Wait;
             });
-            await loginStore.register(
-                _userProfile, _passwordFieldController.text);
+            loginStore.register(_userProfile);
             setState(() {
               _cadastroStatus = _CadastroStatus.Idle;
             });
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil(DashboardScreen.tag, (_) => false);
-          } on RegisterError {
+          } catch (_) {
             setState(() {
               _cadastroStatus = _CadastroStatus.Error;
             });
@@ -302,10 +298,6 @@ class _State extends State<CadastroPage> {
               SizedBox(height: 25.0),
               new Text(
                   "Preencha os campos com seus dados para realizar seu cadastro"),
-              SizedBox(height: 25.0),
-              email,
-              SizedBox(height: 25.0),
-              password,
               SizedBox(height: 25.0),
               primeiroNome,
               SizedBox(height: 25.0),

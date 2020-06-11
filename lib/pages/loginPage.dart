@@ -1,12 +1,12 @@
-import 'package:afetivo/main.dart';
 import 'package:afetivo/pages/cadastroPage.dart';
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'createUser.dart';
 import 'forgotPage.dart';
 
 class LoginPage extends StatefulWidget {
-  static String tag = 'tag-page';
+  static final tag = 'login_page';
   @override
   _State createState() => _State();
 }
@@ -82,8 +82,6 @@ class _State extends State<LoginPage> {
               setState(() {
                 _loginStatus = _LoginStatus.Idle;
               });
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil(DashboardScreen.tag, (_) => false);
             } on LoginError catch (_) {
               setState(() {
                 _loginStatus = _LoginStatus.Error;
@@ -111,7 +109,7 @@ class _State extends State<LoginPage> {
           style: TextStyle(color: Colors.black54, fontSize: 15),
         ),
         onPressed: () {
-          Navigator.of(context).pushNamed(CadastroPage.tag);
+          Navigator.of(context).pushNamed(CreateUser.tag);
         });
 
     final forgotLabel = FlatButton(
