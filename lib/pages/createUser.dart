@@ -1,8 +1,7 @@
+import 'package:validators/validators.dart' as validator;
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:afetivo/widgets/MyTextFormField.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:provider/provider.dart';
-import 'package:validators/validators.dart' as validator;
 import 'package:flutter/material.dart';
 
 class CreateUser extends StatefulWidget {
@@ -21,11 +20,11 @@ class _CreateUserState extends State<CreateUser> {
 
   @override
   Widget build(BuildContext context) {
-    final loginStore = Provider.of<LoginStore>(context);
+    final loginStore = LoginStore();
 
     final userField = MyTextFormField(
       isEmail: true,
-      hintText: 'E-Mail',
+      labelText: 'E-Mail',
       onSaved: (value) {
         username = value;
       },
@@ -34,7 +33,7 @@ class _CreateUserState extends State<CreateUser> {
 
     final passwordField = MyTextFormField(
       isPassword: true,
-      hintText: 'Senha',
+      labelText: 'Senha',
       onSaved: (value) {
         password = value;
       },
@@ -49,7 +48,7 @@ class _CreateUserState extends State<CreateUser> {
 
     final passwordConfirmationField = MyTextFormField(
       isPassword: true,
-      hintText: 'Confirme a Senha',
+      labelText: 'Confirme a Senha',
       validator: (value) =>
           value == password ? null : "As senhas não correspondem.",
     );
@@ -75,15 +74,13 @@ class _CreateUserState extends State<CreateUser> {
             await loginStore.createUser(username, password);
           } on RegisterError catch (e) {
             setState(() {
+              isLoading = false;
               error = e;
             });
           } catch (_) {
             setState(() {
-              error = RegisterError.UnknownError;
-            });
-          } finally {
-            setState(() {
               isLoading = false;
+              error = RegisterError.UnknownError;
             });
           }
         },
@@ -99,11 +96,14 @@ class _CreateUserState extends State<CreateUser> {
               return Text("Usuario ou senha invalido",
                   style: TextStyle(color: Colors.redAccent));
             case RegisterError.WeakPassword:
-              return Text("Senha Fraca");
+              return Text("Senha Fraca",
+                  style: TextStyle(color: Colors.redAccent));
             case RegisterError.Unavailable:
-              return Text("Usuario já cadastrado");
+              return Text("Usuario já cadastrado",
+                  style: TextStyle(color: Colors.redAccent));
             case RegisterError.UnknownError:
-              return Text("Erro desconhecido");
+              return Text("Erro desconhecido",
+                  style: TextStyle(color: Colors.redAccent));
             default:
               return Text("");
           }
@@ -111,13 +111,13 @@ class _CreateUserState extends State<CreateUser> {
       ),
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_pageTitle),
-      ),
-      body: LoadingOverlay(
-        isLoading: isLoading,
-        child: Center(
+    return LoadingOverlay(
+      isLoading: isLoading,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(_pageTitle),
+        ),
+        body: Center(
           child: Form(
             key: _formKey,
             child: ListView(
@@ -127,8 +127,8 @@ class _CreateUserState extends State<CreateUser> {
                   userField,
                   passwordField,
                   passwordConfirmationField,
-                  finishButton,
                   errorMessage,
+                  finishButton,
                 ]),
           ),
         ),

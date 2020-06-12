@@ -15,8 +15,15 @@ class HumorStore extends _HumorStore with _$HumorStore {
   StreamSubscription _snapshotsSubscription;
   ReactionDisposer _disposeLoginReactor;
 
-  HumorStore({@required LoginStore loginStore})
-      : super(loginStore: loginStore) {
+  static HumorStore _instance;
+
+  factory HumorStore() {
+    if (_instance == null) _instance = HumorStore._();
+
+    return _instance;
+  }
+
+  HumorStore._() {
     _disposeLoginReactor = autorun((_) async {
       final uid = loginStore.uid;
       if (_snapshotsSubscription != null) {
@@ -48,9 +55,7 @@ class HumorStore extends _HumorStore with _$HumorStore {
 }
 
 abstract class _HumorStore with Store {
-  final LoginStore loginStore;
-
-  _HumorStore({@required this.loginStore});
+  final LoginStore loginStore = LoginStore();
 
   @observable
   ObservableList<RegistroHumor> humorList = ObservableList();

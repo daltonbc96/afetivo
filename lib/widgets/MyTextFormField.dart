@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MyTextFormField extends StatelessWidget {
-  final String hintText;
+  final String labelText;
   final String initialValue;
   final String Function(String) validator;
   final Function(String) onSaved;
@@ -9,7 +9,7 @@ class MyTextFormField extends StatelessWidget {
   final bool isEmail;
   MyTextFormField({
     this.initialValue,
-    this.hintText,
+    this.labelText,
     this.validator,
     this.onSaved,
     this.isPassword = false,
@@ -25,9 +25,7 @@ class MyTextFormField extends StatelessWidget {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(32.0),
           ),
-          hintText: hintText,
-          filled: true,
-          fillColor: Colors.grey[200],
+          labelText: labelText,
         ),
         obscureText: isPassword ? true : false,
         validator: validator,

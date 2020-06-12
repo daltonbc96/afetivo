@@ -39,6 +39,17 @@ class UserProfile extends _UserProfile with _$UserProfile {
           medicamentos: ObservableList.of(medicamentos ?? []),
         );
 
+  UserProfile.from(UserProfile src)
+      : super(
+          nome: src.nome,
+          sobrenome: src.sobrenome,
+          email: src.email,
+          nascimento: src.nascimento,
+          sexo: src.sexo,
+          diagnosticos: ObservableList.of(src.diagnosticos ?? []),
+          medicamentos: ObservableList.of(src.medicamentos ?? []),
+        );
+
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.
   /// The constructor is named after the source class, in this case, User.

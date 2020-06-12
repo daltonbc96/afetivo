@@ -1,10 +1,9 @@
+import 'package:afetivo/pages/afetivograma.dart';
+import 'package:afetivo/pages/cadastroPage.dart';
 import 'package:afetivo/stores/LoginStore.dart';
+import 'package:afetivo/widgets/humorselector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:provider/provider.dart';
-
-import 'afetivograma.dart';
-import 'home.dart';
 
 class DashboardScreen extends StatefulWidget {
   static String tag = 'DashboardScreen';
@@ -47,7 +46,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    LoginStore loginStore = Provider.of<LoginStore>(context);
+    LoginStore loginStore = LoginStore();
     return new Scaffold(
       appBar: new AppBar(
         title: new Text(
@@ -73,14 +72,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
               title: new Text("Configurações"),
               trailing: new Icon(Icons.settings),
               onTap: () {
-                Navigator.of(context).pushNamed("/a");
+                Navigator.of(context).pushNamed(CadastroPage.tag);
               },
             ),
             new ListTile(
               title: new Text("Ajuda"),
               trailing: new Icon(Icons.help_outline),
               onTap: () {
-                Navigator.of(context).pushNamed("/b");
+                Navigator.of(context).pushNamed("/help");
               },
             ),
             new Divider(),
@@ -92,47 +91,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ],
         ),
       ),
-      body: new PageView(
-        children: [
-          new Home("Home"),
-          new Afetivograma(),
-        ],
-        onPageChanged: onPageChanged,
-        controller: _pageController,
-      ),
-      bottomNavigationBar: new Theme(
-        data: Theme.of(context).copyWith(
-          // sets the background color of the `BottomNavigationBar`
-          canvasColor: const Color(0xFF167F67),
-        ), // sets the inactive color of the `BottomNavigationBar`
-        child: new BottomNavigationBar(
-          items: [
-            new BottomNavigationBarItem(
-                icon: new Icon(
-                  Icons.home,
-                  color: const Color(0xFFFFFFFF),
-                ),
-                title: new Text(
-                  "Home",
-                  style: new TextStyle(
-                    color: const Color(0xFFFFFFFF),
-                  ),
-                )),
-            new BottomNavigationBarItem(
-                icon: new Icon(
-                  Icons.timeline,
-                  color: const Color(0xFFFFFFFF),
-                ),
-                title: new Text(
-                  "Afetivograma",
-                  style: new TextStyle(
-                    color: const Color(0xFFFFFFFF),
-                  ),
-                ))
-          ],
-          onTap: navigationTapped,
-          currentIndex: _page,
-        ),
+      body: Afetivograma(),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          showDialog(context: context, builder: (context) => HumorSelector());
+        },
       ),
     );
   }

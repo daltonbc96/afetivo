@@ -5,13 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:provider/provider.dart';
 
 class CadastroPage extends StatefulWidget {
   static String tag = 'tag-page-cadastro';
-  final UserProfile userProfile;
-
-  CadastroPage({Key key, this.userProfile}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -21,20 +17,18 @@ enum _CadastroStatus { Idle, Wait, Error }
 
 //TODO: Implement form validation
 class _State extends State<CadastroPage> {
+  final loginStore = LoginStore();
   TextEditingController _diagnosticoFieldController;
   TextEditingController _medNameFieldController;
   TextEditingController _medDoseFieldController;
-  TextEditingController _passwordFieldController;
   UserProfile _userProfile;
   _CadastroStatus _cadastroStatus;
-
   @override
   void initState() {
     super.initState();
-    _userProfile = widget.userProfile ?? UserProfile();
+    _userProfile = UserProfile.from(loginStore.userProfile) ?? UserProfile();
     _cadastroStatus = _CadastroStatus.Idle;
     _diagnosticoFieldController = TextEditingController();
-    _passwordFieldController = TextEditingController();
     _medNameFieldController = TextEditingController();
     _medDoseFieldController = TextEditingController();
   }
@@ -42,7 +36,6 @@ class _State extends State<CadastroPage> {
   @override
   void dispose() {
     _diagnosticoFieldController.dispose();
-    _passwordFieldController.dispose();
     _medNameFieldController.dispose();
     _medDoseFieldController.dispose();
     super.dispose();
@@ -50,34 +43,6 @@ class _State extends State<CadastroPage> {
 
   @override
   Widget build(BuildContext context) {
-    final LoginStore loginStore = Provider.of<LoginStore>(context);
-    final email = Observer(
-        builder: (context) => TextFormField(
-              keyboardType: TextInputType.emailAddress,
-              autofocus: false,
-              onChanged: (value) => _userProfile.email = value,
-              decoration: InputDecoration(
-                labelText: 'E-mail',
-                contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(32.0),
-                ),
-              ),
-            ));
-
-    final password = TextFormField(
-      autofocus: false,
-      obscureText: true,
-      controller: _passwordFieldController,
-      decoration: InputDecoration(
-        labelText: 'Senha',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(32.0),
-        ),
-      ),
-    );
-
     final primeiroNome = Observer(
         builder: (context) => TextFormField(
               autofocus: false,

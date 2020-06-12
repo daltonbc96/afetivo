@@ -4,7 +4,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class AddicionalInfo extends StatefulWidget {
   static String tag = 'tag-pageAddInfo';
@@ -35,7 +34,7 @@ class _State extends State<AddicionalInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final humorStore = Provider.of<HumorStore>(context);
+    final humorStore = HumorStore();
 
     final data = Observer(
         builder: (context) => Padding(

@@ -1,9 +1,10 @@
-import 'package:afetivo/pages/cadastroPage.dart';
+import 'package:validators/validators.dart' as validator;
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 import 'createUser.dart';
 import 'forgotPage.dart';
+import '../widgets/MyTextFormField.dart';
 
 class LoginPage extends StatefulWidget {
   static final tag = 'login_page';
@@ -14,51 +15,31 @@ class LoginPage extends StatefulWidget {
 enum _LoginStatus { Idle, Wait, Error }
 
 class _State extends State<LoginPage> {
-  TextEditingController _emailController;
-  TextEditingController _passwordControler;
-  _LoginStatus _loginStatus;
-
-  @override
-  void initState() {
-    super.initState();
-    _emailController = TextEditingController();
-    _passwordControler = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordControler.dispose();
-    super.dispose();
-  }
+  final _formKey = GlobalKey<FormState>();
+  _LoginStatus _loginStatus = _LoginStatus.Idle;
+  String email;
+  String password;
 
   @override
   Widget build(BuildContext context) {
-    LoginStore loginStore = Provider.of<LoginStore>(context);
-    final email = TextFormField(
-      controller: _emailController,
-      keyboardType: TextInputType.emailAddress,
-      autofocus: false,
-      decoration: InputDecoration(
-        labelText: 'E-mail',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(32.0),
-        ),
-      ),
+    LoginStore loginStore = LoginStore();
+
+    final emailField = MyTextFormField(
+      labelText: 'E-mail',
+      isEmail: true,
+      validator: (value) => validator.isEmail(value) ? null : "E-Mail invalido",
+      onSaved: (value) {
+        this.email = value;
+      },
     );
 
-    final password = TextFormField(
-      autofocus: false,
-      obscureText: true,
-      controller: _passwordControler,
-      decoration: InputDecoration(
-        labelText: 'Senha',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(32.0),
-        ),
-      ),
+    final passwordField = MyTextFormField(
+      labelText: 'Senha',
+      isPassword: true,
+      validator: (value) => validator.isNull(value) ? "Senha em branco" : null,
+      onSaved: (value) {
+        this.password = value;
+      },
     );
 
     final loginButton = Padding(
@@ -73,15 +54,13 @@ class _State extends State<LoginPage> {
           textColor: Colors.white,
           child: new Text("ENTRAR", style: TextStyle(fontSize: 16.0)),
           onPressed: () async {
+            if (!_formKey.currentState.validate()) return;
+            _formKey.currentState.save();
             try {
               setState(() {
                 _loginStatus = _LoginStatus.Wait;
               });
-              await loginStore.login(
-                  _emailController.text, _passwordControler.text);
-              setState(() {
-                _loginStatus = _LoginStatus.Idle;
-              });
+              await loginStore.login(this.email, this.password);
             } on LoginError catch (_) {
               setState(() {
                 _loginStatus = _LoginStatus.Error;
@@ -96,11 +75,9 @@ class _State extends State<LoginPage> {
         case _LoginStatus.Error:
           return Text("Usuario ou senha invalido",
               style: TextStyle(color: Colors.redAccent));
-        case _LoginStatus.Wait:
-          return Text("Validando Usuario...");
         default:
+          return Text("");
       }
-      return Text("");
     }));
 
     final cadastro = FlatButton(
@@ -122,27 +99,29 @@ class _State extends State<LoginPage> {
       },
     );
 
-    return Scaffold(
-      appBar: new AppBar(
-        title: new Text("Login"),
-      ),
-      backgroundColor: Colors.white,
-      body: Center(
-        child: ListView(
-          shrinkWrap: true,
-          padding: EdgeInsets.only(left: 24.0, right: 24.0),
-          children: <Widget>[
-            SizedBox(height: 48.0),
-            email,
-            SizedBox(height: 8.0),
-            password,
-            SizedBox(height: 24.0),
-            errorMessage,
-            SizedBox(height: 24.0),
-            loginButton,
-            forgotLabel,
-            cadastro,
-          ],
+    return LoadingOverlay(
+      isLoading: (_loginStatus == _LoginStatus.Wait),
+      child: Scaffold(
+        appBar: new AppBar(
+          title: new Text("Login"),
+        ),
+        backgroundColor: Colors.white,
+        body: Center(
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              shrinkWrap: true,
+              padding: EdgeInsets.only(left: 24.0, right: 24.0),
+              children: <Widget>[
+                emailField,
+                passwordField,
+                errorMessage,
+                loginButton,
+                forgotLabel,
+                cadastro,
+              ],
+            ),
+          ),
         ),
       ),
     );

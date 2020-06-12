@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:afetivo/models/Humor.dart';
 
 class Afetivograma extends StatelessWidget {
@@ -12,7 +11,7 @@ class Afetivograma extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final humorStore = Provider.of<HumorStore>(context);
+    final humorStore = HumorStore();
 
     return new Scaffold(
         body: new Center(
@@ -69,7 +68,7 @@ class _CardState extends State<_HumorCard> {
 
   @override
   Widget build(BuildContext context) {
-    final humorStore = Provider.of<HumorStore>(context);
+    final humorStore = HumorStore();
     final humor = widget.humor;
     final _menuItems = [
       _MenuOption("Editar", (context, humor) async {

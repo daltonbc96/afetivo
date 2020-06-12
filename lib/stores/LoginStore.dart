@@ -22,33 +22,41 @@ class LoginError {}
 
 class LoginStore extends _LoginStore with _$LoginStore {
   StreamSubscription _snapshotsSubscription;
+  static LoginStore _instance;
 
-  LoginStore() {
+  factory LoginStore() {
+    if (_instance == null) _instance = LoginStore._();
+
+    return _instance;
+  }
+
+  LoginStore._() {
     _firebaseAuth.onAuthStateChanged.listen((user) async {
       if (user != null) {
-        this.uid = user.uid;
         if (_snapshotsSubscription != null) {
           await _snapshotsSubscription.cancel();
           _snapshotsSubscription = null;
         }
-        final document = _fireStore.collection("users").document(user.uid);
+        this.uid = user.uid;
 
-        if (await document.get() == null) loginState = LoginState.NoProfile;
+        final document = _fireStore.collection("users").document(user.uid);
+        if (await document.get() == null) {
+          loginState = LoginState.NoProfile;
+          this.userProfile = UserProfile(email: user.email);
+        }
 
         _snapshotsSubscription = document.snapshots().listen((value) {
-          if (value.data == null)
+          if (value.data == null) {
             this.loginState = LoginState.NoProfile;
-          else {
+            this.userProfile = UserProfile(email: user.email);
+          } else {
             this.userProfile = UserProfile.fromJson(value.data);
-            this.email = user.email;
-            this.userProfile.email = user.email;
             this.loginState = LoginState.LoggedIn;
           }
         });
       } else {
         this.uid = null;
         this.userProfile = null;
-        this.email = null;
         this.loginState = LoginState.LoggedOut;
       }
     });
@@ -62,14 +70,11 @@ abstract class _LoginStore with Store {
   @observable
   String uid;
 
-  @observable
-  String email;
-
   @computed
   bool get isLoggedIn => uid != null;
 
   @computed
-  bool get hasUserProfile => userProfile != null;
+  bool get hasUserProfile => loginState == LoginState.LoggedIn;
 
   @observable
   LoginState loginState = LoginState.Loading;
@@ -92,7 +97,7 @@ abstract class _LoginStore with Store {
   Future<void> createUser(String email, String password) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
-          email: email, password: password);
+          email: email.trim(), password: password);
     } on AuthException catch (e) {
       switch (e.code) {
         case 'FirebaseAuthUserCollisionException':
@@ -112,7 +117,6 @@ abstract class _LoginStore with Store {
 
   @action
   void register(UserProfile user) {
-    user.email = email;
     _fireStore.collection('users').document(uid).setData(user.toJson());
   }
 }

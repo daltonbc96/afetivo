@@ -12,9 +12,9 @@ import 'package:afetivo/stores/LoginStore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mobx/mobx.dart';
-import 'package:provider/provider.dart';
 
 import 'pages/dashboard.dart';
 
@@ -36,52 +36,46 @@ class _AppMainState extends State<AppMain> {
     analytics = FirebaseAnalytics();
     navigationService = NavigationService();
     loginStore = LoginStore();
-    humorStore = HumorStore(loginStore: loginStore);
+    humorStore = HumorStore();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final root = MultiProvider(
-        providers: [
-          Provider<LoginStore>(
-            create: (_) => loginStore,
-          ),
-          Provider<HumorStore>(
-            create: (_) => humorStore,
-          ),
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    final root = MaterialApp(
+        navigatorKey: navigationService.navigatorKey,
+        navigatorObservers: [
+          FirebaseAnalyticsObserver(analytics: analytics),
         ],
-        child: MaterialApp(
-            navigatorKey: navigationService.navigatorKey,
-            navigatorObservers: [
-              FirebaseAnalyticsObserver(analytics: analytics),
-            ],
-            localizationsDelegates: [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: [
-              const Locale.fromSubtags(languageCode: 'pt', countryCode: 'BR')
-            ],
-            title: 'Afetivo',
-            debugShowCheckedModeBanner: false,
-            theme: new ThemeData(
-              primarySwatch: Colors.green,
-            ),
-            home: LoadingScreen(),
-            routes: <String, WidgetBuilder>{
-              LoadingScreen.tag: (context) => LoadingScreen(),
-              "/config": (context) => Configuracoes("Configurações"),
-              "/help": (context) => Ajuda("Ajuda"),
-              DashboardScreen.tag: (context) =>
-                  DashboardScreen(title: 'Afetivo'),
-              FogotPage.tag: (context) => FogotPage(),
-              Afetivograma.tag: (context) => Afetivograma(),
-              LoginPage.tag: (context) => LoginPage(),
-              CadastroPage.tag: (context) => CadastroPage(),
-              CreateUser.tag: (context) => CreateUser(),
-            }));
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale.fromSubtags(languageCode: 'pt', countryCode: 'BR')
+        ],
+        title: 'Afetivo',
+        debugShowCheckedModeBanner: false,
+        theme: new ThemeData(
+          primarySwatch: Colors.green,
+        ),
+        home: LoadingScreen(),
+        routes: <String, WidgetBuilder>{
+          LoadingScreen.tag: (context) => LoadingScreen(),
+          "/config": (context) => Configuracoes("Configurações"),
+          "/help": (context) => Ajuda("Ajuda"),
+          DashboardScreen.tag: (context) => DashboardScreen(title: 'Afetivo'),
+          FogotPage.tag: (context) => FogotPage(),
+          Afetivograma.tag: (context) => Afetivograma(),
+          LoginPage.tag: (context) => LoginPage(),
+          CadastroPage.tag: (context) => CadastroPage(),
+          CreateUser.tag: (context) => CreateUser(),
+        });
     autorun((_) {
       switch (loginStore.loginState) {
         case LoginState.LoggedIn:
