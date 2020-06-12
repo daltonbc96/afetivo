@@ -4,40 +4,39 @@ import 'package:afetivo/stores/HumorStore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class HumorSelector extends StatefulWidget {
-  _HumorSelectorState createState() => _HumorSelectorState();
+class HumorSelector extends StatelessWidget {
   static String tag = 'home-page';
-}
+  final double _cardHeight = 400;
+  final double _cardElevation = 8;
+  final double _cardShadowOffset = 18;
+  final humorStore = HumorStore();
+  final PageController pageController =
+      PageController(initialPage: 4, viewportFraction: 0.8);
 
-class _HumorSelectorState extends State<HumorSelector> {
   @override
   Widget build(BuildContext context) {
-    //final Widget body = Column(children: [pageView,]);
-    final humorStore = HumorStore();
-
-    final PageController pageController =
-        PageController(initialPage: 4, viewportFraction: 0.8);
+    final mediaQuery = MediaQuery.of(context);
+    final deviceHeight = mediaQuery.size.height;
 
     Widget getPageWidget(String text2, MaterialColor backgroundColor,
             String titulo, String descricao, TipoHumor tipoHumor) =>
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 15.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Material(
-                elevation: 10.0,
+          height: _cardHeight,
+          margin:
+              EdgeInsets.only(left: 15.0, right: 15, bottom: _cardShadowOffset),
+          child: Align(
+              alignment: Alignment.topCenter,
+              child: Material(
+                elevation: _cardElevation,
                 borderRadius: BorderRadius.circular(40.0),
                 color: backgroundColor,
                 child: Align(
-                  //alignment: Alignment(0.0, 0.7),
+                  alignment: Alignment.center,
                   child: Container(
-                    height: 320,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         Text(
                           describeTipoHumor(tipoHumor),
@@ -114,14 +113,11 @@ class _HumorSelectorState extends State<HumorSelector> {
                     ),
                   ),
                 ),
-              )
-            ],
-          ),
+              )),
         );
 
-    double deviceHeight = MediaQuery.of(context).size.height;
     return Container(
-      margin: EdgeInsets.symmetric(vertical: (deviceHeight - 400) / 2),
+      margin: EdgeInsets.symmetric(vertical: (deviceHeight - _cardHeight) / 2),
       child: PageView(
         controller: pageController,
         children: [
