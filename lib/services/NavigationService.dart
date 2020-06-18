@@ -4,10 +4,10 @@ class NavigationService {
   final navigatorKey = GlobalKey<NavigatorState>();
   static NavigationService _singleton;
 
-  NavigationService._constructor();
+  NavigationService._();
 
   factory NavigationService() {
-    if (_singleton == null) _singleton = NavigationService._constructor();
+    if (_singleton == null) _singleton = NavigationService._();
 
     return _singleton;
   }

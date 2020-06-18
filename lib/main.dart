@@ -69,7 +69,7 @@ class _AppMainState extends State<AppMain> {
           LoadingScreen.tag: (context) => LoadingScreen(),
           "/config": (context) => Configuracoes("Configurações"),
           "/help": (context) => Ajuda("Ajuda"),
-          DashboardScreen.tag: (context) => DashboardScreen(title: 'Afetivo'),
+          DashboardScreen.tag: (context) => DashboardScreen(),
           FogotPage.tag: (context) => FogotPage(),
           Afetivograma.tag: (context) => Afetivograma(),
           LoginPage.tag: (context) => LoginPage(),
