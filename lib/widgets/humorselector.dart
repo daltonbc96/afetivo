@@ -17,6 +17,7 @@ class HumorSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final deviceHeight = mediaQuery.size.height;
+    final deviceWidth = mediaQuery.size.width;
 
     Widget getPageWidget(String text2, MaterialColor backgroundColor,
             String titulo, String descricao, TipoHumor tipoHumor) =>
@@ -116,31 +117,51 @@ class HumorSelector extends StatelessWidget {
               )),
         );
 
+    final margin = (deviceHeight - _cardHeight - 160) / 2;
     return Container(
-      margin: EdgeInsets.symmetric(vertical: (deviceHeight - _cardHeight) / 2),
-      child: PageView(
-        controller: pageController,
-        children: [
-          getPageWidget(" Descrição do humor", Colors.amber, "page1",
-              "descrição 1", TipoHumor.graveDepre),
-          getPageWidget(" Descrição do humor", Colors.lightBlue, "page2",
-              "descrição 2", TipoHumor.modGraveDepre),
-          getPageWidget(" Descrição do humor", Colors.lime, "page3",
-              "descrição 3", TipoHumor.modLeveDepre),
-          getPageWidget(" Descrição do humor", Colors.lime, "page4",
-              "descrição 4", TipoHumor.leveDepre),
-          getPageWidget(" Descrição do humor", Colors.lime, "page5",
-              "descrição 5", TipoHumor.estavel),
-          getPageWidget(" Descrição do humor", Colors.lime, "page6",
-              "descrição 6", TipoHumor.leveMania),
-          getPageWidget(" Descrição do humor", Colors.lime, "page7",
-              "descrição 7", TipoHumor.modLeveMania),
-          getPageWidget(" Descrição do humor", Colors.lime, "page8",
-              "descrição 8", TipoHumor.modGraveMania),
-          getPageWidget(" Descrição do humor", Colors.lime, "page9",
-              "descrição 9", TipoHumor.graveMania),
-        ],
-      ),
-    );
+        margin: EdgeInsets.symmetric(vertical: margin),
+        child: Material(
+            type: MaterialType.transparency,
+            child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    "Como está seu Humor?",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        height: 2,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  Container(
+                      height: _cardHeight,
+                      width: deviceWidth,
+                      child: PageView(
+                        controller: pageController,
+                        children: [
+                          getPageWidget(" Descrição do humor", Colors.amber,
+                              "page1", "descrição 1", TipoHumor.graveDepre),
+                          getPageWidget(" Descrição do humor", Colors.lightBlue,
+                              "page2", "descrição 2", TipoHumor.modGraveDepre),
+                          getPageWidget(" Descrição do humor", Colors.lime,
+                              "page3", "descrição 3", TipoHumor.modLeveDepre),
+                          getPageWidget(" Descrição do humor", Colors.lime,
+                              "page4", "descrição 4", TipoHumor.leveDepre),
+                          getPageWidget(" Descrição do humor", Colors.lime,
+                              "page5", "descrição 5", TipoHumor.estavel),
+                          getPageWidget(" Descrição do humor", Colors.lime,
+                              "page6", "descrição 6", TipoHumor.leveMania),
+                          getPageWidget(" Descrição do humor", Colors.lime,
+                              "page7", "descrição 7", TipoHumor.modLeveMania),
+                          getPageWidget(" Descrição do humor", Colors.lime,
+                              "page8", "descrição 8", TipoHumor.modGraveMania),
+                          getPageWidget(" Descrição do humor", Colors.lime,
+                              "page9", "descrição 9", TipoHumor.graveMania),
+                        ],
+                      )),
+                ])));
   }
 }
