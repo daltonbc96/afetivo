@@ -2,13 +2,12 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobx/mobx.dart';
 import '../models/User.dart';
 
 part 'LoginStore.g.dart';
 
-final _firebaseAuth = FirebaseAuth.instance;
-final _fireStore = Firestore.instance;
 enum RegisterError {
   NotAnError,
   Invalid,
@@ -17,6 +16,7 @@ enum RegisterError {
   UnknownError
 }
 enum LoginState { Loading, LoggedOut, NoProfile, LoggedIn }
+enum LoginMethod { EmailAndPassword, GoogleSignIn }
 
 class LoginError {}
 
@@ -64,11 +64,18 @@ class LoginStore extends _LoginStore with _$LoginStore {
 }
 
 abstract class _LoginStore with Store {
+  final _firebaseAuth = FirebaseAuth.instance;
+  final _fireStore = Firestore.instance;
+  final _googleSignIn = GoogleSignIn();
+
   @observable
   UserProfile userProfile;
 
   @observable
   String uid;
+
+  @observable
+  LoginMethod loginMethod;
 
   @computed
   bool get isLoggedIn => uid != null;
@@ -85,6 +92,7 @@ abstract class _LoginStore with Store {
       final response = await _firebaseAuth.signInWithEmailAndPassword(
           email: email.trim(), password: password);
       if (response.user == null) throw LoginError();
+      loginMethod = LoginMethod.EmailAndPassword;
     } catch (_) {
       throw LoginError();
     }
@@ -98,6 +106,7 @@ abstract class _LoginStore with Store {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email.trim(), password: password);
+      loginMethod = LoginMethod.EmailAndPassword;
     } on AuthException catch (e) {
       switch (e.code) {
         case 'FirebaseAuthUserCollisionException':

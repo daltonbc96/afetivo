@@ -82,7 +82,7 @@ abstract class _UserProfile with Store {
   String get descSexo => describeSexo(sexo);
 
   @computed
-  String get fullName => nome + " " + sobrenome;
+  String get fullName => nome ?? "" + " " + sobrenome ?? "";
 
   @observable
   ObservableList<String> diagnosticos = ObservableList<String>();

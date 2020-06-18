@@ -54,6 +54,21 @@ mixin _$LoginStore on _LoginStore, Store {
     });
   }
 
+  final _$loginMethodAtom = Atom(name: '_LoginStore.loginMethod');
+
+  @override
+  LoginMethod get loginMethod {
+    _$loginMethodAtom.reportRead();
+    return super.loginMethod;
+  }
+
+  @override
+  set loginMethod(LoginMethod value) {
+    _$loginMethodAtom.reportWrite(value, super.loginMethod, () {
+      super.loginMethod = value;
+    });
+  }
+
   final _$loginStateAtom = Atom(name: '_LoginStore.loginState');
 
   @override
@@ -112,6 +127,7 @@ mixin _$LoginStore on _LoginStore, Store {
     return '''
 userProfile: ${userProfile},
 uid: ${uid},
+loginMethod: ${loginMethod},
 loginState: ${loginState},
 isLoggedIn: ${isLoggedIn},
 hasUserProfile: ${hasUserProfile}
