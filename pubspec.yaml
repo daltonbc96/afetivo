@@ -38,6 +38,7 @@ dependencies:
   json_annotation:
   validators:
   loading_overlay:
+  charts_flutter:
 
 dev_dependencies:
   build_runner:

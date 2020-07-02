@@ -1,131 +1,78 @@
-import 'package:afetivo/pages/adicionalInfo.dart';
+import 'package:afetivo/models/Humor.dart';
 import 'package:afetivo/stores/HumorStore.dart';
+import 'package:afetivo/widgets/HumorCard.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:intl/intl.dart';
-import 'package:afetivo/models/Humor.dart';
 
 class Afetivograma extends StatelessWidget {
   static String tag = 'afetivograma-page';
+  final _humorStore = HumorStore();
 
   @override
-  Widget build(BuildContext context) {
-    final humorStore = HumorStore();
-
-    return new Scaffold(
-        body: new Center(
-            child: Observer(
-                builder: (_) => ListView.builder(
-                    itemCount: humorStore.humorList.length,
-                    itemBuilder: (context, index) {
-                      return _HumorCard(humorStore.humorList[index]);
-                    }))));
-  }
-}
-
-typedef Future<void> Callback(BuildContext context, RegistroHumor humor);
-
-class _MenuOption {
-  final String title;
-  final Callback callback;
-
-  _MenuOption(this.title, this.callback);
-}
-
-class _HumorCard extends StatefulWidget {
-  final RegistroHumor humor;
-  _HumorCard(this.humor);
-
-  @override
-  _CardState createState() => _CardState();
-}
-
-class _CardState extends State<_HumorCard> {
-  bool isExpanded;
-
-  @override
-  void initState() {
-    this.isExpanded = false;
-    super.initState();
-  }
-
-  @override
-  void didUpdateWidget(_HumorCard oldWidget) {
-    if (widget.humor != oldWidget.humor) {
-      this.isExpanded = false;
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
-  _cardInfoText(String text) {
-    return Align(
-        alignment: Alignment.centerLeft,
-        child: Container(
-            margin: new EdgeInsets.symmetric(horizontal: 10.0),
-            child: Text(text)));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final humorStore = HumorStore();
-    final humor = widget.humor;
-    final _menuItems = [
-      _MenuOption("Editar", (context, humor) async {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => AddicionalInfo(
-                  humor: humor,
-                )));
-      }),
-      _MenuOption("Remover", (context, humor) async {
-        await humorStore.deleteHumor(humor);
-      })
-    ];
-
-    return Observer(
-        builder: (context) => Card(
-                child: ExpansionPanelList(
-                    expansionCallback: (_, isExpanded) => setState(() {
-                          this.isExpanded = !isExpanded;
-                        }),
-                    children: [
-                  ExpansionPanel(
-                      headerBuilder: (context, isExpanded) => ListTile(
-                            title: Text(describeTipoHumor(humor.tipo)),
-                            subtitle: Text(DateFormat.yMd().format(humor.data)),
-                          ),
-                      body: Column(children: <Widget>[
-                        if (humor.nota != null)
-                          _cardInfoText("Nota do Humor: ${humor.nota}"),
-                        if (humor.horasDormidas != null)
-                          _cardInfoText(
-                              "Horas Dormidas: ${humor.horasDormidas}"),
-                        if (humor.periodoMenstrual)
-                          _cardInfoText("Em Periodo Menstrual"),
-                        if (humor.eventoDeVida != null)
-                          _cardInfoText(
-                              "Evento de Vida: ${humor.eventoDeVida}"),
-                        if (humor.eventoDeVida != null)
-                          _cardInfoText(
-                              "Impacto do evento: ${humor.impactoEvento}"),
-                        if (humor.sintomas != null)
-                          _cardInfoText(
-                              "Sintomas Comorbidos: ${humor.sintomas}"),
-                        if (humor.otherInfo != null)
-                          _cardInfoText(
-                              "Outras Informações: ${humor.otherInfo}"),
-                        ButtonBar(children: <Widget>[
-                          PopupMenuButton<_MenuOption>(
-                            itemBuilder: (context) => _menuItems
-                                .map((item) => PopupMenuItem(
-                                    value: item, child: Text(item.title)))
-                                .toList(),
-                            onSelected: (choice) =>
-                                choice.callback(context, humor),
-                          )
-                        ])
-                      ]),
-                      isExpanded: isExpanded)
-                ])));
-  }
+  Widget build(BuildContext context) => Scaffold(
+      body: Observer(
+          builder: (context) => Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                        margin:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        child: Material(
+                            elevation: 10,
+                            child: Container(
+                              height: 250,
+                              child: charts.TimeSeriesChart(
+                                  [
+                                    charts.Series<RegistroHumor, DateTime>(
+                                      id: 'Humor',
+                                      data: _humorStore.humorList,
+                                      domainFn: (datum, index) => datum.data,
+                                      colorFn: (datum, index) =>
+                                          charts.ColorUtil.fromDartColor(
+                                              Theme.of(context).accentColor),
+                                      measureFn: (datum, index) =>
+                                          datum.tipo.index,
+                                      measureFormatterFn: (datum, index) =>
+                                          (i) => describeTipoHumor(
+                                              TipoHumor.values[i]),
+                                    )
+                                  ],
+                                  animate: true,
+                                  defaultRenderer: charts.LineRendererConfig(
+                                      includePoints: true),
+                                  primaryMeasureAxis: charts.NumericAxisSpec(
+                                      tickFormatterSpec:
+                                          charts.BasicNumericTickFormatterSpec(
+                                              (i) => '')),
+                                  behaviors: [
+                                    charts.RangeAnnotation(TipoHumor.values
+                                        .map((e) =>
+                                            charts.LineAnnotationSegment(
+                                                e.index,
+                                                charts.RangeAnnotationAxisType
+                                                    .measure,
+                                                endLabel: describeTipoHumor(e),
+                                                labelStyleSpec:
+                                                    charts.TextStyleSpec(
+                                                        fontSize: 10,
+                                                        color:
+                                                            charts
+                                                                .MaterialPalette
+                                                                .gray
+                                                                .shade600),
+                                                color: charts.MaterialPalette
+                                                    .gray.shade200))
+                                        .toList())
+                                  ]),
+                            ))),
+                    Expanded(
+                        child: ListView.builder(
+                            itemCount: _humorStore.humorList.length,
+                            itemBuilder: (context, index) {
+                              return HumorCard(_humorStore.humorList[index]);
+                            })),
+                  ])));
 }
