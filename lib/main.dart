@@ -1,4 +1,3 @@
-import 'package:afetivo/pages/afetivograma.dart';
 import 'package:afetivo/pages/cadastroPage.dart';
 import 'package:afetivo/pages/configuracoes.dart';
 import 'package:afetivo/pages/ajuda.dart';
@@ -71,7 +70,6 @@ class _AppMainState extends State<AppMain> {
           "/help": (context) => Ajuda("Ajuda"),
           DashboardScreen.tag: (context) => DashboardScreen(),
           FogotPage.tag: (context) => FogotPage(),
-          Afetivograma.tag: (context) => Afetivograma(),
           LoginPage.tag: (context) => LoginPage(),
           CadastroPage.tag: (context) => CadastroPage(),
           CreateUser.tag: (context) => CreateUser(),
