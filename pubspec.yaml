@@ -34,7 +34,7 @@ dependencies:
   cloud_firestore: ^0.13.6
   firebase_auth: ^0.16.1
   firebase_analytics: ^5.0.14
-  google_sign_in: ^4.5.1
+  #google_sign_in: ^4.5.1
   json_annotation:
   validators:
   loading_overlay:

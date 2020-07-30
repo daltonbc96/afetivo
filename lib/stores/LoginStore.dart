@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobx/mobx.dart';
 import '../models/User.dart';
 
@@ -66,7 +65,6 @@ class LoginStore extends _LoginStore with _$LoginStore {
 abstract class _LoginStore with Store {
   final _firebaseAuth = FirebaseAuth.instance;
   final _fireStore = Firestore.instance;
-  final _googleSignIn = GoogleSignIn();
 
   @observable
   UserProfile userProfile;

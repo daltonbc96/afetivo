@@ -32,11 +32,12 @@ class _AppMainState extends State<AppMain> {
 
   @override
   void initState() {
+    super.initState();
     analytics = FirebaseAnalytics();
     navigationService = NavigationService();
     loginStore = LoginStore();
     humorStore = HumorStore();
-    super.initState();
+    //initializeDateFormatting('pt_BR');
   }
 
   @override

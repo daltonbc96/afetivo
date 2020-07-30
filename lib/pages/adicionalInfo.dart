@@ -45,17 +45,14 @@ class _State extends State<AddicionalInfo> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     DateTimeField(
-                      format: DateFormat(DateFormat.YEAR_MONTH_DAY),
+                      format: DateFormat(DateFormat.YEAR_MONTH_DAY, 'pt_BR'),
                       onChanged: (value) => humor.data = value,
                       initialValue: humor.data ?? DateTime.now(),
-                      onShowPicker: (context, currentValue) {
-                        return showDatePicker(
-                            context: context,
-                            firstDate:
-                                DateTime.now().subtract(Duration(days: 3)),
-                            initialDate: currentValue ?? DateTime.now(),
-                            lastDate: DateTime.now());
-                      },
+                      onShowPicker: (context, currentValue) => showDatePicker(
+                          context: context,
+                          firstDate: DateTime.now().subtract(Duration(days: 3)),
+                          initialDate: currentValue ?? DateTime.now(),
+                          lastDate: DateTime.now()),
                     ),
                   ],
                 ),
