@@ -121,32 +121,64 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ExpandedSection(
             expand: _humorStore.filtered,
             child: Container(
+                padding: EdgeInsets.only(top: 12),
                 child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                DateTimeField(
-                    format: DateFormat(DateFormat.YEAR_MONTH_DAY, 'pt_BR'),
-                    controller: _startDateFieldController,
-                    onChanged: (value) => _humorStore.startDate = value,
-                    onShowPicker: (context, currentValue) => showDatePicker(
-                          context: context,
-                          firstDate: _humorStore.humorList.last.data.date,
-                          initialDate: currentValue,
-                          lastDate: _humorStore.endDate,
-                        )),
-                DateTimeField(
-                    format: DateFormat(DateFormat.YEAR_MONTH_DAY, 'pt_BR'),
-                    controller: _endDateFieldController,
-                    onChanged: (value) => _humorStore.endDate = value,
-                    onShowPicker: (context, currentValue) => showDatePicker(
-                          context: context,
-                          firstDate: _humorStore.startDate,
-                          initialDate: currentValue,
-                          lastDate: _humorStore.humorList.first.data.date,
-                        )),
-              ],
-            )),
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: DateTimeField(
+                            decoration: InputDecoration(
+                              contentPadding:
+                                  EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(32.0),
+                              ),
+                              labelText: "Data Inicial",
+                            ),
+                            format:
+                                DateFormat(DateFormat.YEAR_MONTH_DAY, 'pt_BR'),
+                            controller: _startDateFieldController,
+                            onChanged: (value) => _humorStore.startDate = value,
+                            onShowPicker: (context, currentValue) =>
+                                showDatePicker(
+                                  context: context,
+                                  firstDate:
+                                      _humorStore.humorList.last.data.date,
+                                  initialDate: currentValue ??
+                                      _humorStore.humorList.last.data.date,
+                                  lastDate: _humorStore.endDate ??
+                                      _humorStore.humorList.first.data.date,
+                                ))),
+                    Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: DateTimeField(
+                            decoration: InputDecoration(
+                              contentPadding:
+                                  EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(32.0),
+                              ),
+                              labelText: "Data Final",
+                            ),
+                            format:
+                                DateFormat(DateFormat.YEAR_MONTH_DAY, 'pt_BR'),
+                            controller: _endDateFieldController,
+                            onChanged: (value) => _humorStore.endDate = value,
+                            onShowPicker: (context, currentValue) =>
+                                showDatePicker(
+                                  context: context,
+                                  firstDate: _humorStore.startDate ??
+                                      _humorStore.humorList.last.data.date,
+                                  initialDate: currentValue ??
+                                      _humorStore.humorList.first.data.date,
+                                  lastDate:
+                                      _humorStore.humorList.first.data.date,
+                                ))),
+                  ],
+                )),
           ),
           GestureDetector(
               onVerticalDragUpdate: (detail) {
