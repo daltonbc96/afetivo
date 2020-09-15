@@ -20,7 +20,7 @@ class HumorSelector extends StatelessWidget {
     final deviceWidth = mediaQuery.size.width;
 
     Widget getPageWidget(String text2, MaterialColor backgroundColor,
-            String titulo, String descricao, TipoHumor tipoHumor) =>
+            String titulo, TipoHumor descHumor, TipoHumor tipoHumor) =>
         Container(
           height: _cardHeight,
           margin:
@@ -39,18 +39,31 @@ class HumorSelector extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
-                        Text(
-                          describeTipoHumor(tipoHumor),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                        SizedBox(
+                          width: 200.0,
+                          height: 80.0,
+                          child: Center(
+                            child: Text(
+                              describeTipoHumor(tipoHumor),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 23,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                          textAlign: TextAlign.center,
                         ),
-                        Text(
-                          text2,
-                          style: TextStyle(
-                            fontSize: 14.0,
+                        SizedBox(
+                          width: 250.0,
+                          height: 100.0,
+                          child: Center(
+                            child: Text(
+                              text2,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 20.0,
+                              ),
+                            ),
                           ),
                         ),
                         Column(
@@ -62,7 +75,7 @@ class HumorSelector extends StatelessWidget {
                               icon: Icon(Icons.check, color: Colors.white),
                               label: Text("Escolher Humor",
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 16.0)),
+                                      color: Colors.white, fontSize: 20.0)),
                               elevation: 6.0,
                               shape: RoundedRectangleBorder(
                                 borderRadius: new BorderRadius.circular(40.0),
@@ -80,8 +93,10 @@ class HumorSelector extends StatelessWidget {
                             FlatButton(
                               color: Colors.transparent,
                               child: Text('Estou com Dúvida',
-                                  style: TextStyle(fontSize: 16)),
-                              textColor: Colors.white,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16)),
+                              textColor: Colors.green[800],
                               onPressed: () {
                                 showDialog(
                                   context: context,
@@ -93,11 +108,31 @@ class HumorSelector extends StatelessWidget {
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(10.0))),
                                       title: new Text(titulo),
-                                      content: new Text(descricao),
+                                      insetPadding: EdgeInsets.symmetric(),
+                                      content: Container(
+                                          width: 400,
+                                          height: 400,
+                                          child: SingleChildScrollView(
+                                            child: Text(
+                                              describeLongTipoHumor(descHumor),
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                              ),
+                                              textAlign: TextAlign.justify,
+                                            ),
+                                          )),
                                       actions: <Widget>[
                                         // usually buttons at the bottom of the dialog
                                         new FlatButton(
-                                          child: new Text("Entendi"),
+                                          shape: new RoundedRectangleBorder(
+                                              borderRadius:
+                                                  new BorderRadius.circular(
+                                                      30.0)),
+                                          color: Colors.green[700],
+                                          child: new Text(
+                                            "Entendi",
+                                            style: TextStyle(fontSize: 20),
+                                          ),
                                           onPressed: () {
                                             Navigator.of(context).pop();
                                           },
@@ -118,6 +153,7 @@ class HumorSelector extends StatelessWidget {
         );
 
     final margin = (deviceHeight - _cardHeight - 160) / 2;
+
     return Container(
         margin: EdgeInsets.symmetric(vertical: margin),
         child: Material(
@@ -142,24 +178,60 @@ class HumorSelector extends StatelessWidget {
                       child: PageView(
                         controller: pageController,
                         children: [
-                          getPageWidget(" Descrição do humor", Colors.amber,
-                              "page1", "descrição 1", TipoHumor.graveDepre),
-                          getPageWidget(" Descrição do humor", Colors.lightBlue,
-                              "page2", "descrição 2", TipoHumor.modGraveDepre),
-                          getPageWidget(" Descrição do humor", Colors.lime,
-                              "page3", "descrição 3", TipoHumor.modLeveDepre),
-                          getPageWidget(" Descrição do humor", Colors.lime,
-                              "page4", "descrição 4", TipoHumor.leveDepre),
-                          getPageWidget(" Descrição do humor", Colors.lime,
-                              "page5", "descrição 5", TipoHumor.estavel),
-                          getPageWidget(" Descrição do humor", Colors.lime,
-                              "page6", "descrição 6", TipoHumor.leveMania),
-                          getPageWidget(" Descrição do humor", Colors.lime,
-                              "page7", "descrição 7", TipoHumor.modLeveMania),
-                          getPageWidget(" Descrição do humor", Colors.lime,
-                              "page8", "descrição 8", TipoHumor.modGraveMania),
-                          getPageWidget(" Descrição do humor", Colors.lime,
-                              "page9", "descrição 9", TipoHumor.graveMania),
+                          getPageWidget(
+                              "Essencialmente incapacitado ou hospitalizado",
+                              Colors.lime,
+                              "Depressão Severa",
+                              TipoHumor.graveDepre,
+                              TipoHumor.graveDepre),
+                          getPageWidget(
+                              "Funcional com grande esforço",
+                              Colors.lime,
+                              "Depressão Moderada Alta",
+                              TipoHumor.modGraveDepre,
+                              TipoHumor.modGraveDepre),
+                          getPageWidget(
+                              "Funcional com algum esforço",
+                              Colors.lime,
+                              "Depressão Moderada Baixa",
+                              TipoHumor.modLeveDepre,
+                              TipoHumor.modLeveDepre),
+                          getPageWidget(
+                              "Pouco ou nenhum prejuízo funcional",
+                              Colors.lime,
+                              "Depressão Leve",
+                              TipoHumor.leveDepre,
+                              TipoHumor.leveDepre),
+                          getPageWidget(
+                              "Sem alterações importantes",
+                              Colors.lime,
+                              "Estável",
+                              TipoHumor.estavel,
+                              TipoHumor.estavel),
+                          getPageWidget(
+                              "Mais energia e produtividade com pouco ou nenhum prejuízo funcional",
+                              Colors.lime,
+                              "Hipomania/Mania Leve",
+                              TipoHumor.leveMania,
+                              TipoHumor.leveMania),
+                          getPageWidget(
+                              "Alguma dificuldade em tarefas orientadas para um objetivo",
+                              Colors.lime,
+                              "Hipomania/Mania Moderada Baixa",
+                              TipoHumor.modLeveMania,
+                              TipoHumor.modLeveMania),
+                          getPageWidget(
+                              "Grande dificuldade em tarefas orientadas para um objetivo",
+                              Colors.lime,
+                              "Hipomania/Mania Moderada Alta",
+                              TipoHumor.modGraveMania,
+                              TipoHumor.modGraveMania),
+                          getPageWidget(
+                              "Essencialmente incapacitado ou hospitalizado",
+                              Colors.lime,
+                              "Hipomania/Mania Severa",
+                              TipoHumor.graveMania,
+                              TipoHumor.graveMania),
                         ],
                       )),
                 ])));

@@ -69,7 +69,7 @@ class _State extends State<AddicionalInfo> {
           minWidth: 70.0,
           color: Theme.of(context).primaryColor,
           textColor: Colors.white,
-          child: new Text("Registrar", style: TextStyle(fontSize: 16.0)),
+          child: new Text("Registrar", style: TextStyle(fontSize: 20.0)),
           onPressed: () {
             humorStore.editHumor(humor);
             Navigator.of(context).pop();
@@ -88,7 +88,7 @@ class _State extends State<AddicionalInfo> {
           overlayColor: Colors.amber,
         ),
         child: new Container(
-          margin: const EdgeInsets.all(10.0),
+          margin: const EdgeInsets.all(16.0),
           child: Observer(
             builder: (context) => Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -125,6 +125,9 @@ class _State extends State<AddicionalInfo> {
                                   flex: 4,
                                   child: Text(
                                     "${item.medicamento.nome}, ${item.medicamento.dose}",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                    ),
                                     overflow: TextOverflow.ellipsis,
                                   )),
                               Expanded(
@@ -137,9 +140,10 @@ class _State extends State<AddicionalInfo> {
                                         .numeroComprimidos = int.parse(value),
                                     autofocus: false,
                                     decoration: InputDecoration(
-                                      labelText: 'Comprimidos:',
-                                      contentPadding: EdgeInsets.fromLTRB(
-                                          20.0, 10.0, 20.0, 10.0),
+                                      labelText: 'Qt. Comprimidos:',
+                                      isDense: true, // Added this
+                                      contentPadding: EdgeInsets.all(8),
+
                                       border: OutlineInputBorder(
                                         borderRadius:
                                             BorderRadius.circular(32.0),
@@ -170,7 +174,12 @@ class _State extends State<AddicionalInfo> {
 
     final menstrual = Container(
         child: Row(children: <Widget>[
-      Text("Você está no Período Menstrual?"),
+      Text(
+        "Você está no Período Menstrual?",
+        style: TextStyle(
+          fontSize: 20,
+        ),
+      ),
       Observer(
           builder: (context) => Checkbox(
                 onChanged: (value) => humor.periodoMenstrual = value,
@@ -180,7 +189,57 @@ class _State extends State<AddicionalInfo> {
 
     final disforica = Container(
         child: Row(children: <Widget>[
-      Text("Sua Mania é disforica?"),
+      Text(
+        "Sua Mania é disforica?",
+        style: TextStyle(
+          fontSize: 20,
+        ),
+      ),
+      IconButton(
+        icon: Icon(Icons.help),
+        iconSize: 20,
+        color: Colors.black38,
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (ctxt) => new AlertDialog(
+                    title: Text(
+                      "Mania Disfórica",
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                    insetPadding: EdgeInsets.symmetric(),
+                    content: Container(
+                        width: 400,
+                        height: 300,
+                        child: SingleChildScrollView(
+                          child: Text(
+                            'Se você estiver experienciando sintomas de mania ou hipomania (como por exemplo: um aumento na energia, diminuição da necessidade de sono, aumento no número de atividades, de pensamentos ou de interações), associados com raiva, irritabilidade ou ansiedade. Portanto, quando o estado energizado é desagradável ou disfórico, por favor, indique marcando um (✓) em "mania disfórica".',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.justify,
+                          ),
+                        )),
+                    actions: <Widget>[
+                      // usually buttons at the bottom of the dialog
+                      new FlatButton(
+                        shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(30.0)),
+                        color: Colors.green[700],
+                        child: new Text(
+                          "Entendi",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  ));
+        },
+      ),
       Observer(
           builder: (context) => Checkbox(
                 onChanged: (value) => humor.disforico = value,
@@ -190,6 +249,8 @@ class _State extends State<AddicionalInfo> {
 
     final eventos = Observer(
       builder: (context) => TextFormField(
+        keyboardType: TextInputType.multiline,
+        maxLines: null,
         initialValue: humor.eventoDeVida,
         onChanged: (value) => humor.eventoDeVida = value,
         autofocus: false,
@@ -204,7 +265,12 @@ class _State extends State<AddicionalInfo> {
     );
 
     final impacto = Column(children: [
-      Text("impacto do evento de vida"),
+      Text(
+        "impacto do evento de vida",
+        style: TextStyle(
+          fontSize: 20,
+        ),
+      ),
       SliderTheme(
         data: SliderTheme.of(context).copyWith(
           activeTrackColor: Colors.black,
@@ -216,7 +282,7 @@ class _State extends State<AddicionalInfo> {
           overlayColor: Colors.amber,
         ),
         child: new Container(
-          margin: const EdgeInsets.all(10.0),
+          margin: const EdgeInsets.all(16.0),
           child: new Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -248,6 +314,8 @@ class _State extends State<AddicionalInfo> {
 
     final sintomasComorb = Observer(
       builder: (context) => TextFormField(
+        keyboardType: TextInputType.multiline,
+        maxLines: null, //Number_of_lines(int),)
         autofocus: false,
         initialValue: humor.sintomas,
         onChanged: (value) => humor.sintomas = value,
@@ -263,12 +331,16 @@ class _State extends State<AddicionalInfo> {
 
     final outrasInfo = Observer(
       builder: (context) => TextFormField(
+        keyboardType: TextInputType.multiline,
+        maxLines: null, //Number_of_lines(int),)
+        textAlignVertical: TextAlignVertical.center,
         autofocus: false,
         initialValue: humor.otherInfo,
         onChanged: (value) => humor.otherInfo = value,
         decoration: InputDecoration(
           labelText: 'Outras Informações',
-          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+          contentPadding: EdgeInsets.all(16),
+          //contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(32.0),
           ),
@@ -279,8 +351,8 @@ class _State extends State<AddicionalInfo> {
     return Scaffold(
         appBar: new AppBar(
           title: Column(children: [
-            Text("Informações Adicionais"),
-            Text(describeTipoHumor(humor.tipo))
+            Text("Informações Adicionais", textAlign: TextAlign.center),
+            Text(describeTipoHumor(humor.tipo), textAlign: TextAlign.center)
           ]),
         ),
         backgroundColor: Colors.white,
@@ -290,28 +362,53 @@ class _State extends State<AddicionalInfo> {
               shrinkWrap: true,
               padding: EdgeInsets.only(left: 24.0, right: 24.0),
               children: <Widget>[
-                SizedBox(height: 24.0),
+                SizedBox(height: 10.0),
                 if (tipoHumorManiaco(humor.tipo)) disforica,
-                SizedBox(height: 24.0),
-                new Text("Data"),
+                SizedBox(height: 25.0),
+                new Text(
+                  "Data",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
                 data,
-                SizedBox(height: 25.0),
-                new Text("Atibua uma Nota para o seu Humor"),
+                SizedBox(height: 50.0),
+                new Text(
+                  'Avalie seu Humor de Forma  Geral',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+                new Text(
+                  "Escolha um número de 0 a 100, baseado na escala de humor demonstrada abaixo:",
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+                Image.asset("assets/images/nota_humor.jpg",
+                    width: 100, height: 110),
                 notaHumor,
+                SizedBox(height: 25.0),
+                Text(
+                  "Medicamentos",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
                 medicamentos,
-                SizedBox(height: 25.0),
+                SizedBox(height: 35.0),
                 horasDormidas,
-                SizedBox(height: 25.0),
+                SizedBox(height: 35.0),
                 menstrual,
-                SizedBox(height: 25.0),
+                SizedBox(height: 35.0),
                 eventos,
-                SizedBox(height: 12.5),
+                SizedBox(height: 20),
                 if (humor.eventoDeVida != null) impacto,
-                SizedBox(height: 12.5),
+                SizedBox(height: 20),
                 sintomasComorb,
-                SizedBox(height: 25.0),
+                SizedBox(height: 35),
                 outrasInfo,
-                SizedBox(height: 48.0),
+                SizedBox(height: 35),
                 sentBtt,
               ],
             ),
