@@ -8,6 +8,7 @@ import 'package:afetivo/widgets/HumorCard.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:afetivo/extensions/DateTime.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:intl/intl.dart';
@@ -26,6 +27,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final _startDateFieldController = TextEditingController();
   final _endDateFieldController = TextEditingController();
   ReactionDisposer _filterReactor;
+  bool isSwitched;
 
   final String title = 'Afetivo';
 
@@ -38,6 +40,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   void initState() {
+    isSwitched = true;
     _filterReactor = autorun((_) {
       final startDate = DateFormat(DateFormat.YEAR_MONTH_DAY, 'pt_BR')
           .format(_humorStore.startDate.date);
@@ -99,6 +102,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Navigator.of(context).pushNamed(CadastroPage.tag);
               },
             ),
+            new ListTile(
+                title: new Text("Lembretes Diários"),
+                trailing: new Switch(
+                    value: isSwitched,
+                    onChanged: (value) {
+                      setState(() {
+                        isSwitched = value;
+                      });
+
+                      if (value) {
+                        return scheduleNotification();
+                      } else {
+                        return cancelNotification();
+                      }
+                    })),
             new ListTile(
               title: new Text("Ajuda"),
               trailing: new Icon(Icons.help_outline),
@@ -246,6 +264,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
+}
+
+Future<void> scheduleNotification() async {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  var scheduledNotificationDateTime =
+      new DateTime.now().add(new Duration(seconds: 5));
+  var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+      'your other channel id',
+      'your other channel name',
+      'your other channel description');
+  var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
+  NotificationDetails platformChannelSpecifics = new NotificationDetails(
+      androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+  await flutterLocalNotificationsPlugin.schedule(
+      0,
+      'scheduled title',
+      'scheduled body',
+      scheduledNotificationDateTime,
+      platformChannelSpecifics);
+}
+
+Future<void> cancelNotification() async {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  await flutterLocalNotificationsPlugin.cancel(0);
 }
 
 //References

@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mobx/mobx.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'pages/dashboard.dart';
 
@@ -29,6 +30,7 @@ class _AppMainState extends State<AppMain> {
   NavigationService navigationService;
   LoginStore loginStore;
   HumorStore humorStore;
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   @override
   void initState() {
@@ -38,6 +40,23 @@ class _AppMainState extends State<AppMain> {
     loginStore = LoginStore();
     humorStore = HumorStore();
     //initializeDateFormatting('pt_BR');
+
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    var android = new AndroidInitializationSettings('@mipmap/ic_launcher');
+    var IOS = new IOSInitializationSettings();
+    var initSettings = new InitializationSettings(android, IOS);
+    flutterLocalNotificationsPlugin.initialize(initSettings,
+        onSelectNotification: onSelectNotification);
+  }
+
+  Future onSelectNotification(String payload) {
+    debugPrint("payload: $payload");
+    showDialog(
+        context: context,
+        builder: (_) => new AlertDialog(
+              title: new Text('Notification'),
+              content: new Text('Minha notificao deu certo'),
+            ));
   }
 
   @override
@@ -75,6 +94,7 @@ class _AppMainState extends State<AppMain> {
           CadastroPage.tag: (context) => CadastroPage(),
           CreateUser.tag: (context) => CreateUser(),
         });
+
     autorun((_) {
       switch (loginStore.loginState) {
         case LoginState.LoggedIn:
