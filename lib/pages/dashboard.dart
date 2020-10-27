@@ -27,7 +27,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final _startDateFieldController = TextEditingController();
   final _endDateFieldController = TextEditingController();
   ReactionDisposer _filterReactor;
-  bool isSwitched;
 
   final String title = 'Afetivo';
 
@@ -35,13 +34,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void dispose() {
     _startDateFieldController.dispose();
     _endDateFieldController.dispose();
+    _filterReactor();
     super.dispose();
   }
 
   @override
   void initState() {
-    isSwitched = true;
     _filterReactor = autorun((_) {
+      var userProfile = _loginStore.userProfile;
+      if (userProfile != null && userProfile.notificationsEnabled)
+        scheduleNotification();
+      else
+        cancelNotification();
+
       final startDate = DateFormat(DateFormat.YEAR_MONTH_DAY, 'pt_BR')
           .format(_humorStore.startDate.date);
       final endDate = DateFormat(DateFormat.YEAR_MONTH_DAY, 'pt_BR')
@@ -102,21 +107,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Navigator.of(context).pushNamed(CadastroPage.tag);
               },
             ),
-            new ListTile(
-                title: new Text("Lembretes Diários"),
-                trailing: new Switch(
-                    value: isSwitched,
-                    onChanged: (value) {
-                      setState(() {
-                        isSwitched = value;
-                      });
-
-                      if (value) {
-                        return scheduleNotification();
-                      } else {
-                        return cancelNotification();
-                      }
-                    })),
+            Observer(builder: (context) {
+              var userProfile = _loginStore.userProfile;
+              return _loginStore.userProfile != null
+                  ? ListTile(
+                      title: new Text("Lembretes Diários"),
+                      trailing: new Switch(
+                          value: userProfile.notificationsEnabled,
+                          onChanged: (val) =>
+                              userProfile.notificationsEnabled = val))
+                  : SizedBox.shrink();
+            }),
             new ListTile(
               title: new Text("Ajuda"),
               trailing: new Icon(Icons.help_outline),

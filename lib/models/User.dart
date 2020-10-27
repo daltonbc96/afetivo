@@ -27,6 +27,7 @@ class UserProfile extends _UserProfile with _$UserProfile {
     String email,
     DateTime nascimento,
     Sexo sexo,
+    bool notificationsEnabled,
     List<String> diagnosticos,
     List<Medicamento> medicamentos,
   }) : super(
@@ -35,6 +36,7 @@ class UserProfile extends _UserProfile with _$UserProfile {
           email: email,
           nascimento: nascimento,
           sexo: sexo,
+          notificationsEnabled: notificationsEnabled,
           diagnosticos: ObservableList.of(diagnosticos ?? []),
           medicamentos: ObservableList.of(medicamentos ?? []),
         );
@@ -46,6 +48,7 @@ class UserProfile extends _UserProfile with _$UserProfile {
           email: src.email,
           nascimento: src.nascimento,
           sexo: src.sexo,
+          notificationsEnabled: src.notificationsEnabled,
           diagnosticos: ObservableList.of(src.diagnosticos ?? []),
           medicamentos: ObservableList.of(src.medicamentos ?? []),
         );
@@ -77,6 +80,9 @@ abstract class _UserProfile with Store {
 
   @observable
   Sexo sexo;
+
+  @observable
+  bool notificationsEnabled;
 
   @computed
   String get descSexo => describeSexo(sexo);
@@ -125,7 +131,9 @@ abstract class _UserProfile with Store {
       this.nascimento,
       this.sexo,
       this.diagnosticos,
-      this.medicamentos});
+      this.medicamentos,
+      bool notificationsEnabled})
+      : notificationsEnabled = notificationsEnabled ?? false;
 }
 
 class _ObservableListJsonConverter
