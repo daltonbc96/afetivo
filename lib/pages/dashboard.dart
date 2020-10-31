@@ -39,29 +39,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   @override
-  void initState() {
-    _filterReactor = autorun((_) {
-      var userProfile = _loginStore.userProfile;
-      if (userProfile != null && userProfile.notificationsEnabled)
-        scheduleNotification();
-      else
-        cancelNotification();
-
-      final startDate = DateFormat(DateFormat.YEAR_MONTH_DAY, 'pt_BR')
-          .format(_humorStore.startDate.date);
-      final endDate = DateFormat(DateFormat.YEAR_MONTH_DAY, 'pt_BR')
-          .format(_humorStore.endDate.date);
-
-      if (_startDateFieldController.text != startDate)
-        _startDateFieldController.text = startDate;
-
-      if (_endDateFieldController.text != endDate)
-        _endDateFieldController.text = endDate;
-    });
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
@@ -107,17 +84,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Navigator.of(context).pushNamed(CadastroPage.tag);
               },
             ),
-            Observer(builder: (context) {
-              var userProfile = _loginStore.userProfile;
-              return _loginStore.userProfile != null
-                  ? ListTile(
-                      title: new Text("Lembretes Diários"),
-                      trailing: new Switch(
-                          value: userProfile.notificationsEnabled,
-                          onChanged: (val) =>
-                              userProfile.notificationsEnabled = val))
-                  : SizedBox.shrink();
-            }),
             new ListTile(
               title: new Text("Ajuda"),
               trailing: new Icon(Icons.help_outline),
@@ -257,40 +223,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ]),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
           showDialog(context: context, builder: (context) => HumorSelector());
         },
+        tooltip: 'Increment',
+        // elevation: 2.0,
+      ),
+      bottomNavigationBar: BottomAppBar(
+        shape: CircularNotchedRectangle(),
+        color: Colors.green,
+        child: Container(
+          height: 60,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[],
+          ),
+        ),
       ),
     );
   }
-}
-
-Future<void> scheduleNotification() async {
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-  var scheduledNotificationDateTime =
-      new DateTime.now().add(new Duration(seconds: 5));
-  var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-      'your other channel id',
-      'your other channel name',
-      'your other channel description');
-  var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
-  NotificationDetails platformChannelSpecifics = new NotificationDetails(
-      androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-  await flutterLocalNotificationsPlugin.schedule(
-      0,
-      'scheduled title',
-      'scheduled body',
-      scheduledNotificationDateTime,
-      platformChannelSpecifics);
-}
-
-Future<void> cancelNotification() async {
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-  await flutterLocalNotificationsPlugin.cancel(0);
 }
 
 //References
