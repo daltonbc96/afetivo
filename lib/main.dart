@@ -8,6 +8,7 @@ import 'package:afetivo/pages/loginPage.dart';
 import 'package:afetivo/services/NavigationService.dart';
 import 'package:afetivo/stores/HumorStore.dart';
 import 'package:afetivo/stores/LoginStore.dart';
+import 'package:afetivo/widgets/onboarding_screen.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
@@ -83,7 +84,8 @@ class _AppMainState extends State<AppMain> {
         theme: new ThemeData(
           primarySwatch: Colors.green,
         ),
-        home: LoadingScreen(),
+        home: OnboardingScreen(),
+        //home: LoadingScreen(),
         routes: <String, WidgetBuilder>{
           LoadingScreen.tag: (context) => LoadingScreen(),
           "/config": (context) => Configuracoes("Configurações"),
@@ -93,6 +95,7 @@ class _AppMainState extends State<AppMain> {
           LoginPage.tag: (context) => LoginPage(),
           CadastroPage.tag: (context) => CadastroPage(),
           CreateUser.tag: (context) => CreateUser(),
+          OnboardingScreen.tag: (context) => OnboardingScreen(),
         });
 
     autorun((_) {
@@ -104,7 +107,7 @@ class _AppMainState extends State<AppMain> {
           navigationService.forceNamedRoute(CadastroPage.tag);
           break;
         case LoginState.LoggedOut:
-          navigationService.forceNamedRoute(LoginPage.tag);
+          navigationService.forceNamedRoute(OnboardingScreen.tag);
           break;
         default:
           navigationService.forceNamedRoute(LoadingScreen.tag);
