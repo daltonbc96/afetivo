@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:afetivo/models/Humor.dart';
 import 'package:afetivo/pages/cadastroPage.dart';
 import 'package:afetivo/stores/HumorStore.dart';
@@ -13,6 +15,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class DashboardScreen extends StatefulWidget {
   static String tag = 'DashboardScreen';
@@ -38,6 +42,198 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.dispose();
   }
 
+  //coah marks - tutorial inicial
+  TutorialCoachMark tutorialCoachMark; // class variable
+  List<TargetFocus> targets = List(); // list of targets
+
+  // all target keys
+  GlobalKey key1 = GlobalKey();
+  GlobalKey key2 = GlobalKey();
+  GlobalKey key3 = GlobalKey();
+  GlobalKey key4 = GlobalKey();
+  GlobalKey key5 = GlobalKey();
+
+  //functions
+
+  @override
+  void initState() {
+    initTarget();
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+
+    super.initState();
+  }
+
+  void _afterLayout(_) {
+    Future.delayed(Duration(milliseconds: 100));
+    showTutorial();
+  }
+
+  void showTutorial() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var intro = preferences.getBool('intro') ?? false;
+    if (!intro) {
+      tutorialCoachMark = TutorialCoachMark(
+        context,
+        targets: targets,
+        colorShadow: Colors.green,
+        opacityShadow: 0.85,
+        textSkip: "Pular Tutorial",
+      )..show();
+    }
+    await preferences.setBool('intro', true);
+  }
+
+  void initTarget() {
+    targets.add(
+      TargetFocus(identify: "Target 1", keyTarget: key1, contents: [
+        ContentTarget(
+          align: AlignContent.top,
+          child: Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "Adicionar um Novo Humor",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                    color: Colors.black,
+                  ),
+                ),
+                Text(
+                    'Clique nesse botão para adicionar um novo humor. Escolha um dos cartões que melhor represente o seu humor hoje.',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                    ))
+              ],
+            ),
+          ),
+        ),
+      ]),
+    );
+
+    targets.add(
+      TargetFocus(identify: "Target 2", keyTarget: key2, contents: [
+        ContentTarget(
+          align: AlignContent.top,
+          child: Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "Visualização",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                    color: Colors.black,
+                  ),
+                ),
+                Text(
+                    'Nessa área será mostrado os seus registros de humor. Aqui também é possível editar e excluir seus registros.',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                    ))
+              ],
+            ),
+          ),
+        ),
+      ]),
+    );
+
+    targets.add(
+      TargetFocus(identify: "Target 3", keyTarget: key3, contents: [
+        ContentTarget(
+          align: AlignContent.bottom,
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                Text(
+                  "Afetivograma",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                    color: Colors.black,
+                  ),
+                ),
+                Text(
+                  'Aqui será exibido o seu afetivograma. O afetivograma é um tipo de gráfico que mostrará a variação do seu humor ao longo do tempo.',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ]),
+    );
+
+    targets.add(
+      TargetFocus(identify: "Target 4", keyTarget: key4, contents: [
+        ContentTarget(
+          align: AlignContent.bottom,
+          child: Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "Filtrar Dados",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                    color: Colors.black,
+                  ),
+                ),
+                Text(
+                    'Clique nesse botão para filtrar o período que deseja visualizar no gráfico. Para filtrar escolha uma data inicial e uma data final',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                    ))
+              ],
+            ),
+          ),
+        ),
+      ]),
+    );
+
+    targets.add(
+      TargetFocus(identify: "Target 5", keyTarget: key5, contents: [
+        ContentTarget(
+          align: AlignContent.bottom,
+          child: Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "Exportar Dados",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                    color: Colors.black,
+                  ),
+                ),
+                Text(
+                    'Clique nesse botão para exportar e compartilhar os seus registros.',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                    ))
+              ],
+            ),
+          ),
+        ),
+      ]),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -47,12 +243,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         actions: <Widget>[
           IconButton(
+            key: key4,
             onPressed: _humorStore.toggleFilter,
             icon: Icon(
               Icons.date_range,
             ),
           ),
           IconButton(
+            key: key5,
             onPressed: () {},
             icon: Icon(
               Icons.arrow_downward,
@@ -176,6 +374,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: Material(
                   elevation: 10,
                   child: Container(
+                    key: key3,
                     height: 250,
                     child: charts.TimeSeriesChart(
                       [
@@ -214,6 +413,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               )),
           Expanded(
+            key: key2,
             child: ListView.builder(
               itemCount: _humorStore.filteredHumors.length,
               itemBuilder: (context, index) {
@@ -225,7 +425,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
+        key: key1,
         child: Icon(Icons.add),
+
         onPressed: () {
           showDialog(context: context, builder: (context) => HumorSelector());
         },

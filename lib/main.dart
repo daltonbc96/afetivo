@@ -84,8 +84,7 @@ class _AppMainState extends State<AppMain> {
         theme: new ThemeData(
           primarySwatch: Colors.green,
         ),
-        home: OnboardingScreen(),
-        //home: LoadingScreen(),
+        home: LoadingScreen(),
         routes: <String, WidgetBuilder>{
           LoadingScreen.tag: (context) => LoadingScreen(),
           "/config": (context) => Configuracoes("Configurações"),
