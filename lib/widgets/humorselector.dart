@@ -18,6 +18,7 @@ class HumorSelector extends StatelessWidget {
     final mediaQuery = MediaQuery.of(context);
     final deviceHeight = mediaQuery.size.height;
     final deviceWidth = mediaQuery.size.width;
+    final _scrollController = ScrollController();
 
     Widget getPageWidget(String text2, MaterialColor backgroundColor,
             String titulo, TipoHumor descHumor, TipoHumor tipoHumor) =>
@@ -112,15 +113,27 @@ class HumorSelector extends StatelessWidget {
                                       content: Container(
                                           width: 400,
                                           height: 400,
-                                          child: SingleChildScrollView(
-                                            child: Text(
-                                              describeLongTipoHumor(descHumor),
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                              ),
-                                              textAlign: TextAlign.justify,
-                                            ),
-                                          )),
+                                          child: Scrollbar(
+                                              controller:
+                                                  _scrollController, // <---- Here, the controller
+                                              isAlwaysShown: true,
+                                              child: SingleChildScrollView(
+                                                  controller: _scrollController,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(
+                                                      describeLongTipoHumor(
+                                                        descHumor,
+                                                      ),
+                                                      style: TextStyle(
+                                                        fontSize: 18,
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.justify,
+                                                    ),
+                                                  )))),
                                       actions: <Widget>[
                                         // usually buttons at the bottom of the dialog
                                         new FlatButton(

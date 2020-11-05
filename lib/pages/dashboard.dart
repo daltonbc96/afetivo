@@ -70,7 +70,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void showTutorial() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    var intro = preferences.getBool('intro') ?? false;
+    var intro = preferences.getBool('intro') ?? true;
     if (!intro) {
       tutorialCoachMark = TutorialCoachMark(
         context,
@@ -80,7 +80,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         textSkip: "Pular Tutorial",
       )..show();
     }
-    await preferences.setBool('intro', true);
+    await preferences.setBool('intro', false);
   }
 
   void initTarget() {
@@ -452,3 +452,4 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
 //References
 //https://github.com/DeveloperLibs/flutter_bottom_bar_navigation
+//https://github.com/javico2609/flutter-challenges/blob/master/lib/pages/code_examples/pdf_and_csv/pdf.dart
