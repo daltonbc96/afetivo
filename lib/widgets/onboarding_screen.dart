@@ -90,23 +90,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            // Center(
-                            //   child: Image(
-                            //     image: AssetImage(
-                            //       'assets/images/logo.png',
-                            //     ),
-                            //     height: 300.0,
-                            //     width: 300.0,
-                            //   ),
-                            // ),
+                            Center(
+                              child: Icon(Icons.stacked_line_chart,
+                                  size: 150.0, color: Colors.white),
+                            ),
                             SizedBox(height: 30.0),
                             Text(
-                              'Connect people\naround the world',
+                              'Descubra uma nova forma de monitorar o seu humor',
                               style: kTitleStyle,
                             ),
                             SizedBox(height: 15.0),
                             Text(
-                              'Lorem ipsum dolor sit amet, consect adipiscing elit, sed do eiusmod tempor incididunt ut labore et.',
+                              'Monitore o seu humor diariamente e construa afetivogramas',
                               style: kSubtitleStyle,
                             ),
                           ],
@@ -117,23 +112,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            // Center(
-                            //   child: Image(
-                            //     image: AssetImage(
-                            //       'assets/images/logo.png',
-                            //     ),
-                            //     height: 300.0,
-                            //     width: 300.0,
-                            //   ),
-                            // ),
+                            Center(
+                              child: Icon(Icons.rule_outlined,
+                                  size: 150.0, color: Colors.white),
+                            ),
                             SizedBox(height: 30.0),
                             Text(
-                              'Live your life smarter\nwith us!',
+                              'Descubra como o seu humor pode influênciar no seu dia a dia',
                               style: kTitleStyle,
                             ),
                             SizedBox(height: 15.0),
                             Text(
-                              'Lorem ipsum dolor sit amet, consect adipiscing elit, sed do eiusmod tempor incididunt ut labore et.',
+                              'Além do humor, você pode monitorar outras informações e hábitos da sua rotina',
                               style: kSubtitleStyle,
                             ),
                           ],
@@ -144,23 +134,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            // Center(
-                            //   child: Image(
-                            //     image: AssetImage(
-                            //       'assets/images/logo.png',
-                            //     ),
-                            //     height: 300.0,
-                            //     width: 300.0,
-                            //   ),
-                            // ),
+                            Center(
+                              child: Icon(Icons.share,
+                                  size: 150.0, color: Colors.white),
+                            ),
                             SizedBox(height: 30.0),
                             Text(
-                              'Get a new experience\nof imagination',
+                              'Compartilhe os seus registros',
                               style: kTitleStyle,
                             ),
                             SizedBox(height: 15.0),
                             Text(
-                              'Lorem ipsum dolor sit amet, consect adipiscing elit, sed do eiusmod tempor incididunt ut labore et.',
+                              'Você poderá compartilhar os seus registros com quem quiser',
                               style: kSubtitleStyle,
                             ),
                           ],
