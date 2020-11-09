@@ -48,6 +48,7 @@ dependencies:
   flutter_launcher_icons: "^0.7.0"
   tutorial_coach_mark: ^0.5.1
   shared_preferences: ^0.5.12+2
+  flutter_html: ^1.0.2
   
 
  
@@ -77,6 +78,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/nota_humor.jpg
+    - assets/images/notaEvento.jpg
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 
 class Ajuda extends StatefulWidget {
   final String title;
@@ -74,7 +73,7 @@ Utilize a opção “estou com dúvida” em cada cartão para visualizar a desc
 
 Note que o comprometimento funcional, devido a outras doenças médicas, como uma gripe, uma perna quebrada, artrite, doenças cardíacas, entre outras, estes não devem ser levados em conta para avaliar a intensidade do seu humor.
 
-Se você acredita que não teve alterações no humor e comprometimento funcional ao longo do dia, você pode marcar na base de referência (neutro). 
+Se você acredita que não teve alterações no humor e comprometimento funcional ao longo do dia, você pode marcar a opção "estável" (neutro). 
 '''),
     MyItem(
         header: '''Lista de Medicamentos''',

@@ -122,16 +122,15 @@ class HumorSelector extends StatelessWidget {
                                                   child: Padding(
                                                     padding:
                                                         const EdgeInsets.all(
-                                                            8.0),
+                                                            5.0),
                                                     child: Text(
                                                       describeLongTipoHumor(
                                                         descHumor,
                                                       ),
                                                       style: TextStyle(
-                                                        fontSize: 18,
-                                                      ),
-                                                      textAlign:
-                                                          TextAlign.justify,
+                                                          fontSize: 18,
+                                                          height: 1.5),
+                                                      textAlign: TextAlign.left,
                                                     ),
                                                   )))),
                                       actions: <Widget>[

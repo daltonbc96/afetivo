@@ -175,7 +175,7 @@ class _State extends State<AddicionalInfo> {
     final menstrual = Container(
         child: Row(children: <Widget>[
       Text(
-        "Você está no Período Menstrual?",
+        "Você está no seu ciclo \nmenstrual?",
         style: TextStyle(
           fontSize: 20,
         ),
@@ -204,7 +204,7 @@ class _State extends State<AddicionalInfo> {
               context: context,
               builder: (ctxt) => new AlertDialog(
                     title: Text(
-                      "Mania Disfórica",
+                      "Mania disfórica",
                       style: TextStyle(
                         fontSize: 20,
                       ),
@@ -215,10 +215,8 @@ class _State extends State<AddicionalInfo> {
                         height: 300,
                         child: SingleChildScrollView(
                           child: Text(
-                            'Se você estiver experienciando sintomas de mania ou hipomania (como por exemplo: um aumento na energia, diminuição da necessidade de sono, aumento no número de atividades, de pensamentos ou de interações), associados com raiva, irritabilidade ou ansiedade. Portanto, quando o estado energizado é desagradável ou disfórico, por favor, indique marcando um (✓) em "mania disfórica".',
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
+                            'Se você estiver experienciando sintomas de mania/hipomania associados com raiva, irritabilidade ou ansiedade e esse estado energizado é desagradável ou disfórico, por favor, marque a opção "mania disfórica".',
+                            style: TextStyle(fontSize: 18, height: 1.5),
                             textAlign: TextAlign.justify,
                           ),
                         )),
@@ -255,7 +253,7 @@ class _State extends State<AddicionalInfo> {
         onChanged: (value) => humor.eventoDeVida = value,
         autofocus: false,
         decoration: InputDecoration(
-          labelText: 'Eventos de Vida',
+          labelText: 'Eventos de vida',
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(32.0),
@@ -266,11 +264,12 @@ class _State extends State<AddicionalInfo> {
 
     final impacto = Column(children: [
       Text(
-        "impacto do evento de vida",
+        "Impacto do evento de vida",
         style: TextStyle(
           fontSize: 20,
         ),
       ),
+      Image.asset("assets/images/notaEvento.jpg", width: 500, height: 80),
       SliderTheme(
         data: SliderTheme.of(context).copyWith(
           activeTrackColor: Colors.black,
@@ -288,20 +287,21 @@ class _State extends State<AddicionalInfo> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               new Text(
-                '-4.0',
+                '-4',
                 textAlign: TextAlign.left,
               ),
               new Expanded(
-                  child: Observer(
-                      builder: (context) => Slider(
-                            onChanged: (double value) =>
-                                humor.impactoEvento = value,
-                            divisions: 16,
-                            min: -4,
-                            max: 4,
-                            label: humor.impactoEvento.toString(),
-                            value: humor.impactoEvento,
-                          ))),
+                child: Observer(
+                    builder: (context) => Slider(
+                          onChanged: (double value) =>
+                              humor.impactoEvento = value,
+                          divisions: 16,
+                          min: -4,
+                          max: 4,
+                          label: humor.impactoEvento.toString(),
+                          value: humor.impactoEvento,
+                        )),
+              ),
               new Text(
                 '+4',
                 textAlign: TextAlign.right,
@@ -320,7 +320,7 @@ class _State extends State<AddicionalInfo> {
         initialValue: humor.sintomas,
         onChanged: (value) => humor.sintomas = value,
         decoration: InputDecoration(
-          labelText: 'Sintomas Comorbitos',
+          labelText: 'Sintomas comorbitos',
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(32.0),
@@ -338,7 +338,7 @@ class _State extends State<AddicionalInfo> {
         initialValue: humor.otherInfo,
         onChanged: (value) => humor.otherInfo = value,
         decoration: InputDecoration(
-          labelText: 'Outras Informações',
+          labelText: 'Outras informações',
           contentPadding: EdgeInsets.all(16),
           //contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
           border: OutlineInputBorder(
@@ -350,6 +350,20 @@ class _State extends State<AddicionalInfo> {
 
     return Scaffold(
         appBar: new AppBar(
+          actions: <Widget>[
+            SizedBox(
+                width: 70,
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                      side: BorderSide(color: Colors.green)),
+                  child: const Text('Ajuda'),
+                  color: Colors.green,
+                  textColor: Colors.white,
+                  onPressed: () {
+                    Navigator.of(context).pushNamed("/help");
+                  },
+                )),
+          ],
           title: Column(children: [
             Text("Informações Adicionais", textAlign: TextAlign.center),
             Text(describeTipoHumor(humor.tipo), textAlign: TextAlign.center)
@@ -374,7 +388,7 @@ class _State extends State<AddicionalInfo> {
                 data,
                 SizedBox(height: 50.0),
                 new Text(
-                  'Avalie seu Humor de Forma  Geral',
+                  'Avalie seu humor de forma  geral',
                   style: TextStyle(
                     fontSize: 20,
                   ),
@@ -388,6 +402,8 @@ class _State extends State<AddicionalInfo> {
                 Image.asset("assets/images/nota_humor.jpg",
                     width: 100, height: 110),
                 notaHumor,
+                SizedBox(height: 35.0),
+                menstrual,
                 SizedBox(height: 25.0),
                 Text(
                   "Medicamentos",
@@ -398,8 +414,6 @@ class _State extends State<AddicionalInfo> {
                 medicamentos,
                 SizedBox(height: 35.0),
                 horasDormidas,
-                SizedBox(height: 35.0),
-                menstrual,
                 SizedBox(height: 35.0),
                 eventos,
                 SizedBox(height: 20),
