@@ -34,17 +34,15 @@ dependencies:
   mobx:
   flutter_mobx:
   intl:
-  firebase_core: ^0.4.5
-  cloud_firestore: ^0.13.6
-  firebase_auth: ^0.16.1
-  firebase_analytics: ^5.0.14
+  firebase_core: ^0.5.2
+  cloud_firestore: ^0.14.3
+  firebase_auth: ^0.18.3
   #google_sign_in: ^4.5.1
   json_annotation:
   validators:
   loading_overlay:
   charts_flutter:
-  localstorage: ^3.0.0
-  firebase_messaging: ^5.1.4
+  firebase_messaging: ^7.0.3
   flutter_launcher_icons: "^0.7.0"
   tutorial_coach_mark: ^0.5.1
   shared_preferences: ^0.5.12+2

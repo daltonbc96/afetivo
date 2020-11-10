@@ -9,8 +9,6 @@ import 'package:afetivo/services/NavigationService.dart';
 import 'package:afetivo/stores/HumorStore.dart';
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:afetivo/widgets/onboarding_screen.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -27,7 +25,6 @@ class AppMain extends StatefulWidget {
 }
 
 class _AppMainState extends State<AppMain> {
-  FirebaseAnalytics analytics;
   NavigationService navigationService;
   LoginStore loginStore;
   HumorStore humorStore;
@@ -36,7 +33,6 @@ class _AppMainState extends State<AppMain> {
   @override
   void initState() {
     super.initState();
-    analytics = FirebaseAnalytics();
     navigationService = NavigationService();
     loginStore = LoginStore();
     humorStore = HumorStore();
@@ -68,9 +64,6 @@ class _AppMainState extends State<AppMain> {
     ]);
     final root = MaterialApp(
         navigatorKey: navigationService.navigatorKey,
-        navigatorObservers: [
-          FirebaseAnalyticsObserver(analytics: analytics),
-        ],
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,

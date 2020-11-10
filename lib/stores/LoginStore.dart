@@ -30,7 +30,7 @@ class LoginStore extends _LoginStore with _$LoginStore {
   }
 
   LoginStore._() {
-    _firebaseAuth.onAuthStateChanged.listen((user) async {
+    _firebaseAuth.authStateChanges().listen((user) async {
       if (user != null) {
         if (_snapshotsSubscription != null) {
           await _snapshotsSubscription.cancel();
@@ -38,7 +38,7 @@ class LoginStore extends _LoginStore with _$LoginStore {
         }
         this.uid = user.uid;
 
-        final document = _fireStore.collection("users").document(user.uid);
+        final document = _fireStore.collection("users").doc(user.uid);
         if (await document.get() == null) {
           loginState = LoginState.NoProfile;
           this.userProfile = UserProfile(email: user.email);
@@ -49,7 +49,7 @@ class LoginStore extends _LoginStore with _$LoginStore {
             this.loginState = LoginState.NoProfile;
             this.userProfile = UserProfile(email: user.email);
           } else {
-            this.userProfile = UserProfile.fromJson(value.data);
+            this.userProfile = UserProfile.fromJson(value.data());
             this.loginState = LoginState.LoggedIn;
           }
         });
@@ -64,7 +64,7 @@ class LoginStore extends _LoginStore with _$LoginStore {
 
 abstract class _LoginStore with Store {
   final _firebaseAuth = FirebaseAuth.instance;
-  final _fireStore = Firestore.instance;
+  final _fireStore = FirebaseFirestore.instance;
 
   @observable
   UserProfile userProfile;
@@ -105,7 +105,7 @@ abstract class _LoginStore with Store {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email.trim(), password: password);
       loginMethod = LoginMethod.EmailAndPassword;
-    } on AuthException catch (e) {
+    } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'FirebaseAuthUserCollisionException':
           throw RegisterError.Unavailable;
@@ -124,6 +124,6 @@ abstract class _LoginStore with Store {
 
   @action
   void register(UserProfile user) {
-    _fireStore.collection('users').document(uid).setData(user.toJson());
+    _fireStore.collection('users').doc(uid).set(user.toJson());
   }
 }

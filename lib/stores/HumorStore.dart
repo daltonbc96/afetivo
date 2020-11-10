@@ -9,7 +9,7 @@ import 'package:mobx/mobx.dart';
 
 part 'HumorStore.g.dart';
 
-final _fireStore = Firestore.instance;
+final _fireStore = FirebaseFirestore.instance;
 
 class HumorStore extends _HumorStore with _$HumorStore {
   StreamSubscription _snapshotsSubscription;
@@ -33,14 +33,14 @@ class HumorStore extends _HumorStore with _$HumorStore {
       if (uid != null)
         _snapshotsSubscription = _fireStore
             .collection('users')
-            .document(uid)
+            .doc(uid)
             .collection('humorEntries')
             .orderBy('data', descending: true)
             .snapshots()
             .listen((event) {
-          humorList = ObservableList.of(event.documents.map((e) {
-            var data = e.data;
-            data["id"] = e.documentID;
+          humorList = ObservableList.of(event.docs.map((e) {
+            var data = e.data();
+            data["id"] = e.id;
             return RegistroHumor.fromJson(data);
           }).toList());
         }); // _snapshotsSubscription
@@ -110,19 +110,19 @@ abstract class _HumorStore with Store {
   void editHumor(RegistroHumor humor) {
     _fireStore
         .collection("users")
-        .document(loginStore.uid)
+        .doc(loginStore.uid)
         .collection("humorEntries")
-        .document(humor.id)
-        .setData(humor.toJson());
+        .doc(humor.id)
+        .set(humor.toJson());
   }
 
   @action
   Future<void> deleteHumor(RegistroHumor humor) async {
     await _fireStore
         .collection("users")
-        .document(loginStore.uid)
+        .doc(loginStore.uid)
         .collection("humorEntries")
-        .document(humor.id)
+        .doc(humor.id)
         .delete();
   }
 }
