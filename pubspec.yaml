@@ -44,7 +44,7 @@ dependencies:
   loading_overlay:
   charts_flutter:
   localstorage: ^3.0.0
-  firebase_messaging: ^5.1.4
+  firebase_messaging: ^6.0.16
   flutter_launcher_icons: "^0.7.0"
   tutorial_coach_mark: ^0.5.1
   shared_preferences: ^0.5.12+2
