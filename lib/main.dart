@@ -9,6 +9,7 @@ import 'package:afetivo/services/NavigationService.dart';
 import 'package:afetivo/stores/HumorStore.dart';
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:afetivo/widgets/onboarding_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -29,10 +30,30 @@ class _AppMainState extends State<AppMain> {
   LoginStore loginStore;
   HumorStore humorStore;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  // Set default `_initialized` and `_error` state to false
+  bool _initialized = false;
+  bool _error = false;
+
+  // Define an async function to initialize FlutterFire
+  void initializeFlutterFire() async {
+    try {
+      // Wait for Firebase to initialize and set `_initialized` state to true
+      await Firebase.initializeApp();
+      setState(() {
+        _initialized = true;
+      });
+    } catch (e) {
+      // Set `_error` state to true if Firebase initialization fails
+      setState(() {
+        _error = true;
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    initializeFlutterFire();
     navigationService = NavigationService();
     loginStore = LoginStore();
     humorStore = HumorStore();
