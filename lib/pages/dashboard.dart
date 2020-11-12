@@ -70,7 +70,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void showTutorial() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    var intro = preferences.getBool('intro') ?? true;
+    var intro = preferences.getBool('intro') ?? false;
     if (!intro) {
       tutorialCoachMark = TutorialCoachMark(
         context,
@@ -80,7 +80,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         textSkip: "Pular Tutorial",
       )..show();
     }
-    await preferences.setBool('intro', false);
+    await preferences.setBool('intro', true);
   }
 
   void initTarget() {
@@ -276,8 +276,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   : SizedBox.shrink();
             }),
             new ListTile(
-              title: new Text("Configurações"),
-              trailing: new Icon(Icons.settings),
+              title: new Text("Cadastro"),
+              trailing: new Icon(Icons.account_circle_sharp),
               onTap: () {
                 Navigator.of(context).pushNamed(CadastroPage.tag);
               },

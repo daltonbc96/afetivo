@@ -1,5 +1,5 @@
 import 'package:afetivo/pages/cadastroPage.dart';
-import 'package:afetivo/pages/configuracoes.dart';
+
 import 'package:afetivo/pages/ajuda.dart';
 import 'package:afetivo/pages/createUser.dart';
 import 'package:afetivo/pages/forgotPage.dart';
@@ -87,7 +87,6 @@ class _AppMainState extends State<AppMain> {
         home: LoadingScreen(),
         routes: <String, WidgetBuilder>{
           LoadingScreen.tag: (context) => LoadingScreen(),
-          "/config": (context) => Configuracoes("Configurações"),
           "/help": (context) => Ajuda("Ajuda"),
           DashboardScreen.tag: (context) => DashboardScreen(),
           FogotPage.tag: (context) => FogotPage(),

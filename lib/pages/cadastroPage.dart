@@ -95,7 +95,7 @@ class _State extends State<CadastroPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     DateTimeField(
-                      format: DateFormat(DateFormat.YEAR_MONTH_DAY),
+                      format: DateFormat(DateFormat.YEAR_MONTH_DAY, 'pt_Br'),
                       onChanged: (value) => _userProfile.nascimento = value,
                       initialValue: _userProfile.nascimento,
                       onShowPicker: (context, currentValue) {
@@ -258,20 +258,22 @@ class _State extends State<CadastroPage> {
       body: Form(
         child: Center(
           child: ListView(
-            padding: const EdgeInsets.all(8),
+            padding: EdgeInsets.only(left: 24.0, right: 24.0),
             children: <Widget>[
               SizedBox(height: 25.0),
               new Text(
-                  "Preencha os campos com seus dados para realizar seu cadastro"),
+                "Preencha os campos com seus dados para realizar seu cadastro",
+                style: TextStyle(fontSize: 20),
+              ),
               SizedBox(height: 25.0),
               primeiroNome,
               SizedBox(height: 25.0),
               sobrenome,
               SizedBox(height: 25.0),
-              new Text("Sexo"),
+              new Text("Sexo", style: TextStyle(fontSize: 20)),
               sexo,
               SizedBox(height: 25.0),
-              new Text("Data de Nascimento"),
+              new Text("Data de Nascimento", style: TextStyle(fontSize: 20)),
               dataNascimento,
               SizedBox(height: 25.0),
               diagnosticoAdder,
