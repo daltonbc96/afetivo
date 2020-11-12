@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:afetivo/models/Humor.dart';
 import 'package:afetivo/pages/cadastroPage.dart';
+import 'package:afetivo/pages/reportViewer.dart';
 import 'package:afetivo/stores/HumorStore.dart';
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:afetivo/widgets/ExpandedSection.dart';
@@ -246,9 +247,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           IconButton(
             key: key5,
-            onPressed: () {},
+            onPressed: () => Navigator.of(context).pushNamed(ReportViewer.tag),
             icon: Icon(
-              Icons.arrow_downward,
+              Icons.picture_as_pdf,
             ),
           ),
         ],

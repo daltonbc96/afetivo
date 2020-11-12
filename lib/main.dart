@@ -5,6 +5,7 @@ import 'package:afetivo/pages/createUser.dart';
 import 'package:afetivo/pages/forgotPage.dart';
 import 'package:afetivo/pages/loadingScreen.dart';
 import 'package:afetivo/pages/loginPage.dart';
+import 'package:afetivo/pages/reportViewer.dart';
 import 'package:afetivo/services/NavigationService.dart';
 import 'package:afetivo/stores/HumorStore.dart';
 import 'package:afetivo/stores/LoginStore.dart';
@@ -94,6 +95,7 @@ class _AppMainState extends State<AppMain> {
           CadastroPage.tag: (context) => CadastroPage(),
           CreateUser.tag: (context) => CreateUser(),
           OnboardingScreen.tag: (context) => OnboardingScreen(),
+          ReportViewer.tag: (context) => ReportViewer(),
         });
 
     autorun((_) {
