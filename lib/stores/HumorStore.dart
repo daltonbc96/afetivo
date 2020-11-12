@@ -63,8 +63,8 @@ abstract class _HumorStore with Store {
   @observable
   DateTime endDate;
 
-  @computed
-  bool get filtered => startDate != null || endDate != null;
+  @observable
+  bool filtered = false;
 
   @observable
   ObservableList<RegistroHumor> humorList = ObservableList();
@@ -73,26 +73,22 @@ abstract class _HumorStore with Store {
   ObservableList<RegistroHumor> get filteredHumors {
     var ret = humorList;
 
-    if (startDate != null)
-      ret = ObservableList.of(
-          ret.where((x) => x.data.isAfterOrAtDate(startDate)));
+    if (filtered) {
+      if (startDate != null)
+        ret = ObservableList.of(
+            ret.where((x) => x.data.isAfterOrAtDate(startDate)));
 
-    if (endDate != null)
-      ret =
-          ObservableList.of(ret.where((x) => x.data.isBeforeOrAtDate(endDate)));
+      if (endDate != null)
+        ret = ObservableList.of(
+            ret.where((x) => x.data.isBeforeOrAtDate(endDate)));
+    }
 
     return ret;
   }
 
   @action
   void toggleFilter() {
-    if (!filtered && humorList != null && humorList.length > 0) {
-      startDate = humorList.last.data;
-      endDate = humorList.first.data;
-    } else {
-      startDate = null;
-      endDate = null;
-    }
+    filtered = !filtered;
   }
 
   @action

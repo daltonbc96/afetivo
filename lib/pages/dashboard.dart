@@ -10,7 +10,6 @@ import 'package:afetivo/widgets/HumorCard.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:afetivo/extensions/DateTime.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:intl/intl.dart';
@@ -28,16 +27,12 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   final _humorStore = HumorStore();
   final _loginStore = LoginStore();
-  final _startDateFieldController = TextEditingController();
-  final _endDateFieldController = TextEditingController();
   ReactionDisposer _filterReactor;
 
   final String title = 'Afetivo';
 
   @override
   void dispose() {
-    _startDateFieldController.dispose();
-    _endDateFieldController.dispose();
     _filterReactor();
     super.dispose();
   }
@@ -78,9 +73,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         colorShadow: Colors.green,
         opacityShadow: 0.85,
         textSkip: "Pular Tutorial",
+        onFinish: () => preferences.setBool('intro', true),
       )..show();
     }
-    await preferences.setBool('intro', true);
   }
 
   void initTarget() {
@@ -323,7 +318,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                             format:
                                 DateFormat(DateFormat.YEAR_MONTH_DAY, 'pt_BR'),
-                            controller: _startDateFieldController,
                             onChanged: (value) => _humorStore.startDate = value,
                             onShowPicker: (context, currentValue) =>
                                 showDatePicker(
@@ -348,7 +342,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                             format:
                                 DateFormat(DateFormat.YEAR_MONTH_DAY, 'pt_BR'),
-                            controller: _endDateFieldController,
                             onChanged: (value) => _humorStore.endDate = value,
                             onShowPicker: (context, currentValue) =>
                                 showDatePicker(
