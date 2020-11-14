@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_full_pdf_viewer/flutter_full_pdf_viewer.dart';
 import 'package:flutter_full_pdf_viewer/full_pdf_viewer_scaffold.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:share_extend/share_extend.dart';
 
 class ReportViewer extends StatelessWidget {
   static final tag = '/reportViewer';
@@ -21,7 +22,8 @@ class ReportViewer extends StatelessWidget {
     print(path);
 
     await pdf.saveToFile(path);
-    //
+   
+  
 
     return path;
   }
@@ -35,7 +37,11 @@ class ReportViewer extends StatelessWidget {
                     actions: <Widget>[
                       IconButton(
                         icon: Icon(Icons.share),
-                        onPressed: () => {},
+                        onPressed: () => {
+                          ShareExtend.share(path.data, "file",
+                              sharePanelTitle: "Enviar PDF",
+                              subject: "example-pdf")
+                        },
                       )
                     ],
                   ),
