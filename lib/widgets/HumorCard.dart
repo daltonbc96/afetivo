@@ -79,6 +79,7 @@ class _CardState extends State<HumorCard> {
                       body: Column(children: <Widget>[
                         if (humor.nota != null)
                           _cardInfoText("Nota do Humor: ${humor.nota}"),
+                        if (humor.disforico != null) _cardInfoText("Disfórico"),
                         if (humor.horasDormidas != null)
                           _cardInfoText(
                               "Horas Dormidas: ${humor.horasDormidas}"),

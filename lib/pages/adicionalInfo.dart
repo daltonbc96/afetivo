@@ -190,7 +190,7 @@ class _State extends State<AddicionalInfo> {
     final disforica = Container(
         child: Row(children: <Widget>[
       Text(
-        "Sua Mania é disforica?",
+        "Sua Mania é disfórica?",
         style: TextStyle(
           fontSize: 20,
         ),
