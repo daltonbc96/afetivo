@@ -13,6 +13,8 @@ class CadastroPage extends StatefulWidget {
   _State createState() => _State();
 }
 
+final _formKey = GlobalKey<FormState>();
+
 enum _CadastroStatus { Idle, Wait, Error }
 
 //TODO: Implement form validation
@@ -45,6 +47,11 @@ class _State extends State<CadastroPage> {
   Widget build(BuildContext context) {
     final primeiroNome = Observer(
         builder: (context) => TextFormField(
+              validator: (value) {
+                if (value.isEmpty) {
+                  return "Esse campo é obrigatório.";
+                }
+              },
               autofocus: false,
               initialValue: _userProfile.nome,
               onChanged: (value) => _userProfile.nome = value,
@@ -59,6 +66,11 @@ class _State extends State<CadastroPage> {
 
     final sobrenome = Observer(
         builder: (context) => TextFormField(
+              validator: (value) {
+                if (value.isEmpty) {
+                  return "Esse campo é obrigatório.";
+                }
+              },
               autofocus: false,
               initialValue: _userProfile.sobrenome,
               onChanged: (value) => _userProfile.sobrenome = value,
@@ -231,7 +243,9 @@ class _State extends State<CadastroPage> {
                     ? "CADASTRANDO..."
                     : "CADASTRAR",
                 style: TextStyle(fontSize: 16.0))),
-        onPressed: () {
+        onPressed: () async {
+          if (!_formKey.currentState.validate()) return;
+          _formKey.currentState.save();
           try {
             setState(() {
               _cadastroStatus = _CadastroStatus.Wait;
@@ -256,6 +270,7 @@ class _State extends State<CadastroPage> {
       ),
       backgroundColor: Colors.white,
       body: Form(
+        key: _formKey,
         child: Center(
           child: ListView(
             padding: EdgeInsets.only(left: 24.0, right: 24.0),

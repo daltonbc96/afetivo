@@ -21,6 +21,7 @@ class ReportViewer extends StatelessWidget {
     print(path);
 
     await pdf.saveToFile(path);
+    //
 
     return path;
   }
@@ -30,7 +31,14 @@ class ReportViewer extends StatelessWidget {
           future: genPDFFile(_humorStore.filteredHumors),
           builder: (context, path) => path.hasData
               ? PDFViewerScaffold(
-                  appBar: AppBar(),
+                  appBar: AppBar(
+                    actions: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.share),
+                        onPressed: () => {},
+                      )
+                    ],
+                  ),
                   path: path.data,
                 )
               : LoadingScreen()));

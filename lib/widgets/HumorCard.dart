@@ -73,7 +73,8 @@ class _CardState extends State<HumorCard> {
                   ExpansionPanel(
                       headerBuilder: (context, isExpanded) => ListTile(
                             title: Text(describeTipoHumor(humor.tipo)),
-                            subtitle: Text(DateFormat.yMd().format(humor.data)),
+                            subtitle: Text(
+                                DateFormat('dd/MM/yyyy').format(humor.data)),
                           ),
                       body: Column(children: <Widget>[
                         if (humor.nota != null)

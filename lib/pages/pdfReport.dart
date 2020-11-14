@@ -11,9 +11,12 @@ class PdfReport extends pw.Document {
   PdfReport({this.data, this.user}) : super() {
     this.addPage(pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
         header: _pageHeader,
         footer: _pageFooter,
         build: (context) => [
+              _user(context, user),
+
               //_humorChart(context, data),
               ...data.map((e) => _humorEntry(context, e))
             ]));
@@ -22,6 +25,16 @@ class PdfReport extends pw.Document {
   pw.Widget _pageHeader(context) => null;
 
   pw.Widget _pageFooter(context) => null;
+
+  pw.Widget _user(context, UserProfile user) => pw.Column(children: [
+        pw.Row(
+            children: [pw.Text('Nome: '), pw.Text(user.fullName.toString())]),
+        pw.Row(children: [
+          pw.Text('Data de Nascimento: '),
+          pw.Text(user.nascimento.toString())
+        ]),
+        pw.SizedBox(height: 20),
+      ]);
 
   pw.Widget _humorEntry(context, RegistroHumor humor) => pw.Column(children: [
         pw.Row(children: [pw.Text('Data: '), pw.Text(humor.data.toString())]),
