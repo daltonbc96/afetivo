@@ -22,8 +22,6 @@ class ReportViewer extends StatelessWidget {
     print(path);
 
     await pdf.saveToFile(path);
-   
-  
 
     return path;
   }
@@ -31,21 +29,26 @@ class ReportViewer extends StatelessWidget {
   Widget build(BuildContext context) => Observer(
       builder: (context) => FutureBuilder<String>(
           future: genPDFFile(_humorStore.filteredHumors),
-          builder: (context, path) => path.hasData
-              ? PDFViewerScaffold(
-                  appBar: AppBar(
-                    actions: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.share),
-                        onPressed: () => {
-                          ShareExtend.share(path.data, "file",
-                              sharePanelTitle: "Enviar PDF",
-                              subject: "example-pdf")
-                        },
-                      )
-                    ],
-                  ),
-                  path: path.data,
-                )
-              : LoadingScreen()));
+          builder: (context, path) =>
+              path.connectionState == ConnectionState.waiting
+                  ? LoadingScreen()
+                  : path.hasData
+                      ? PDFViewerScaffold(
+                          appBar: AppBar(
+                            actions: <Widget>[
+                              IconButton(
+                                icon: Icon(Icons.share),
+                                onPressed: () => {
+                                  ShareExtend.share(path.data, "file",
+                                      sharePanelTitle: "Enviar PDF",
+                                      subject: "example-pdf")
+                                },
+                              )
+                            ],
+                          ),
+                          path: path.data,
+                        )
+                      : Scaffold(
+                          appBar: AppBar(),
+                          body: Center(child: Text(path.error.toString())))));
 }
