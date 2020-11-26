@@ -54,30 +54,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     initTarget();
-    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+    // WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
 
     super.initState();
   }
 
-  void _afterLayout(_) {
-    Future.delayed(Duration(milliseconds: 100));
-    showTutorial();
-  }
+  // void _afterLayout(_) {
+  //   Future.delayed(Duration(milliseconds: 100));
+  //   showTutorial();
+  // }
 
-  void showTutorial() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var intro = preferences.getBool('intro') ?? false;
-    if (!intro) {
-      tutorialCoachMark = TutorialCoachMark(
-        context,
-        targets: targets,
-        colorShadow: Colors.green,
-        opacityShadow: 0.85,
-        textSkip: "Pular Tutorial",
-        onFinish: () => preferences.setBool('intro', true),
-      )..show();
-    }
-  }
+  // void showTutorial() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   var intro = preferences.getBool('intro') ?? false;
+  //   if (!intro) {
+  //     tutorialCoachMark = TutorialCoachMark(
+  //       context,
+  //       targets: targets,
+  //       colorShadow: Colors.green,
+  //       opacityShadow: 0.85,
+  //       textSkip: "Pular Tutorial",
+  //       onFinish: () => preferences.setBool('intro', true),
+  //     )..show();
+  //   }
+  // }
 
   void initTarget() {
     targets.add(
