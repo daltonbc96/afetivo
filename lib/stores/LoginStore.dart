@@ -85,6 +85,12 @@ abstract class _LoginStore with Store {
   LoginState loginState = LoginState.Loading;
 
   @action
+  Future<void> deleteUser() async {
+    final user = await _firebaseAuth.currentUser();
+    await user.delete();
+  }
+
+  @action
   Future<void> login(String email, String password) async {
     try {
       final response = await _firebaseAuth.signInWithEmailAndPassword(

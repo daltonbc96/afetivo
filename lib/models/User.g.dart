@@ -15,7 +15,6 @@ UserProfile _$UserProfileFromJson(Map<String, dynamic> json) {
         ? null
         : DateTime.parse(json['nascimento'] as String),
     sexo: _$enumDecodeNullable(_$SexoEnumMap, json['sexo']),
-    notificationsEnabled: json['notificationsEnabled'] as bool,
     diagnosticos:
         (json['diagnosticos'] as List)?.map((e) => e as String)?.toList(),
     medicamentos: (json['medicamentos'] as List)
@@ -32,7 +31,6 @@ Map<String, dynamic> _$UserProfileToJson(UserProfile instance) =>
       'email': instance.email,
       'nascimento': instance.nascimento?.toIso8601String(),
       'sexo': _$SexoEnumMap[instance.sexo],
-      'notificationsEnabled': instance.notificationsEnabled,
       'diagnosticos': instance.diagnosticos,
       'medicamentos':
           const _ObservableListJsonConverter().toJson(instance.medicamentos),
@@ -171,23 +169,6 @@ mixin _$UserProfile on _UserProfile, Store {
     });
   }
 
-  final _$notificationsEnabledAtom =
-      Atom(name: '_UserProfile.notificationsEnabled');
-
-  @override
-  bool get notificationsEnabled {
-    _$notificationsEnabledAtom.reportRead();
-    return super.notificationsEnabled;
-  }
-
-  @override
-  set notificationsEnabled(bool value) {
-    _$notificationsEnabledAtom.reportWrite(value, super.notificationsEnabled,
-        () {
-      super.notificationsEnabled = value;
-    });
-  }
-
   final _$diagnosticosAtom = Atom(name: '_UserProfile.diagnosticos');
 
   @override
@@ -272,7 +253,6 @@ sobrenome: ${sobrenome},
 email: ${email},
 nascimento: ${nascimento},
 sexo: ${sexo},
-notificationsEnabled: ${notificationsEnabled},
 diagnosticos: ${diagnosticos},
 medicamentos: ${medicamentos},
 descSexo: ${descSexo},

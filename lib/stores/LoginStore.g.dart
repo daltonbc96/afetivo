@@ -84,6 +84,13 @@ mixin _$LoginStore on _LoginStore, Store {
     });
   }
 
+  final _$deleteUserAsyncAction = AsyncAction('_LoginStore.deleteUser');
+
+  @override
+  Future<void> deleteUser() {
+    return _$deleteUserAsyncAction.run(() => super.deleteUser());
+  }
+
   final _$loginAsyncAction = AsyncAction('_LoginStore.login');
 
   @override
