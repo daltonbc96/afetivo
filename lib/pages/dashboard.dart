@@ -385,8 +385,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         )
                       ],
                       animate: false,
+                      /*selectionModels: [charts.SelectionModelConfig(changedListener: (d) {
+
+                      })],*/
                       defaultRenderer:
                           charts.LineRendererConfig(includePoints: true),
+                      domainAxis: charts.DateTimeAxisSpec(
+                        tickFormatterSpec: charts.AutoDateTimeTickFormatterSpec(
+                          day: charts.TimeFormatterSpec(
+                            format: 'dd/MM',
+                            transitionFormat: 'dd/MM/yyyy',
+                          ),
+                          month: charts.TimeFormatterSpec(
+                            format: 'MM/yyyy',
+                            transitionFormat: 'MM/yyyy',
+                          ),
+                        ),
+                      ),
                       primaryMeasureAxis: charts.NumericAxisSpec(
                           tickFormatterSpec:
                               charts.BasicNumericTickFormatterSpec((i) => '')),
