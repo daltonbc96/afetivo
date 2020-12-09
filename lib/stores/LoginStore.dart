@@ -14,7 +14,7 @@ enum RegisterError {
   WeakPassword,
   UnknownError
 }
-enum LoginState { Loading, LoggedOut, NoProfile, LoggedIn }
+enum LoginState { Loading, LoggedOut, NoProfile, FirstLogin, LoggedIn }
 enum LoginMethod { EmailAndPassword, GoogleSignIn }
 
 class LoginError {}
@@ -50,7 +50,9 @@ class LoginStore extends _LoginStore with _$LoginStore {
             this.userProfile = UserProfile(email: user.email);
           } else {
             this.userProfile = UserProfile.fromJson(value.data);
-            this.loginState = LoginState.LoggedIn;
+            var firstLogin = this.userProfile.firstLogin ?? true;
+            this.loginState =
+                firstLogin ? LoginState.FirstLogin : LoginState.LoggedIn;
           }
         });
       } else {

@@ -15,6 +15,8 @@ UserProfile _$UserProfileFromJson(Map<String, dynamic> json) {
         ? null
         : DateTime.parse(json['nascimento'] as String),
     sexo: _$enumDecodeNullable(_$SexoEnumMap, json['sexo']),
+    firstLogin: json['firstLogin'] as bool,
+    tutorial: json['tutorial'] as bool,
     diagnosticos:
         (json['diagnosticos'] as List)?.map((e) => e as String)?.toList(),
     medicamentos: (json['medicamentos'] as List)
@@ -31,6 +33,8 @@ Map<String, dynamic> _$UserProfileToJson(UserProfile instance) =>
       'email': instance.email,
       'nascimento': instance.nascimento?.toIso8601String(),
       'sexo': _$SexoEnumMap[instance.sexo],
+      'firstLogin': instance.firstLogin,
+      'tutorial': instance.tutorial,
       'diagnosticos': instance.diagnosticos,
       'medicamentos':
           const _ObservableListJsonConverter().toJson(instance.medicamentos),
@@ -169,6 +173,36 @@ mixin _$UserProfile on _UserProfile, Store {
     });
   }
 
+  final _$firstLoginAtom = Atom(name: '_UserProfile.firstLogin');
+
+  @override
+  bool get firstLogin {
+    _$firstLoginAtom.reportRead();
+    return super.firstLogin;
+  }
+
+  @override
+  set firstLogin(bool value) {
+    _$firstLoginAtom.reportWrite(value, super.firstLogin, () {
+      super.firstLogin = value;
+    });
+  }
+
+  final _$tutorialAtom = Atom(name: '_UserProfile.tutorial');
+
+  @override
+  bool get tutorial {
+    _$tutorialAtom.reportRead();
+    return super.tutorial;
+  }
+
+  @override
+  set tutorial(bool value) {
+    _$tutorialAtom.reportWrite(value, super.tutorial, () {
+      super.tutorial = value;
+    });
+  }
+
   final _$diagnosticosAtom = Atom(name: '_UserProfile.diagnosticos');
 
   @override
@@ -253,6 +287,8 @@ sobrenome: ${sobrenome},
 email: ${email},
 nascimento: ${nascimento},
 sexo: ${sexo},
+firstLogin: ${firstLogin},
+tutorial: ${tutorial},
 diagnosticos: ${diagnosticos},
 medicamentos: ${medicamentos},
 descSexo: ${descSexo},

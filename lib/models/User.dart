@@ -27,6 +27,8 @@ class UserProfile extends _UserProfile with _$UserProfile {
     String email,
     DateTime nascimento,
     Sexo sexo,
+    bool firstLogin,
+    bool tutorial,
     List<String> diagnosticos,
     List<Medicamento> medicamentos,
   }) : super(
@@ -35,6 +37,8 @@ class UserProfile extends _UserProfile with _$UserProfile {
           email: email,
           nascimento: nascimento,
           sexo: sexo,
+          firstLogin: firstLogin,
+          tutorial: tutorial,
           diagnosticos: ObservableList.of(diagnosticos ?? []),
           medicamentos: ObservableList.of(medicamentos ?? []),
         );
@@ -46,6 +50,8 @@ class UserProfile extends _UserProfile with _$UserProfile {
           email: src.email,
           nascimento: src.nascimento,
           sexo: src.sexo,
+          firstLogin: src.firstLogin,
+          tutorial: src.tutorial,
           diagnosticos: ObservableList.of(src.diagnosticos ?? []),
           medicamentos: ObservableList.of(src.medicamentos ?? []),
         );
@@ -77,6 +83,12 @@ abstract class _UserProfile with Store {
 
   @observable
   Sexo sexo;
+
+  @observable
+  bool firstLogin;
+
+  @observable
+  bool tutorial;
 
   @computed
   String get descSexo => describeSexo(sexo);
@@ -124,6 +136,8 @@ abstract class _UserProfile with Store {
     this.email,
     this.nascimento,
     this.sexo,
+    this.firstLogin,
+    this.tutorial,
     this.diagnosticos,
     this.medicamentos,
   });

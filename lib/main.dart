@@ -109,7 +109,10 @@ class _AppMainState extends State<AppMain> {
           navigationService.forceNamedRoute(CadastroPage.tag);
           break;
         case LoginState.LoggedOut:
-          navigationService.forceNamedRoute(OnboardingScreen.tag);
+          navigationService.forceNamedRoute(LoginPage.tag);
+          break;
+        case LoginState.FirstLogin:
+          navigationService.forceNamedRoute(TutorialPage.tag);
           break;
         default:
           navigationService.forceNamedRoute(LoadingScreen.tag);
