@@ -6,6 +6,7 @@ import 'package:afetivo/pages/forgotPage.dart';
 import 'package:afetivo/pages/loadingScreen.dart';
 import 'package:afetivo/pages/loginPage.dart';
 import 'package:afetivo/pages/reportViewer.dart';
+import 'package:afetivo/pages/tutorial.dart';
 import 'package:afetivo/services/NavigationService.dart';
 import 'package:afetivo/stores/HumorStore.dart';
 import 'package:afetivo/stores/LoginStore.dart';
@@ -93,6 +94,7 @@ class _AppMainState extends State<AppMain> {
           FogotPage.tag: (context) => FogotPage(),
           LoginPage.tag: (context) => LoginPage(),
           CadastroPage.tag: (context) => CadastroPage(),
+          TutorialPage.tag: (context) => TutorialPage(),
           CreateUser.tag: (context) => CreateUser(),
           OnboardingScreen.tag: (context) => OnboardingScreen(),
           ReportViewer.tag: (context) => ReportViewer(),
