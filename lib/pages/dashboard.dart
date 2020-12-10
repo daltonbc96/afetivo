@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:afetivo/models/Humor.dart';
 import 'package:afetivo/pages/cadastroPage.dart';
 import 'package:afetivo/pages/reportViewer.dart';
+import 'package:afetivo/pages/tutorial.dart';
 import 'package:afetivo/stores/HumorStore.dart';
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:afetivo/widgets/ExpandedSection.dart';
@@ -278,12 +279,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Navigator.of(context).pushNamed(CadastroPage.tag);
               },
             ),
+            ListTile(
+                title: Text('Video introdução'),
+                onTap: () => Navigator.of(context).pushNamed(TutorialPage.tag)),
             new ListTile(
               title: new Text("Ajuda"),
               trailing: new Icon(Icons.help_outline),
-              onTap: () {
-                Navigator.of(context).pushNamed("/help");
-              },
+              onTap: () => Navigator.of(context).pushNamed("/help"),
             ),
             new Divider(),
             new ListTile(

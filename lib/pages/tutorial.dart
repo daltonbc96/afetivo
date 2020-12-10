@@ -1,3 +1,5 @@
+import 'package:flutter_html/style.dart';
+import 'package:flutter_youtube_view/flutter_youtube_view.dart';
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:flutter/material.dart';
 
@@ -8,34 +10,67 @@ class TutorialPage extends StatefulWidget {
   _State createState() => _State();
 }
 
-class _State extends State<TutorialPage> {
+class _State extends State<TutorialPage> implements YouTubePlayerListener {
   final loginStore = LoginStore();
+  FlutterYoutubeViewController _ytController;
 
   @override
   Widget build(BuildContext context) {
+    final first = loginStore.userProfile.firstLogin ?? true;
     return Scaffold(
       appBar: AppBar(
         title: Text("Tutorial"),
+        actions: [
+          if (first)
+            MaterialButton(
+                onPressed: () {
+                  loginStore.userProfile.firstLogin = false;
+                  loginStore.register(loginStore.userProfile);
+                },
+                child:
+                    Text("Prosseguir", style: TextStyle(color: Colors.white))),
+        ],
       ),
       backgroundColor: Colors.white,
-      body: Center(
-        child: ListView(
-          padding: EdgeInsets.only(left: 24.0, right: 24.0),
-          children: <Widget>[
-            Text(
-              "Preencha os campos com seus dados para realizar seu cadastro",
-              style: TextStyle(fontSize: 20),
-            ),
-            MaterialButton(
-              onPressed: () {
-                loginStore.userProfile.firstLogin = false;
-                loginStore.register(loginStore.userProfile);
-              },
-              child: Text("Prosseguir"),
-            )
-          ],
-        ),
+      body: Stack(
+        children: <Widget>[
+          Container(
+              child: FlutterYoutubeView(
+            listener: this,
+            onViewCreated: (controller) => this._ytController = controller,
+            params: YoutubeParam(
+                videoId: 'AtclrcBwiPw',
+                autoPlay: true,
+                showUI: true,
+                showFullScreen: false),
+          )),
+        ],
       ),
     );
+  }
+
+  @override
+  void onCurrentSecond(double second) {
+    // TODO: implement onCurrentSecond
+  }
+
+  @override
+  void onError(String error) {
+    // TODO: implement onError
+  }
+
+  @override
+  void onReady() {
+    // TODO: implement onReady
+  }
+
+  @override
+  void onStateChange(String state) {
+    // TODO: implement onStateChange
+  }
+
+  @override
+  void onVideoDuration(double duration) {
+    // TODO: implement onVideoDuration
   }
 }
