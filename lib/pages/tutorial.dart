@@ -19,7 +19,7 @@ class _State extends State<TutorialPage> implements YouTubePlayerListener {
     final first = loginStore.userProfile.firstLogin ?? true;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Tutorial"),
+        title: Text("Apresentação"),
         actions: [
           if (first)
             MaterialButton(
@@ -27,23 +27,33 @@ class _State extends State<TutorialPage> implements YouTubePlayerListener {
                   loginStore.userProfile.firstLogin = false;
                   loginStore.register(loginStore.userProfile);
                 },
-                child:
-                    Text("Prosseguir", style: TextStyle(color: Colors.white))),
+                child: Text("Prosseguir",
+                    style: TextStyle(color: Colors.white, fontSize: 20.0))),
         ],
       ),
       backgroundColor: Colors.white,
       body: Stack(
         children: <Widget>[
+          Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                  margin: EdgeInsets.only(top: 20.0, left: 8.0),
+                  child: Text(
+                    'Assita o védeo de apresentação e depois clique em prosseguir!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18.0),
+                  ))),
           Container(
+              margin: const EdgeInsets.only(top: 80, bottom: 80),
               child: FlutterYoutubeView(
-            listener: this,
-            onViewCreated: (controller) => this._ytController = controller,
-            params: YoutubeParam(
-                videoId: 'AtclrcBwiPw',
-                autoPlay: true,
-                showUI: true,
-                showFullScreen: false),
-          )),
+                listener: this,
+                onViewCreated: (controller) => this._ytController = controller,
+                params: YoutubeParam(
+                    videoId: 'gzsYp1rDo2Y',
+                    autoPlay: true,
+                    showUI: true,
+                    showFullScreen: false),
+              )),
         ],
       ),
     );
