@@ -1,3 +1,4 @@
+import 'package:afetivo/pages/tutorial.dart';
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:flutter/material.dart';
 
@@ -32,6 +33,22 @@ class _Ajuda extends State<Ajuda> {
             'O afetivo é um aplicativo que objetiva auxiliar pessoas no automonitoramento de humor. O método utilizado nesse aplicativo foi inspirado no protocolo desenvolvido pelo National Institute of Mental Health (NIMH), o Life Chart Method - Self/Prospective (LCM-S/P).',
             style: TextStyle(fontSize: 14, height: 1.5),
           )),
+      MyItem(
+          header: 'Vídeo de Apresentação',
+          body: Container(
+              child: ListBody(children: [
+            Text("Para assistir o vídeo de apresentação clique em 'Assitir'"),
+            MaterialButton(
+                elevation: 5.0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(18.0)),
+                height: 40.0,
+                minWidth: 70.0,
+                textColor: Colors.green,
+                child: new Text("Assitir", style: TextStyle(fontSize: 16.0)),
+                onPressed: () =>
+                    Navigator.of(context).pushNamed(TutorialPage.tag)),
+          ]))),
       MyItem(
           header: "O que é humor?",
           body: Text(

@@ -279,9 +279,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Navigator.of(context).pushNamed(CadastroPage.tag);
               },
             ),
-            ListTile(
-                title: Text('Video introdução'),
-                onTap: () => Navigator.of(context).pushNamed(TutorialPage.tag)),
             new ListTile(
               title: new Text("Ajuda"),
               trailing: new Icon(Icons.help_outline),

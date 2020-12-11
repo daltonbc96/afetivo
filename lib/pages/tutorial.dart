@@ -39,7 +39,7 @@ class _State extends State<TutorialPage> implements YouTubePlayerListener {
               child: Container(
                   margin: EdgeInsets.only(top: 20.0, left: 8.0),
                   child: Text(
-                    'Assita o védeo de apresentação e depois clique em prosseguir!',
+                    'Assita o vídeo de apresentação!',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 18.0),
                   ))),
