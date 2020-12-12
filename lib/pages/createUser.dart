@@ -1,3 +1,4 @@
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:validators/validators.dart' as validator;
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:afetivo/widgets/MyTextFormField.dart';
@@ -52,6 +53,21 @@ class _CreateUserState extends State<CreateUser> {
       validator: (value) =>
           value == password ? null : "As senhas não correspondem.",
     );
+
+    final menstrual = Container(
+        child: Row(children: <Widget>[
+      Text(
+        "Ao criar sua conta, você está aceitando a política de privacidade do Afetivo",
+        style: TextStyle(
+          fontSize: 20,
+        ),
+      ),
+      Observer(
+          builder: (context) => Checkbox(
+              onChanged: (value) => {
+//firebase
+                  }))
+    ]));
 
     final finishButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
