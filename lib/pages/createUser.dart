@@ -1,9 +1,10 @@
-import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:afetivo/widgets/CheckBoxFormField.dart';
 import 'package:validators/validators.dart' as validator;
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:afetivo/widgets/MyTextFormField.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CreateUser extends StatefulWidget {
   static final tag = "/createUser";
@@ -54,20 +55,22 @@ class _CreateUserState extends State<CreateUser> {
           value == password ? null : "As senhas não correspondem.",
     );
 
-    final menstrual = Container(
-        child: Row(children: <Widget>[
-      Text(
-        "Ao criar sua conta, você está aceitando a política de privacidade do Afetivo",
-        style: TextStyle(
-          fontSize: 20,
-        ),
+    final toc = CheckboxFormField(
+      title: Row(
+        children: [
+          Text("Aceito a "),
+          InkWell(
+            child: Text("Politica de Privacidade",
+                style: TextStyle(
+                    color: Colors.blue, decoration: TextDecoration.underline)),
+            onTap: () => launch("https://google.com/"),
+          )
+        ],
       ),
-      Observer(
-          builder: (context) => Checkbox(
-              onChanged: (value) => {
-//firebase
-                  }))
-    ]));
+      validator: (value) => value
+          ? null
+          : "Você deve aceitar a poltica de privacidade para continuar.",
+    );
 
     final finishButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -145,6 +148,7 @@ class _CreateUserState extends State<CreateUser> {
                   passwordField,
                   passwordConfirmationField,
                   errorMessage,
+                  toc,
                   finishButton,
                 ]),
           ),

@@ -79,22 +79,23 @@ class _CardState extends State<HumorCard> {
                       body: Column(children: <Widget>[
                         if (humor.nota != null)
                           _cardInfoText("Nota do Humor: ${humor.nota}"),
-                        if (humor.disforico != null) _cardInfoText("Disfórico"),
+                        if (humor.disforico ?? false)
+                          _cardInfoText("Disfórico"),
                         if (humor.horasDormidas != null)
                           _cardInfoText(
                               "Horas Dormidas: ${humor.horasDormidas}"),
-                        if (humor.periodoMenstrual)
+                        if (humor.periodoMenstrual ?? false)
                           _cardInfoText("Em Periodo Menstrual"),
-                        if (humor.eventoDeVida != null)
+                        if ((humor.eventoDeVida ?? '').isNotEmpty) ...[
                           _cardInfoText(
                               "Evento de Vida: ${humor.eventoDeVida}"),
-                        if (humor.eventoDeVida != null)
                           _cardInfoText(
                               "Impacto do evento: ${humor.impactoEvento}"),
-                        if (humor.sintomas != null)
+                        ],
+                        if ((humor.sintomas ?? '').isNotEmpty)
                           _cardInfoText(
                               "Sintomas Comorbidos: ${humor.sintomas}"),
-                        if (humor.otherInfo != null)
+                        if ((humor.otherInfo ?? '').isNotEmpty)
                           _cardInfoText(
                               "Outras Informações: ${humor.otherInfo}"),
                         ButtonBar(children: [

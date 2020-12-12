@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:afetivo/models/Humor.dart';
 import 'package:afetivo/pages/cadastroPage.dart';
 import 'package:afetivo/pages/reportViewer.dart';
-import 'package:afetivo/pages/tutorial.dart';
 import 'package:afetivo/stores/HumorStore.dart';
 import 'package:afetivo/stores/LoginStore.dart';
 import 'package:afetivo/widgets/ExpandedSection.dart';

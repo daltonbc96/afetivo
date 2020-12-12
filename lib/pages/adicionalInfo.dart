@@ -1,5 +1,6 @@
 import 'package:afetivo/models/Humor.dart';
 import 'package:afetivo/stores/HumorStore.dart';
+import 'package:afetivo/widgets/ExpandedSection.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class _State extends State<AddicionalInfo> {
   RegistroHumor humor;
   double mCurrentValue = 50.0;
   double currentValue = 0.0;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -32,8 +34,6 @@ class _State extends State<AddicionalInfo> {
     super.dispose();
   }
 
-  final _formKey = GlobalKey<FormState>();
-  bool _autoValidate = false;
   @override
   Widget build(BuildContext context) {
     final humorStore = HumorStore();
@@ -74,6 +74,7 @@ class _State extends State<AddicionalInfo> {
           child: new Text("Registrar", style: TextStyle(fontSize: 20.0)),
           onPressed: () {
             if (_formKey.currentState.validate()) {
+              _formKey.currentState.save();
               humorStore.editHumor(humor);
               Navigator.of(context).pop();
             }
@@ -163,10 +164,14 @@ class _State extends State<AddicionalInfo> {
         child: Observer(
       builder: (context) => TextFormField(
         validator: (value) {
-          if (double.parse(value) > 24) {
-            return "Neste campo o limite é de 24 horas";
-          } else {
+          if (value.isEmpty) return null;
+          try {
+            final horas = int.parse(value);
+            if (horas < 0 || horas > 24)
+              return "Digite um valor entre 0 e 24 horas";
             return null;
+          } catch (_) {
+            return "Campo deve ser um número";
           }
         },
         keyboardType: TextInputType.number,
@@ -261,7 +266,12 @@ class _State extends State<AddicionalInfo> {
         keyboardType: TextInputType.multiline,
         maxLines: null,
         initialValue: humor.eventoDeVida,
-        onChanged: (value) => humor.eventoDeVida = value,
+        onChanged: (value) {
+          humor.eventoDeVida = value;
+          if (value.isEmpty)
+            humor.impactoEvento = null;
+          else if (humor.impactoEvento == null) humor.impactoEvento = 0;
+        },
         autofocus: false,
         decoration: InputDecoration(
           labelText: 'Eventos de vida',
@@ -301,17 +311,17 @@ class _State extends State<AddicionalInfo> {
                 '-4',
                 textAlign: TextAlign.left,
               ),
-              new Expanded(
+              Expanded(
                 child: Observer(
-                    builder: (context) => Slider(
-                          onChanged: (double value) =>
-                              humor.impactoEvento = value,
-                          divisions: 16,
-                          min: -4,
-                          max: 4,
-                          label: humor.impactoEvento.toString(),
-                          value: humor.impactoEvento,
-                        )),
+                  builder: (context) => Slider(
+                    onChanged: (double value) => humor.impactoEvento = value,
+                    divisions: 16,
+                    min: -4,
+                    max: 4,
+                    label: (humor.impactoEvento ?? 0).toString(),
+                    value: humor.impactoEvento ?? 0,
+                  ),
+                ),
               ),
               new Text(
                 '+4',
@@ -323,66 +333,73 @@ class _State extends State<AddicionalInfo> {
       )
     ]);
 
-    final sintomasComorb = Observer(
-      builder: (context) => TextFormField(
-        keyboardType: TextInputType.multiline,
-        maxLines: null, //Number_of_lines(int),)
-        autofocus: false,
-        initialValue: humor.sintomas,
-        onChanged: (value) => humor.sintomas = value,
-        decoration: InputDecoration(
-          labelText: 'Sintomas comórbidos',
-          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(32.0),
-          ),
-        ),
-      ),
+    final ajudaComorbitos = IconButton(
+      icon: Icon(Icons.help),
+      iconSize: 20,
+      color: Colors.black38,
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (ctxt) => new AlertDialog(
+                  title: Text(
+                    "Sintomas Comórbidos",
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                  insetPadding: EdgeInsets.symmetric(),
+                  content: Container(
+                      width: 400,
+                      height: 300,
+                      child: SingleChildScrollView(
+                        child: Text(
+                          'Anote os sintomas adicionais que você pode experienciar no dia (como ansiedade, abuso de álcool, paranoia, dor de cabeça, entre outros). Se aplicável, continue a indicar a presença e a frequência desses sintomas nos dias subsequentes (por exemplo, número de ataques de pânico, número de bebidas alcoólicas, etc.).',
+                          style: TextStyle(fontSize: 18, height: 1.5),
+                          textAlign: TextAlign.justify,
+                        ),
+                      )),
+                  actions: <Widget>[
+                    // usually buttons at the bottom of the dialog
+                    new FlatButton(
+                      shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(30.0)),
+                      color: Colors.green[700],
+                      child: new Text(
+                        "Entendi",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ));
+      },
     );
 
-    final ajudaComorbitos = Container(
-      child: IconButton(
-        icon: Icon(Icons.help),
-        iconSize: 20,
-        color: Colors.black38,
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (ctxt) => new AlertDialog(
-                    title: Text(
-                      "Sintomas Comórbidos",
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
-                    ),
-                    insetPadding: EdgeInsets.symmetric(),
-                    content: Container(
-                        width: 400,
-                        height: 300,
-                        child: SingleChildScrollView(
-                          child: Text(
-                            'Anote os sintomas adicionais que você pode experienciar no dia (como ansiedade, abuso de álcool, paranoia, dor de cabeça, entre outros). Se aplicável, continue a indicar a presença e a frequência desses sintomas nos dias subsequentes (por exemplo, número de ataques de pânico, número de bebidas alcoólicas, etc.).',
-                            style: TextStyle(fontSize: 18, height: 1.5),
-                            textAlign: TextAlign.justify,
-                          ),
-                        )),
-                    actions: <Widget>[
-                      // usually buttons at the bottom of the dialog
-                      new FlatButton(
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(30.0)),
-                        color: Colors.green[700],
-                        child: new Text(
-                          "Entendi",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  ));
-        },
+    final sintomasComorb = Container(
+      child: Row(
+        children: [
+          Observer(
+            builder: (context) => Expanded(
+              child: TextFormField(
+                keyboardType: TextInputType.multiline,
+                maxLines: null, //Number_of_lines(int),)
+                autofocus: false,
+                initialValue: humor.sintomas,
+                onChanged: (value) => humor.sintomas = value,
+                decoration: InputDecoration(
+                  labelText: 'Sintomas comórbidos',
+                  contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(32.0),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          ajudaComorbitos,
+        ],
       ),
     );
 
@@ -406,31 +423,32 @@ class _State extends State<AddicionalInfo> {
     );
 
     return Scaffold(
-        appBar: new AppBar(
-          actions: <Widget>[
-            SizedBox(
-                width: 70,
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.green)),
-                  child: const Text('Ajuda'),
-                  color: Colors.green,
-                  textColor: Colors.white,
-                  onPressed: () {
-                    Navigator.of(context).pushNamed("/help");
-                  },
-                )),
-          ],
-          title: Column(children: [
-            Text("Informações Adicionais", textAlign: TextAlign.center),
-            Text(describeTipoHumor(humor.tipo), textAlign: TextAlign.center)
-          ]),
-        ),
-        backgroundColor: Colors.white,
-        body: Center(
-          key: _formKey,
-          child: Observer(
-            builder: (context) => ListView(
+      appBar: new AppBar(
+        actions: <Widget>[
+          SizedBox(
+              width: 70,
+              child: RaisedButton(
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.green)),
+                child: const Text('Ajuda'),
+                color: Colors.green,
+                textColor: Colors.white,
+                onPressed: () {
+                  Navigator.of(context).pushNamed("/help");
+                },
+              )),
+        ],
+        title: Column(children: [
+          Text("Informações Adicionais", textAlign: TextAlign.center),
+          Text(describeTipoHumor(humor.tipo), textAlign: TextAlign.center)
+        ]),
+      ),
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Observer(
+          builder: (context) => Form(
+            key: _formKey,
+            child: ListView(
               shrinkWrap: true,
               padding: EdgeInsets.only(left: 24.0, right: 24.0),
               children: <Widget>[
@@ -462,23 +480,26 @@ class _State extends State<AddicionalInfo> {
                 notaHumor,
                 SizedBox(height: 35.0),
                 menstrual,
-                SizedBox(height: 25.0),
-                if (humor.medicamentos != null)
+                if (humor.medicamentos.isNotEmpty) ...[
+                  SizedBox(height: 25.0),
                   Text(
                     "Medicamentos",
                     style: TextStyle(
                       fontSize: 20,
                     ),
                   ),
-                if (humor.medicamentos != null) medicamentos,
+                  medicamentos,
+                ],
                 SizedBox(height: 35.0),
                 horasDormidas,
                 SizedBox(height: 35.0),
                 eventos,
                 SizedBox(height: 20),
-                if (humor.eventoDeVida != null) impacto,
+                ExpandedSection(
+                  expand: (humor.eventoDeVida ?? '').isNotEmpty,
+                  child: impacto,
+                ),
                 SizedBox(height: 20),
-                ajudaComorbitos,
                 sintomasComorb,
                 SizedBox(height: 35),
                 outrasInfo,
@@ -487,6 +508,8 @@ class _State extends State<AddicionalInfo> {
               ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

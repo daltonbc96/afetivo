@@ -218,7 +218,31 @@ Se aplicável, continue a indicar a presença e a frequência desses sintomas no
                                     onPressed: Navigator.of(context).pop,
                                     child: Text("Cancelar e Voltar")),
                                 TextButton(
-                                    onPressed: _loginStore.deleteUser,
+                                    onPressed: () async {
+                                      try {
+                                        await _loginStore.deleteUser();
+                                      } catch (_) {
+                                        showDialog(
+                                            context: context,
+                                            barrierDismissible: true,
+                                            builder: (context) => AlertDialog(
+                                                  title: Text(
+                                                      "Não foi possível deletar sua conta."),
+                                                  content:
+                                                      SingleChildScrollView(
+                                                    child: Text(
+                                                        '''Você precisa sair e entrar novamente com seu usuário e senha para prosseguir.
+                                                        Após entrar, retorne ao menu de ajuda para tentar novamente.'''),
+                                                  ),
+                                                  actions: [
+                                                    TextButton(
+                                                        onPressed:
+                                                            _loginStore.logout,
+                                                        child: Text("Sair"))
+                                                  ],
+                                                ));
+                                      }
+                                    },
                                     child: Text("Excluir Conta")),
                               ]));
                 }),
