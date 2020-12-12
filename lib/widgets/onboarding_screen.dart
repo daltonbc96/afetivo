@@ -119,7 +119,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             ),
                             SizedBox(height: 30.0),
                             Text(
-                              'Descubra como o seu humor pode influênciar no seu dia a dia',
+                              'Descubra como o seu humor pode influenciar no seu dia a dia',
                               style: kTitleStyle,
                             ),
                             SizedBox(height: 15.0),

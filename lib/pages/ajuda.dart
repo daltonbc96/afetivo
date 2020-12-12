@@ -223,6 +223,12 @@ Se aplicável, continue a indicar a presença e a frequência desses sintomas no
                               ]));
                 }),
           ]))),
+      MyItem(
+          header: '''Contato''',
+          body: Text(
+            '''Em caso de dúvidas, reclamações, elogios ou sugestões entre em contato pelo e-mail: afetivoapp@gmail.com''',
+            style: TextStyle(fontSize: 14, height: 1.5),
+          )),
     ];
   }
 

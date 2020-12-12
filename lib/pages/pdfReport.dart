@@ -22,10 +22,10 @@ class PdfReport extends pw.Document {
   PdfReport({this.data, this.user}) : super() {
     this.addPage(pw.MultiPage(
         pageFormat: PdfPageFormat.a4.copyWith(
-            marginBottom: 2.5 * PdfPageFormat.cm,
-            marginLeft: 2.5 * PdfPageFormat.cm,
+            marginBottom: 1.5 * PdfPageFormat.cm,
+            marginLeft: 1.5 * PdfPageFormat.cm,
             marginRight: 1.5 * PdfPageFormat.cm,
-            marginTop: 2.5 * PdfPageFormat.cm),
+            marginTop: 1.5 * PdfPageFormat.cm),
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         header: _pageHeader,
         footer: _pageFooter,
@@ -70,6 +70,9 @@ class PdfReport extends pw.Document {
           pw.Text('Data de Nascimento: '),
           pw.Text(newFormat1.format(user.nascimento))
         ]),
+        pw.Row(
+            children: [pw.Text('Sexo: '), pw.Text(user.descSexo.toString())]),
+        pw.Row(children: [pw.Text('E-mail: '), pw.Text(user.email.toString())]),
         pw.SizedBox(height: 20),
       ]);
 
@@ -153,6 +156,7 @@ class PdfReport extends pw.Document {
                   divisions: true)),
           datasets: [
             pw.LineDataSet(
+                color: PdfColors.green,
                 isCurved: true,
                 drawPoints: true,
                 data: data.reversed

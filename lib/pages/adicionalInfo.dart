@@ -32,6 +32,8 @@ class _State extends State<AddicionalInfo> {
     super.dispose();
   }
 
+  final _formKey = GlobalKey<FormState>();
+  bool _autoValidate = false;
   @override
   Widget build(BuildContext context) {
     final humorStore = HumorStore();
@@ -71,8 +73,10 @@ class _State extends State<AddicionalInfo> {
           textColor: Colors.white,
           child: new Text("Registrar", style: TextStyle(fontSize: 20.0)),
           onPressed: () {
-            humorStore.editHumor(humor);
-            Navigator.of(context).pop();
+            if (_formKey.currentState.validate()) {
+              humorStore.editHumor(humor);
+              Navigator.of(context).pop();
+            }
           },
           splashColor: Colors.redAccent,
         ));
@@ -158,6 +162,13 @@ class _State extends State<AddicionalInfo> {
     final horasDormidas = Container(
         child: Observer(
       builder: (context) => TextFormField(
+        validator: (value) {
+          if (double.parse(value) > 24) {
+            return "Neste campo o limite é de 24 horas";
+          } else {
+            return null;
+          }
+        },
         keyboardType: TextInputType.number,
         initialValue: (humor.horasDormidas ?? '').toString(),
         onChanged: (value) => humor.horasDormidas = int.parse(value),
@@ -320,12 +331,58 @@ class _State extends State<AddicionalInfo> {
         initialValue: humor.sintomas,
         onChanged: (value) => humor.sintomas = value,
         decoration: InputDecoration(
-          labelText: 'Sintomas comorbitos',
+          labelText: 'Sintomas comórbidos',
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(32.0),
           ),
         ),
+      ),
+    );
+
+    final ajudaComorbitos = Container(
+      child: IconButton(
+        icon: Icon(Icons.help),
+        iconSize: 20,
+        color: Colors.black38,
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (ctxt) => new AlertDialog(
+                    title: Text(
+                      "Sintomas Comórbidos",
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                    insetPadding: EdgeInsets.symmetric(),
+                    content: Container(
+                        width: 400,
+                        height: 300,
+                        child: SingleChildScrollView(
+                          child: Text(
+                            'Anote os sintomas adicionais que você pode experienciar no dia (como ansiedade, abuso de álcool, paranoia, dor de cabeça, entre outros). Se aplicável, continue a indicar a presença e a frequência desses sintomas nos dias subsequentes (por exemplo, número de ataques de pânico, número de bebidas alcoólicas, etc.).',
+                            style: TextStyle(fontSize: 18, height: 1.5),
+                            textAlign: TextAlign.justify,
+                          ),
+                        )),
+                    actions: <Widget>[
+                      // usually buttons at the bottom of the dialog
+                      new FlatButton(
+                        shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(30.0)),
+                        color: Colors.green[700],
+                        child: new Text(
+                          "Entendi",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  ));
+        },
       ),
     );
 
@@ -371,6 +428,7 @@ class _State extends State<AddicionalInfo> {
         ),
         backgroundColor: Colors.white,
         body: Center(
+          key: _formKey,
           child: Observer(
             builder: (context) => ListView(
               shrinkWrap: true,
@@ -405,13 +463,14 @@ class _State extends State<AddicionalInfo> {
                 SizedBox(height: 35.0),
                 menstrual,
                 SizedBox(height: 25.0),
-                Text(
-                  "Medicamentos",
-                  style: TextStyle(
-                    fontSize: 20,
+                if (humor.medicamentos != null)
+                  Text(
+                    "Medicamentos",
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
                   ),
-                ),
-                medicamentos,
+                if (humor.medicamentos != null) medicamentos,
                 SizedBox(height: 35.0),
                 horasDormidas,
                 SizedBox(height: 35.0),
@@ -419,6 +478,7 @@ class _State extends State<AddicionalInfo> {
                 SizedBox(height: 20),
                 if (humor.eventoDeVida != null) impacto,
                 SizedBox(height: 20),
+                ajudaComorbitos,
                 sintomasComorb,
                 SizedBox(height: 35),
                 outrasInfo,
