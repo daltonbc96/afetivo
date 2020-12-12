@@ -10,7 +10,8 @@ import 'package:afetivo/pages/tutorial.dart';
 import 'package:afetivo/services/NavigationService.dart';
 import 'package:afetivo/stores/HumorStore.dart';
 import 'package:afetivo/stores/LoginStore.dart';
-import 'package:afetivo/widgets/onboarding_screen.dart';
+import 'package:afetivo/pages/onboarding_screen.dart';
+import 'package:afetivo/stores/PreferencesStore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'pages/dashboard.dart';
 
@@ -33,6 +35,7 @@ class _AppMainState extends State<AppMain> {
   NavigationService navigationService;
   LoginStore loginStore;
   HumorStore humorStore;
+  PreferencesStore preferencesStore;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   @override
@@ -42,6 +45,7 @@ class _AppMainState extends State<AppMain> {
     navigationService = NavigationService();
     loginStore = LoginStore();
     humorStore = HumorStore();
+    preferencesStore = PreferencesStore();
     //initializeDateFormatting('pt_BR');
 
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
@@ -101,23 +105,27 @@ class _AppMainState extends State<AppMain> {
         });
 
     autorun((_) {
-      switch (loginStore.loginState) {
-        case LoginState.LoggedIn:
-          navigationService.forceNamedRoute(DashboardScreen.tag);
-          break;
-        case LoginState.NoProfile:
-          navigationService.forceNamedRoute(CadastroPage.tag);
-          break;
-        case LoginState.LoggedOut:
-          navigationService.forceNamedRoute(LoginPage.tag);
-          break;
-        case LoginState.FirstLogin:
-          navigationService.forceNamedRoute(TutorialPage.tag);
-          break;
-        default:
-          navigationService.forceNamedRoute(LoadingScreen.tag);
-          break;
-      }
+      if (preferencesStore.firstRun == null) return;
+      if (preferencesStore.firstRun)
+        navigationService.forceNamedRoute(OnboardingScreen.tag);
+      else
+        switch (loginStore.loginState) {
+          case LoginState.LoggedIn:
+            navigationService.forceNamedRoute(DashboardScreen.tag);
+            break;
+          case LoginState.NoProfile:
+            navigationService.forceNamedRoute(CadastroPage.tag);
+            break;
+          case LoginState.LoggedOut:
+            navigationService.forceNamedRoute(LoginPage.tag);
+            break;
+          case LoginState.FirstLogin:
+            navigationService.forceNamedRoute(TutorialPage.tag);
+            break;
+          default:
+            navigationService.forceNamedRoute(LoadingScreen.tag);
+            break;
+        }
     });
     return root;
   }

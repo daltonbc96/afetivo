@@ -224,7 +224,7 @@ Se aplicável, continue a indicar a presença e a frequência desses sintomas no
                                       } catch (_) {
                                         showDialog(
                                             context: context,
-                                            barrierDismissible: true,
+                                            barrierDismissible: false,
                                             builder: (context) => AlertDialog(
                                                   title: Text(
                                                       "Não foi possível deletar sua conta."),

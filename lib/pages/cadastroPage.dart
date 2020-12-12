@@ -47,11 +47,8 @@ class _State extends State<CadastroPage> {
   Widget build(BuildContext context) {
     final primeiroNome = Observer(
         builder: (context) => TextFormField(
-              validator: (value) {
-                if (value.isEmpty) {
-                  return "Esse campo é obrigatório.";
-                }
-              },
+              validator: (value) =>
+                  value.isEmpty ? "Esse campo é obrigatório." : null,
               autofocus: false,
               initialValue: _userProfile.nome,
               onChanged: (value) => _userProfile.nome = value,
@@ -66,11 +63,8 @@ class _State extends State<CadastroPage> {
 
     final sobrenome = Observer(
         builder: (context) => TextFormField(
-              validator: (value) {
-                if (value.isEmpty) {
-                  return "Esse campo é obrigatório.";
-                }
-              },
+              validator: (value) =>
+                  value.isEmpty ? "Esse campo é obrigatório." : null,
               autofocus: false,
               initialValue: _userProfile.sobrenome,
               onChanged: (value) => _userProfile.sobrenome = value,

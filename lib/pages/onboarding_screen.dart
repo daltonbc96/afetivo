@@ -1,4 +1,5 @@
 import 'package:afetivo/pages/loginPage.dart';
+import 'package:afetivo/stores/PreferencesStore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../utilities/styles.dart';
@@ -13,6 +14,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final int _numPages = 3;
   final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;
+  final _preferencesStore = PreferencesStore();
 
   List<Widget> _buildPageIndicator() {
     List<Widget> list = [];
@@ -63,9 +65,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 Container(
                   alignment: Alignment.centerRight,
                   child: FlatButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(LoginPage.tag);
-                    },
+                    onPressed: () => _preferencesStore.setFirstRun(false),
                     child: Text(
                       'Pular',
                       style: TextStyle(
@@ -204,9 +204,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               width: double.infinity,
               color: Colors.white,
               child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pushNamed(LoginPage.tag);
-                },
+                onTap: () => _preferencesStore.setFirstRun(false),
                 child: Center(
                   child: Padding(
                     padding: EdgeInsets.only(bottom: 20.0),
