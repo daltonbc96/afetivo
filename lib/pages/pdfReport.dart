@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:afetivo/models/Humor.dart';
 import 'package:afetivo/models/User.dart';
-import 'package:flutter/widgets.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:intl/intl.dart';

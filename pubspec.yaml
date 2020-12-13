@@ -38,6 +38,7 @@ dependencies:
   cloud_firestore: ^0.13.6
   firebase_auth: ^0.16.1
   firebase_analytics: ^5.0.14
+  firebase_storage: ^3.1.6
   #google_sign_in: ^4.5.1
   json_annotation:
   validators:
@@ -48,17 +49,11 @@ dependencies:
   flutter_launcher_icons: "^0.7.0"
   tutorial_coach_mark: ^0.5.1
   shared_preferences: ^0.5.12+2
-  flutter_html: ^1.0.2
   pdf: ^1.11.2
   flutter_full_pdf_viewer: ^1.0.6
   share_extend: ^1.1.9
   flutter_youtube_view: ^1.1.9
   url_launcher: ^5.7.10
-
-  
-  
-
- 
 
 flutter_icons:
   ios: true

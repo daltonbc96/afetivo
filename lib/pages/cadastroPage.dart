@@ -17,7 +17,6 @@ final _formKey = GlobalKey<FormState>();
 
 enum _CadastroStatus { Idle, Wait, Error }
 
-//TODO: Implement form validation
 class _State extends State<CadastroPage> {
   final loginStore = LoginStore();
   TextEditingController _diagnosticoFieldController;

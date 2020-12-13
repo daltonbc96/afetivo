@@ -1,4 +1,3 @@
-import 'package:afetivo/pages/loginPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +8,6 @@ class FogotPage extends StatefulWidget {
   _State createState() => _State();
 }
 
-//TODO: Implement password reminder
 class _State extends State<FogotPage> {
   TextEditingController emailFieldController;
 

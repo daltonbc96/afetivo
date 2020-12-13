@@ -5,6 +5,7 @@ import 'package:afetivo/widgets/MyTextFormField.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class CreateUser extends StatefulWidget {
   static final tag = "/createUser";
@@ -63,7 +64,13 @@ class _CreateUserState extends State<CreateUser> {
             child: Text("Politica de Privacidade",
                 style: TextStyle(
                     color: Colors.blue, decoration: TextDecoration.underline)),
-            onTap: () => launch("https://google.com/"),
+            onTap: () async {
+              final url = await FirebaseStorage.instance
+                  .ref()
+                  .child('privacy.htm')
+                  .getDownloadURL();
+              await launch(url);
+            },
           )
         ],
       ),

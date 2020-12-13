@@ -1,4 +1,3 @@
-import 'package:afetivo/pages/loginPage.dart';
 import 'package:afetivo/stores/PreferencesStore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
