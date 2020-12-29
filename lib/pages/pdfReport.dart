@@ -107,7 +107,7 @@ class PdfReport extends pw.Document {
           pw.Text('Em Periodo Menstrual: '),
           if (humor.periodoMenstrual != true) _cardInfoText('sim')
         ]),
-        pw.Row(mainAxisAlignment: pw.MainAxisAlignment.spaceBetween, children: [
+        pw.Row(children: [
           pw.Text(
             'Evento de Vida: ',
             //textAlign: pw.TextAlign.justify,
