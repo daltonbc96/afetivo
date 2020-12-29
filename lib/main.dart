@@ -17,8 +17,8 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:mobx/mobx.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'pages/dashboard.dart';
 
@@ -35,7 +35,7 @@ class _AppMainState extends State<AppMain> {
   LoginStore loginStore;
   HumorStore humorStore;
   PreferencesStore preferencesStore;
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
   void initState() {
@@ -45,24 +45,18 @@ class _AppMainState extends State<AppMain> {
     loginStore = LoginStore();
     humorStore = HumorStore();
     preferencesStore = PreferencesStore();
-    //initializeDateFormatting('pt_BR');
-
-    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    var android = new AndroidInitializationSettings('@mipmap/ic_launcher');
-    var IOS = new IOSInitializationSettings();
-    var initSettings = new InitializationSettings(android, IOS);
-    flutterLocalNotificationsPlugin.initialize(initSettings,
-        onSelectNotification: onSelectNotification);
-  }
-
-  Future onSelectNotification(String payload) {
-    debugPrint("payload: $payload");
-    showDialog(
-        context: context,
-        builder: (_) => new AlertDialog(
-              title: new Text('Notification'),
-              content: new Text('Minha notificao deu certo'),
-            ));
+    _firebaseMessaging.configure();
+    _firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(
+            sound: true, badge: true, alert: true, provisional: false));
+    _firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
+    _firebaseMessaging.getToken().then((String token) {
+      assert(token != null);
+      print("Push Messaging token: $token");
+    });
   }
 
   @override

@@ -110,7 +110,7 @@ class PdfReport extends pw.Document {
         pw.Row(mainAxisAlignment: pw.MainAxisAlignment.spaceBetween, children: [
           pw.Text(
             'Evento de Vida: ',
-            textAlign: pw.TextAlign.justify,
+            //textAlign: pw.TextAlign.justify,
           ),
           if (humor.eventoDeVida != null)
             _cardInfoText(humor.eventoDeVida.toString())
