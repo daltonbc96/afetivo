@@ -274,7 +274,7 @@ Se aplicável, continue a indicar a presença e a frequência desses sintomas no
                         Padding(
                             padding: const EdgeInsets.all(10),
                             child: Container(
-                                width: MediaQuery.of(context).size.width * 0.6,
+                                width: MediaQuery.of(context).size.width - 120,
                                 child: Text(item.header,
                                     style: TextStyle(fontSize: 16))))
                       ]));

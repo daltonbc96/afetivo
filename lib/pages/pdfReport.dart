@@ -94,42 +94,51 @@ class PdfReport extends pw.Document {
         ]),
         pw.Row(children: [
           pw.Text('Disfórico: '),
-          if (humor.disforico == true) _cardInfoText('sim')
+          if (humor.disforico == true)
+            _cardInfoText('sim')
+          else
+            _cardInfoText('não')
         ]),
-        pw.Row(children: [
-          pw.Text('Nota Humor: '),
-          if (humor.nota != null) _cardInfoText(humor.nota.toString())
-        ]),
-        pw.Row(children: [
-          pw.Text('Horas Dormidas: '),
-          if (humor.horasDormidas != null)
+        if (humor.nota != null)
+          pw.Row(children: [
+            pw.Text('Nota Humor: '),
+            _cardInfoText(humor.nota.toString())
+          ]),
+        if (humor.horasDormidas != null)
+          pw.Row(children: [
+            pw.Text('Horas Dormidas: '),
             _cardInfoText(humor.horasDormidas.toString())
-        ]),
+          ]),
         pw.Row(children: [
           pw.Text('Em Periodo Menstrual: '),
-          if (humor.periodoMenstrual != true) _cardInfoText('sim')
+          if (humor.periodoMenstrual != true)
+            _cardInfoText('não')
+          else
+            _cardInfoText('sim')
         ]),
-        pw.Row(children: [
-          pw.Text(
-            'Evento de Vida: ',
-            //textAlign: pw.TextAlign.justify,
-          ),
-          if (humor.eventoDeVida != null)
+        if (humor.eventoDeVida != null)
+          pw.Row(children: [
+            pw.Text(
+              'Evento de Vida: ',
+              //textAlign: pw.TextAlign.justify,
+            ),
             _cardInfoText(humor.eventoDeVida.toString())
-        ]),
-        pw.Row(children: [
-          pw.Text('Impacto do evento: '),
-          if (humor.eventoDeVida != null)
+          ]),
+        if (humor.eventoDeVida != null)
+          pw.Row(children: [
+            pw.Text('Impacto do evento: '),
             _cardInfoText(humor.impactoEvento.toString())
-        ]),
-        pw.Row(children: [
-          pw.Text('Sintomas Comorbidos: '),
-          if (humor.sintomas != null) _cardInfoText(humor.sintomas.toString())
-        ]),
-        pw.Row(children: [
-          pw.Text('Outras Informações: '),
-          if (humor.otherInfo != null) _cardInfoText(humor.otherInfo.toString())
-        ]),
+          ]),
+        if (humor.sintomas != null)
+          pw.Row(children: [
+            pw.Text('Sintomas Comorbidos: '),
+            _cardInfoText(humor.sintomas.toString())
+          ]),
+        if (humor.otherInfo != null)
+          pw.Row(children: [
+            pw.Text('Outras Informações: '),
+            _cardInfoText(humor.otherInfo.toString())
+          ]),
         pw.SizedBox(height: 20),
       ]);
 
