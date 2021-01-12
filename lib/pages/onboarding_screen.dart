@@ -38,6 +38,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double deviceWidth = MediaQuery.of(context).size.width;
+    double deviceHeight = MediaQuery.of(context).size.height;
+    //final kTitleStyle = TextStyle(
+    //  color: Colors.white,
+    //  fontFamily: 'CM Sans Serif',
+    //  fontSize: deviceHeight * 0.032,
+    //  height: 1.2,
+    //);
+
+    //final kSubtitleStyle = TextStyle(
+    //  color: Colors.white,
+    //  fontSize: deviceHeight * 0.025,
+    //  height: 1.2,
+    //);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: AnnotatedRegion<SystemUiOverlayStyle>(
@@ -57,7 +72,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 40.0),
+            padding: EdgeInsets.symmetric(vertical: deviceHeight * 0.05),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -74,8 +89,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
                 ),
-                Container(
-                  height: 600.0,
+                Center(
+                    child: Container(
+                  height: deviceHeight * 0.65,
                   child: PageView(
                     physics: ClampingScrollPhysics(),
                     controller: _pageController,
@@ -86,20 +102,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     },
                     children: <Widget>[
                       Padding(
-                        padding: EdgeInsets.all(40.0),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: deviceWidth * 0.05,
+                            vertical: deviceHeight * 0.025),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Center(
                               child: Icon(Icons.stacked_line_chart,
-                                  size: 150.0, color: Colors.white),
+                                  size: deviceHeight * 0.2,
+                                  color: Colors.white),
                             ),
-                            SizedBox(height: 30.0),
+                            SizedBox(height: deviceHeight * 0.025),
                             Text(
                               'Descubra uma nova forma de monitorar o seu humor',
                               style: kTitleStyle,
                             ),
-                            SizedBox(height: 15.0),
+                            SizedBox(height: deviceHeight * 0.025),
                             Text(
                               'Monitore o seu humor diariamente e construa afetivogramas',
                               style: kSubtitleStyle,
@@ -108,20 +127,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.all(40.0),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: deviceWidth * 0.05,
+                            vertical: deviceHeight * 0.025),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Center(
                               child: Icon(Icons.rule_outlined,
-                                  size: 150.0, color: Colors.white),
+                                  size: deviceHeight * 0.2,
+                                  color: Colors.white),
                             ),
-                            SizedBox(height: 30.0),
+                            SizedBox(height: deviceHeight * 0.025),
                             Text(
                               'Descubra como o seu humor pode influenciar no seu dia a dia',
                               style: kTitleStyle,
                             ),
-                            SizedBox(height: 15.0),
+                            SizedBox(height: deviceHeight * 0.025),
                             Text(
                               'Além do humor, você pode monitorar outras informações e hábitos da sua rotina',
                               style: kSubtitleStyle,
@@ -130,20 +152,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.all(40.0),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: deviceWidth * 0.05,
+                            vertical: deviceHeight * 0.025),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Center(
                               child: Icon(Icons.share,
-                                  size: 150.0, color: Colors.white),
+                                  size: deviceHeight * 0.2,
+                                  color: Colors.white),
                             ),
-                            SizedBox(height: 30.0),
+                            SizedBox(height: deviceHeight * 0.025),
                             Text(
                               'Compartilhe os seus registros',
                               style: kTitleStyle,
                             ),
-                            SizedBox(height: 15.0),
+                            SizedBox(height: deviceHeight * 0.025),
                             Text(
                               'Você poderá compartilhar os seus registros com quem quiser',
                               style: kSubtitleStyle,
@@ -153,12 +178,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                     ],
                   ),
-                ),
+                )),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: _buildPageIndicator(),
                 ),
-                _currentPage != _numPages - 1
+                _currentPage < _numPages
                     ? Expanded(
                         child: Align(
                           alignment: FractionalOffset.bottomRight,
@@ -199,23 +224,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
       bottomSheet: _currentPage == _numPages - 1
           ? Container(
-              height: 100.0,
+              height: deviceHeight * 0.15,
               width: double.infinity,
               color: Colors.white,
               child: GestureDetector(
                 onTap: () => _preferencesStore.setFirstRun(false),
                 child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: 20.0),
-                    child: Text(
-                      'Vamos começar!',
-                      style: TextStyle(
-                        color: Color(0XFF4CAF50),
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  //child: Padding(
+                  //  padding: EdgeInsets.only(bottom: deviceHeight * 0.025),
+                  child: Text(
+                    'Vamos começar!',
+                    style: TextStyle(
+                      color: Color(0XFF4CAF50),
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
+                  //),
                 ),
               ),
             )

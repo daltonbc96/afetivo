@@ -33,7 +33,7 @@ bool tipoHumorManiaco(TipoHumor tipoHumor) {
 String describeTipoHumor(TipoHumor humor) {
   switch (humor) {
     case TipoHumor.graveDepre:
-      return "Depressão Severa";
+      return "Depressão Grave";
     case TipoHumor.modGraveDepre:
       return "Depressão Moderada Alta";
     case TipoHumor.modLeveDepre:
@@ -49,7 +49,7 @@ String describeTipoHumor(TipoHumor humor) {
     case TipoHumor.modGraveMania:
       return "Hipomania/Mania Moderada Alta";
     case TipoHumor.graveMania:
-      return "Hipomania/Mania Severa";
+      return "Hipomania/Mania Grave";
     default:
   }
   return '';
@@ -59,7 +59,7 @@ String describeLongTipoHumor(TipoHumor humor) {
   switch (humor) {
     case TipoHumor.graveDepre:
       return '''
-◉	Descrição: no nível severa de depressão significa que você é incapaz de funcionar em qualquer uma de suas funções sociais e ocupacionais habituais, ou seja, é incapaz de sair da cama, ir para a escola ou trabalho, realizar qualquer uma das suas funções de rotina, exige muitos cuidados extras em casa, ou necessidade de ser hospitalizado.
+◉	Descrição: no nível grave de depressão significa que você é incapaz de funcionar em qualquer uma de suas funções sociais e ocupacionais habituais, ou seja, é incapaz de sair da cama, ir para a escola ou trabalho, realizar qualquer uma das suas funções de rotina, exige muitos cuidados extras em casa, ou necessidade de ser hospitalizado.
 
 ◉	Sintomas: imobilizado; falta de autocuidado; má alimentação; baixa ingestão de líquidos; incapaz de se vestir; longos atrasos na fala ou mudo; muito agitado, andando de um lado para o outro; comportamento suicida; não consegue pensar ou lembrar; crenças falsas (delírios); distorções sensoriais (alucinações).
 
@@ -121,7 +121,7 @@ String describeLongTipoHumor(TipoHumor humor) {
 ''';
     case TipoHumor.graveMania:
       return '''
-◉	Descrição: no nível severa do estado de humor maníaco há um aumento ainda maior dos sinais e sintomas descritos nos outros níveis, com muita insistência de familiares e amigos de que você precisa de atenção médica, que seu comportamento está fora de controle, ou eles podem levá-lo para um hospital. Há preocupações de que nem eles e nem você pode mantê-lo seguro por mais tempo. Se você estiver hospitalizado e com sintomas maníacos, marque este nível. 
+◉	Descrição: no nível grave do estado de humor maníaco há um aumento ainda maior dos sinais e sintomas descritos nos outros níveis, com muita insistência de familiares e amigos de que você precisa de atenção médica, que seu comportamento está fora de controle, ou eles podem levá-lo para um hospital. Há preocupações de que nem eles e nem você pode mantê-lo seguro por mais tempo. Se você estiver hospitalizado e com sintomas maníacos, marque este nível. 
 
 ◉	Sintomas: sente pouca ou nenhuma necessidade de sono; sente-se fora de controle; explosivo; sente-se todo poderoso; invencível; bravo; potencialmente violento; sente-se com energia excessiva; imprudente; vê ou ouve coisas que não existem realmente.
 

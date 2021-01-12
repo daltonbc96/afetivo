@@ -125,11 +125,10 @@ class _CreateUserState extends State<CreateUser> {
               return Text("Senha Fraca",
                   style: TextStyle(color: Colors.redAccent));
             case RegisterError.Unavailable:
-              return Text("Usuario já cadastrado",
+              return Text("Sistema Indisponivel",
                   style: TextStyle(color: Colors.redAccent));
             case RegisterError.UnknownError:
-              return Text(
-                  "Erro desconhecido, tente alterar sua senha e/ou e-mail",
+              return Text("E-mail já cadastrado",
                   style: TextStyle(color: Colors.redAccent));
             default:
               return Text("");

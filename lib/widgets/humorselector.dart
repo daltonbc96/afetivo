@@ -193,17 +193,17 @@ class HumorSelector extends StatelessWidget {
                           getPageWidget(
                               "Essencialmente incapacitado ou hospitalizado",
                               Colors.lime,
-                              "Depressão Severa",
+                              "Depressão Grave",
                               TipoHumor.graveDepre,
                               TipoHumor.graveDepre),
                           getPageWidget(
-                              "Funcional com grande esforço",
+                              "Funcionando com grande esforço",
                               Colors.lime,
                               "Depressão Moderada Alta",
                               TipoHumor.modGraveDepre,
                               TipoHumor.modGraveDepre),
                           getPageWidget(
-                              "Funcional com algum esforço",
+                              "Funcionando com algum esforço",
                               Colors.lime,
                               "Depressão Moderada Baixa",
                               TipoHumor.modLeveDepre,
@@ -241,7 +241,7 @@ class HumorSelector extends StatelessWidget {
                           getPageWidget(
                               "Essencialmente incapacitado ou hospitalizado",
                               Colors.lime,
-                              "Hipomania/Mania Severa",
+                              "Hipomania/Mania Grave",
                               TipoHumor.graveMania,
                               TipoHumor.graveMania),
                         ],
