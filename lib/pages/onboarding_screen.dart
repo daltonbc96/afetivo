@@ -40,18 +40,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
-    //final kTitleStyle = TextStyle(
-    //  color: Colors.white,
-    //  fontFamily: 'CM Sans Serif',
-    //  fontSize: deviceHeight * 0.032,
-    //  height: 1.2,
-    //);
-
-    //final kSubtitleStyle = TextStyle(
-    //  color: Colors.white,
-    //  fontSize: deviceHeight * 0.025,
-    //  height: 1.2,
-    //);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

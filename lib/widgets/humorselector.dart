@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 
 class HumorSelector extends StatelessWidget {
   static String tag = 'home-page';
-  final double _cardHeight = 400;
   final double _cardElevation = 8;
   final double _cardShadowOffset = 18;
   final humorStore = HumorStore();
@@ -19,13 +18,14 @@ class HumorSelector extends StatelessWidget {
     final deviceHeight = mediaQuery.size.height;
     final deviceWidth = mediaQuery.size.width;
     final _scrollController = ScrollController();
+    final double _cardHeight = deviceHeight * 0.6;
 
     Widget getPageWidget(String text2, MaterialColor backgroundColor,
             String titulo, TipoHumor descHumor, TipoHumor tipoHumor) =>
         Container(
           height: _cardHeight,
           margin:
-              EdgeInsets.only(left: 15.0, right: 15, bottom: _cardShadowOffset),
+              EdgeInsets.only(left: 15, right: 15, bottom: _cardShadowOffset),
           child: Align(
               alignment: Alignment.topCenter,
               child: Material(
@@ -35,34 +35,34 @@ class HumorSelector extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.center,
                   child: Container(
+                    margin: EdgeInsets.only(
+                        left: 15, right: 15, top: _cardHeight * 0.05),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         SizedBox(
-                          width: 200.0,
-                          height: 80.0,
+                          height: _cardHeight * 0.15,
                           child: Center(
                             child: Text(
                               describeTipoHumor(tipoHumor),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 23,
+                                fontSize: 22,
                               ),
                               textAlign: TextAlign.center,
                             ),
                           ),
                         ),
                         SizedBox(
-                          width: 250.0,
-                          height: 100.0,
+                          height: _cardHeight * 0.4,
                           child: Center(
                             child: Text(
                               text2,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: 20.0,
+                                fontSize: 18.0,
                               ),
                             ),
                           ),
@@ -76,7 +76,7 @@ class HumorSelector extends StatelessWidget {
                               icon: Icon(Icons.check, color: Colors.white),
                               label: Text("Escolher Humor",
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 20.0)),
+                                      color: Colors.white, fontSize: 18.0)),
                               elevation: 6.0,
                               shape: RoundedRectangleBorder(
                                 borderRadius: new BorderRadius.circular(40.0),
@@ -164,10 +164,9 @@ class HumorSelector extends StatelessWidget {
               )),
         );
 
-    final margin = (deviceHeight - _cardHeight - 160) / 2;
-
     return Container(
-        margin: EdgeInsets.symmetric(vertical: margin),
+        margin: EdgeInsets.only(
+            top: deviceHeight * 0.05, bottom: deviceHeight * 0.15),
         child: Material(
             type: MaterialType.transparency,
             child: Column(

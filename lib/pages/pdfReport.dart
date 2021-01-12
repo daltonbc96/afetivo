@@ -65,12 +65,14 @@ class PdfReport extends pw.Document {
         pw.Header(level: 1, text: 'Dados de Identificação'),
         pw.Row(
             children: [pw.Text('Nome: '), pw.Text(user.fullName.toString())]),
-        pw.Row(children: [
-          pw.Text('Data de Nascimento: '),
-          pw.Text(newFormat1.format(user.nascimento))
-        ]),
-        pw.Row(
-            children: [pw.Text('Sexo: '), pw.Text(user.descSexo.toString())]),
+        if (user.nascimento != null)
+          pw.Row(children: [
+            pw.Text('Data de Nascimento: '),
+            pw.Text(newFormat1.format(user.nascimento))
+          ]),
+        if (user.sexo != null)
+          pw.Row(
+              children: [pw.Text('Sexo: '), pw.Text(user.descSexo.toString())]),
         pw.Row(children: [pw.Text('E-mail: '), pw.Text(user.email.toString())]),
         pw.SizedBox(height: 20),
       ]);

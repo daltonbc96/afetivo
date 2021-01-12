@@ -56,7 +56,7 @@ class _Ajuda extends State<Ajuda> {
             style: TextStyle(fontSize: 14, height: 1.5),
           )),
       MyItem(
-          header: "Quando as alterações do humor \nse tornam problemáticas?",
+          header: "Quando as alterações do humor se tornam problemáticas?",
           body: Text(
             '''O humor pode ser entendido como o estado de ânimo ou estado de espírito de uma pessoa, o qual costuma sofrer alterações no dia a dia. No entanto, para algumas pessoas, estas variações são mais importantes e persistentes, trazendo prejuízos para a vida do indivíduo. Esses quadros são chamados de Transtornos de Humor, e podem se manifestar através de sintomas depressivos (com ou sem ansiedade associada) ou sintomas maníacos (elevação do humor). 
 
@@ -67,7 +67,7 @@ Esses sintomas (depressivos ou maníacos) podem gerar sintomas secundários como
           )),
       MyItem(
           header:
-              "Quais são os sintomas comuns \nde Mania/Hipomania e \nDepressão?",
+              "Quais são os sintomas comuns de Mania/Hipomania e Depressão?",
           body: Text(
             '''Sintomas Comuns de Mania/ Hipomania:
 
@@ -95,7 +95,7 @@ Sintomas Comuns de Depressão:
             style: TextStyle(fontSize: 14, height: 1.5),
           )),
       MyItem(
-          header: '''Como identificar a intensidade \ndo meu humor?''',
+          header: '''Como identificar a intensidade do meu humor?''',
           body: Text(
             ''' Os sintomas de mania, hipomania e depressão podem ser diferentes em cada pessoa. Esses sintomas podem durar algum período, podendo durar algumas semanas, mudar na mesma semana ou, até mesmo, no mesmo dia. 
 
@@ -133,7 +133,7 @@ Caso necessite adicionar um novo medicamento na sua lista, vai no seu perfil e a
             style: TextStyle(fontSize: 14, height: 1.5),
           )),
       MyItem(
-          header: '''Como criar uma lista própria \nde sintomas? ''',
+          header: '''Como criar uma lista própria de sintomas? ''',
           body: Text(
             '''Além dos sintomas clássicos de depressão e mania/hipomania, você também pode desenvolver sua própria lista de sintomas típicos. Por exemplo, em algumas pessoas, o melhor marcador de hipomania pode ser o aumento de energia, enquanto, em outras, pode ser a diminuição da necessidade de sono ou maior sociabilidade, telefonemas ou gastos. Da mesma forma, para a depressão, algumas pessoas sentem -se lentas ou apáticas, enquanto outras se sentem agitadas. Algumas pessoas dormem mais, enquanto outras não conseguem dormir muito. Outras têm a impressão de que sua mente está vazia, enquanto outras são atormentadas por pensamentos depressivos.
 
@@ -142,20 +142,20 @@ Ter a própria lista de seus sintomas típicos pode servir como um sistema próp
             style: TextStyle(fontSize: 14, height: 1.5),
           )),
       MyItem(
-          header: '''Como avaliar o meu humor \nde forma geral? ''',
+          header: '''Como avaliar o meu humor de forma geral? ''',
           body: Text(
             '''Nas informações adicionais há uma opção para avaliar o seu humor de forma geral. Trata-se de uma segunda avaliação sobre a intensidade do seu humor, porém com base em uma escala que vai de a 100. Considere 0 como o valor para o mais depressivo possível, 50 para equilibrado (neutro) e 100 o mais maníaco possível. Você pode escolher um valor dentro desses intervalos que melhor represente o seu humor.  ''',
             style: TextStyle(fontSize: 14, height: 1.5),
           )),
       MyItem(
           header:
-              '''Quando exatamente devo marcar \nque estou no ciclo menstrual? ''',
+              '''Quando exatamente devo marcar que estou no ciclo menstrual? ''',
           body: Text(
             '''Ao registrar o seu humor, nas informações adicionais, marque se você está no seu período menstrual naquele dia.''',
             style: TextStyle(fontSize: 14, height: 1.5),
           )),
       MyItem(
-          header: '''Que tipo de evento de vida \ndevo anotar? ''',
+          header: '''Que tipo de evento de vida devo anotar? ''',
           body: Text(
             '''Eventos de vida são todas as situações e acontecimentos que ocorreram ao longo do seu dia e que você considera relevantes.
 
@@ -180,7 +180,7 @@ Se aplicável, continue a indicar a presença e a frequência desses sintomas no
           )),
       MyItem(
           header:
-              '''O que é o Life Chart Method - \nSelf/Prospective (LCM-S/P)?''',
+              '''O que é o Life Chart Method - Self/Prospective (LCM-S/P)?''',
           body: Text(
             '''É um método de anotações de humor e construção de afetivogramas desenvolvido pelo National Institute of Mental Health (NIMH). Esse método se destaca pela sua flexibilidade em diferentes contextos e possibilita a inclusão de diversas outras informações.''',
             style: TextStyle(fontSize: 14, height: 1.5),
@@ -274,9 +274,7 @@ Se aplicável, continue a indicar a presença e a frequência desses sintomas no
                         Padding(
                             padding: const EdgeInsets.all(10),
                             child: Container(
-                                alignment: Alignment.centerLeft,
-                                margin:
-                                    new EdgeInsets.symmetric(horizontal: 10.0),
+                                width: MediaQuery.of(context).size.width * 0.6,
                                 child: Text(item.header,
                                     style: TextStyle(fontSize: 16))))
                       ]));
