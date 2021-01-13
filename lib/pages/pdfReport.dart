@@ -92,13 +92,10 @@ class PdfReport extends pw.Document {
           pw.Text('Data: '),
           pw.Text(newFormat2.format(humor.data))
         ]),
-        pw.Row(children: [
-          pw.Text('Disfórico: '),
-          if (humor.disforico == true)
-            _cardInfoText('sim')
-          else
-            _cardInfoText('não')
-        ]),
+        if (humor.disforico == true)
+          pw.Row(children: [
+            pw.Text('Disfórico '),
+          ]),
         if (humor.nota != null)
           pw.Row(children: [
             pw.Text('Nota Humor: '),
@@ -109,13 +106,10 @@ class PdfReport extends pw.Document {
             pw.Text('Horas Dormidas: '),
             _cardInfoText(humor.horasDormidas.toString())
           ]),
-        pw.Row(children: [
-          pw.Text('Em Periodo Menstrual: '),
-          if (humor.periodoMenstrual != true)
-            _cardInfoText('não')
-          else
-            _cardInfoText('sim')
-        ]),
+        if (humor.periodoMenstrual == true)
+          pw.Row(children: [
+            pw.Text('Em Periodo Menstrual '),
+          ]),
         if (humor.eventoDeVida != null)
           pw.Row(children: [
             pw.Text(

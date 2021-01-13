@@ -26,29 +26,29 @@ class _State extends State<TutorialPage> implements YouTubePlayerListener {
                   loginStore.userProfile.firstLogin = false;
                   loginStore.register(loginStore.userProfile);
                 },
-                child: Text("Prosseguir",
-                    style: TextStyle(color: Colors.white, fontSize: 20.0))),
+                child:
+                    Text("Prosseguir", style: TextStyle(color: Colors.white))),
         ],
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       body: Stack(
         children: <Widget>[
-          Align(
-              alignment: Alignment.topCenter,
-              child: Container(
-                  margin: EdgeInsets.only(top: 20.0, left: 8.0),
-                  child: Text(
-                    'Assista o vídeo de apresentação!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 18.0),
-                  ))),
+          //Align(
+          //    alignment: Alignment.topCenter,
+          //    child: Container(
+          //        margin: EdgeInsets.only(top: 20.0, left: 8.0),
+          //        child: Text(
+          //          'Assista o vídeo de apresentação!',
+          //          textAlign: TextAlign.center,
+          //          style: TextStyle(fontSize: 18.0),
+          //        ))),
           Container(
-              margin: const EdgeInsets.only(top: 80, bottom: 80),
+              margin: const EdgeInsets.symmetric(vertical: 20),
               child: FlutterYoutubeView(
                 listener: this,
                 onViewCreated: (controller) => this._ytController = controller,
                 params: YoutubeParam(
-                    videoId: 'gzsYp1rDo2Y',
+                    videoId: 'kmEV-7cLmKI',
                     autoPlay: true,
                     showUI: true,
                     showFullScreen: false),
