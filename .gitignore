@@ -75,3 +75,9 @@
 
 .fake
 .ionide
+
+# Arquivos sensíveis
+pass.jks
+android/key.properties
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
